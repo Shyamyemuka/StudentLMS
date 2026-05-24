@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 // Routes that don't require authentication
-const publicRoutes = ["/", "/login", "/signup", "/auth/callback"];
+const publicRoutes = ["/", "/login", "/signup", "/auth/callback", "/dashboard"];
 
 // Routes only for admin
 const adminRoutes = ["/admin"];

@@ -5,7 +5,7 @@ import { ArrowRight, BookOpen, GraduationCap, Sparkles } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-16 overflow-hidden">
+    <section className="relative min-h-[85vh] flex items-center justify-center pt-24 pb-16 overflow-hidden">
       {/* Decorative Squiggles & Hand-drawn elements */}
       <div className="absolute top-1/4 left-10 text-accent opacity-20 hidden md:block select-none pointer-events-none animate-sketch-bounce">
         <GraduationCap size={72} strokeWidth={1.5} />
@@ -33,7 +33,7 @@ export default function HeroSection() {
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
           <Link
             href="/signup"
             style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
@@ -41,6 +41,13 @@ export default function HeroSection() {
           >
             Get Started
             <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
+          </Link>
+          <Link
+            href="/dashboard"
+            style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+            className="w-full sm:w-auto bg-card text-foreground text-lg px-8 py-3.5 border-[3px] border-border font-bold shadow-hard-lg hover:scale-105 active:scale-95 hover:bg-muted transition-all flex items-center justify-center gap-2 animate-sketch-bounce"
+          >
+            Go to Dashboard
           </Link>
           <Link
             href="/login"
@@ -73,24 +80,6 @@ export default function HeroSection() {
             <p className="font-body text-sm font-medium">No strict lines, pure authentic growth.</p>
           </div>
         </div>
-      </div>
-
-      {/* Sketched Scroll Indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center">
-        <span className="text-xs font-bold text-muted-foreground mb-1 italic">Scroll Down</span>
-        <svg
-          className="w-6 h-6 text-foreground"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={3}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
       </div>
     </section>
   );

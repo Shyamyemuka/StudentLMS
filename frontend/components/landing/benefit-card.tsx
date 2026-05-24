@@ -14,19 +14,27 @@ export default function BenefitCard({
   description,
 }: BenefitCardProps) {
   return (
-    <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-6 hover:border-[#D4AF37] transition-all duration-300 hover:shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:-translate-y-1 group text-center">
-      {/* Icon */}
-      <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#D4AF37]/20 transition-colors">
+    <div 
+      style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+      className="bg-card border-2 border-border p-6 shadow-hard-sm hover:shadow-hard-md hover:-translate-y-1 hover:rotate-1 transition-all duration-200 group text-center"
+    >
+      {/* Icon Wrapper styled sketch-style */}
+      <div 
+        style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+        className="w-16 h-16 mx-auto mb-5 bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary group-hover:bg-secondary/20 transition-all duration-200 animate-sketch-bounce"
+      >
         {icon}
       </div>
 
       {/* Title */}
-      <h3 className="text-xl text-[#EAEAEA] mb-3 group-hover:text-[#D4AF37] transition-colors font-semibold">
+      <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors font-heading">
         {title}
       </h3>
 
       {/* Description */}
-      <p className="text-[#B0B0B0] text-sm leading-relaxed">{description}</p>
+      <p className="text-muted-foreground text-sm font-medium leading-relaxed font-body">
+        {description}
+      </p>
     </div>
   );
 }

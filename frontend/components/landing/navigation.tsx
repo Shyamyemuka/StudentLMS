@@ -46,16 +46,25 @@ export default function Navigation() {
           </Link>
 
           {/* Navigation Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* Theme Toggle */}
-            <div className="mr-2">
+            <div className="mr-1">
               <SwitchToggleThemeDemo />
             </div>
+
+            {/* Go to dashboard Guest Button */}
+            <Link
+              href="/dashboard"
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="bg-card text-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center animate-sketch-bounce"
+            >
+              Go to Dashboard
+            </Link>
 
             <Link
               href="/signup"
               style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              className="bg-accent text-accent-foreground text-sm px-4 sm:px-5 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all"
+              className="bg-accent text-accent-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center"
             >
               Sign Up
             </Link>
@@ -63,7 +72,7 @@ export default function Navigation() {
             <Link
               href="/login"
               style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-              className="bg-card text-foreground text-sm px-4 sm:px-5 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all"
+              className="bg-card text-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center"
             >
               Login
             </Link>

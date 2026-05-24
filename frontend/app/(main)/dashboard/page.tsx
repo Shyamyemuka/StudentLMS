@@ -9,27 +9,32 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  // Get current user
+  // Get current user (if exists)
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Get user profile
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", user?.id)
-    .single();
+  // Get user profile only if user is logged in
+  let profile: any = null;
+  if (user) {
+    const { data: userProfile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+    profile = userProfile;
+  }
 
   // Redirect pending users to pending approval page
   if (
-    profile?.role === "faculty_pending" ||
-    profile?.role === "student_pending"
+    profile &&
+    (profile?.role === "faculty_pending" ||
+      profile?.role === "student_pending")
   ) {
     redirect("/pending-approval");
   }
 
-  // ALL users see all approved courses in the marketplace/dashboard
+  // ALL users (including guests) see all approved courses in the marketplace/dashboard
   const { data: allSubjects, error: subjectsError } = await supabase
     .from("subjects")
     .select("*")
@@ -42,9 +47,9 @@ export default async function DashboardPage() {
 
   const subjects = allSubjects || [];
 
-  // Determine which subjects are unlocked for the current student
+  // Determine which subjects are unlocked for the current user
   let unlockedSubjectIds: number[] = [];
-  if (profile?.role === "student" && user) {
+  if (user && profile?.role === "student") {
     // 1. Fetch assigned courses
     const { data: assignments } = await supabase
       .from("course_assignments")
@@ -64,9 +69,12 @@ export default async function DashboardPage() {
     
     // Combine both sources
     unlockedSubjectIds = Array.from(new Set([...assignedIds, ...paidIds]));
-  } else {
+  } else if (user && (profile?.role === "faculty" || profile?.role === "admin")) {
     // Faculty and Admin have all subjects unlocked by default
     unlockedSubjectIds = subjects.map((s) => Number(s.id));
+  } else {
+    // Guest sessions have no subjects unlocked!
+    unlockedSubjectIds = [];
   }
 
   // Get unique regulations for filter
@@ -80,38 +88,52 @@ export default async function DashboardPage() {
         {/* Welcome Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
-              Welcome back, {profile?.full_name?.split(" ")[0] || "User"}!
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground font-heading">
+              {profile ? `Welcome back, ${profile.full_name.split(" ")[0]}!` : "Welcome to Student LMS!"}
               <span className="inline-block ml-2 animate-wave">👋</span>
             </h1>
             <p className="text-muted-foreground mt-2 text-lg font-medium">
-              Ready to continue your learning journey?
+              {profile ? "Ready to continue your learning journey?" : "Explore our wobbly courses chalkboard marketplace!"}
             </p>
           </div>
 
-          {/* Create Course Button - Only for Faculty and Admin */}
-          {(profile?.role === "faculty" || profile?.role === "admin") && (
-            <Link
-              href="/create-course"
-              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              className="flex items-center gap-2 bg-primary text-primary-foreground border-[3px] border-border px-5 py-3 text-sm font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {/* Create Course & Actions */}
+          <div className="flex items-center gap-4 shrink-0">
+            {/* Create Course Button - Only for Faculty and Admin */}
+            {profile && (profile.role === "faculty" || profile.role === "admin") && (
+              <Link
+                href="/create-course"
+                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                className="flex items-center gap-2 bg-primary text-primary-foreground border-[3px] border-border px-5 py-3 text-sm font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer animate-sketch-bounce"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Create Course
-            </Link>
-          )}
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Create Course
+              </Link>
+            )}
+
+            {/* If guest, display a Sign In/Sign Up Callout Button */}
+            {!user && (
+              <Link
+                href="/login"
+                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                className="bg-accent text-accent-foreground border-[3px] border-border px-5 py-3 text-sm font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              >
+                🔒 Sign In to Unlock Subjects
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Main Content Grid */}
@@ -121,7 +143,7 @@ export default async function DashboardPage() {
             <DashboardContent
               subjects={subjects}
               regulations={regulations}
-              userRole={profile?.role}
+              userRole={profile?.role || "student"}
               unlockedSubjectIds={unlockedSubjectIds}
             />
           </div>
