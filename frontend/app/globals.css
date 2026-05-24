@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+/* =====================================================
+   STUDENT LMS - GLOBAL HAND-DRAWN DESIGN SYSTEM
+   ===================================================== */
+
+:root {
+  /* Kalam and Patrick Hand loaded variables */
+  --font-kalam: var(--font-kalam), cursive;
+  --font-patrick-hand: var(--font-patrick-hand), sans-serif;
+
+  /* --- LIGHT MODE PALETTE (Warm Sketch Paper) --- */
+  --background: #fdfbf7;
+  --foreground: #2d2d2d;
+  --card: #ffffff;
+  --card-foreground: #2d2d2d;
+  --popover: #ffffff;
+  --popover-foreground: #2d2d2d;
+  --primary: #2d2d2d;
+  --primary-foreground: #ffffff;
+  --secondary: #2d5da1; /* Blue ballpoint pen */
+  --secondary-foreground: #ffffff;
+  --muted: #e5e0d8; /* Erased/Old paper */
+  --muted-foreground: #706b60;
+  --accent: #ff4d4d; /* Red correction marker */
+  --accent-foreground: #ffffff;
+  --destructive: #ff4d4d;
+  --destructive-foreground: #ffffff;
+  
+  --border: #2d2d2d; /* Soft black pencil line */
+  --input: #ffffff;
+  --ring: #2d5da1;
+  --radius: 10px;
+
+  /* Hand-drawn Shadows and Accents */
+  --color-shadow: #2d2d2d;
+  --color-paper-muted: #e5e0d8;
+  --tape-color: rgba(45, 45, 45, 0.08);
+}
+
+.dark {
+  /* --- DARK MODE PALETTE (Gold/Charcoal Chalkboard) --- */
+  --background: #0B0D10; /* Dark charcoal */
+  --foreground: #EAEAEA; /* Chalk white */
+  --card: #14181D; /* Slate card */
+  --card-foreground: #EAEAEA;
+  --popover: #14181D;
+  --popover-foreground: #EAEAEA;
+  --primary: #D4AF37; /* Gold chalk marker */
+  --primary-foreground: #0B0D10;
+  --secondary: #1A1F25;
+  --secondary-foreground: #EAEAEA;
+  --muted: #1A1F25;
+  --muted-foreground: #B0B0B0;
+  --accent: #D4AF37;
+  --accent-foreground: #0B0D10;
+  --destructive: #ff6b6b;
+  --destructive-foreground: #0B0D10;
+  
+  --border: #BFA55A; /* Gold/Chalk outline */
+  --input: #1A1F25;
+  --ring: #D4AF37;
+
+  /* Hand-drawn Shadows and Accents */
+  --color-shadow: #050505;
+  --color-paper-muted: #2A2F35;
+  --tape-color: rgba(212, 175, 55, 0.15);
+}
+
+/* =====================================================
+   BASE OVERRIDES
+   ===================================================== */
+
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-patrick-hand), system-ui, sans-serif;
+  font-size: 1.15rem; /* Larger and readable sketch font */
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  
+  /* Radial dot paper texture grid background */
+  background-image: radial-gradient(var(--color-paper-muted) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-kalam), cursive;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2.75rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2.25rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.45rem;
+}
+
+p {
+  color: var(--foreground);
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* No rigid text underlines on links */
+a {
+  text-decoration: none !important;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-decoration: none !important;
+  color: var(--primary);
+}
+
+/* =====================================================
+   HAND-DRAWN STYLING UTILITIES
+   ==================================================== */
+
+/* Hard solid flat shadows */
+.shadow-hard-sm {
+  box-shadow: 2px 2px 0px 0px var(--color-shadow);
+}
+
+.shadow-hard-md {
+  box-shadow: 4px 4px 0px 0px var(--color-shadow);
+}
+
+.shadow-hard-lg {
+  box-shadow: 6px 6px 0px 0px var(--color-shadow);
+}
+
+.shadow-hard-xl {
+  box-shadow: 8px 8px 0px 0px var(--color-shadow);
+}
+
+/* Irregular organic borders */
+.wobbly-border {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.wobbly-border-md {
+  border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+}
+
+/* Snappy jiggle jolt buttons */
+.btn-sketch-interactive {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-sketch-interactive:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--color-shadow) !important;
+}
+
+.btn-sketch-interactive:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px 0px var(--color-shadow) !important;
+}
+
+/* Translucent Tape Decor */
+.tape-decor {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 100px;
+  height: 24px;
+  background-color: var(--tape-color);
+  backdrop-filter: blur(1px);
+  border: 1px dashed rgba(45, 45, 45, 0.15);
+  z-index: 10;
+}
+
+/* Speech bubble custom triangle tail */
+.speech-bubble-tail {
+  position: absolute;
+  bottom: -12px;
+  left: 30px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid var(--border);
+}
+
+/* Decorative wiggle squiggly accents */
+@keyframes sketch-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+.animate-sketch-bounce {
+  animation: sketch-bounce 3s ease-in-out infinite;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom scrollbars that look sketchy and thick */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 2px dashed var(--color-paper-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border: 3px solid var(--background);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* =====================================================
+   SELECTION STYLE
+   ===================================================== */
+::selection {
+  background: var(--primary);
+  color: var(--background);
+}
+
+/* Standard animation wave keyframes */
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-wave {
+  animation: wave 2.5s infinite;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}

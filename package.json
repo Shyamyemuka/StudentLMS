@@ -1,0 +1,39 @@
+{
+  "name": "tenspicklms",
+  "version": "1.0.0",
+  "description": "Tenspick LMS - A Modern Learning Management System",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "lint": "cd frontend && npm run lint",
+    "install:frontend": "cd frontend && npm install",
+    "clean": "cd frontend && rm -rf .next node_modules",
+    "setup": "npm run install:frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shyamyemuka/TenspickLMS.git"
+  },
+  "keywords": [
+    "lms",
+    "learning-management-system",
+    "education",
+    "nextjs",
+    "supabase"
+  ],
+  "author": "Shyam Yemuka",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "cmdk": "^1.1.1"
+  }
+}

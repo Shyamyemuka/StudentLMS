@@ -1,0 +1,16 @@
+<!-- Placeholder SVG for Hand Gesture Game -->
+<svg width="640" height="360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#4CAF8F;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="#0B0D10"/>
+  <rect width="640" height="360" fill="url(#grad1)"/>
+  <circle cx="320" cy="180" r="80" fill="#D4AF37" opacity="0.2"/>
+  <circle cx="320" cy="180" r="60" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="320" cy="180" r="40" fill="#D4AF37" opacity="0.5"/>
+  <text x="320" y="200" font-family="Arial, sans-serif" font-size="48" fill="#D4AF37" text-anchor="middle">🎮</text>
+  <text x="320" y="280" font-family="Arial, sans-serif" font-size="24" fill="#EAEAEA" text-anchor="middle">Hand Gesture 3D Sphere</text>
+</svg>
