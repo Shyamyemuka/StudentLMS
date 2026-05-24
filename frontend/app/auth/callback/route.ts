@@ -62,7 +62,7 @@ export async function GET(request: Request) {
         // FIX: If existing profile has wrong role (student/faculty instead of pending), correct it
         if (role && (existingProfile.role === "student" || existingProfile.role === "faculty")) {
           const correctRole = role === "faculty" ? "faculty_pending" : 
-                             (role === "student" ? "student_pending" : existingProfile.role);
+                             (role === "student" ? "student" : existingProfile.role);
           
           // Only update if it's different from current role
           if (correctRole !== existingProfile.role) {
@@ -73,13 +73,23 @@ export async function GET(request: Request) {
               .update({ role: correctRole })
               .eq("user_id", data.user.id);
             
-            return NextResponse.redirect(`${origin}/pending-approval`);
+            if (correctRole === "faculty_pending") {
+              return NextResponse.redirect(`${origin}/pending-approval`);
+            }
           }
         }
         
-        // Redirect pending users to approval page
-        if (existingProfile.role === "faculty_pending" || existingProfile.role === "student_pending") {
+        // Redirect pending faculty to approval page (students bypass approval)
+        if (existingProfile.role === "faculty_pending") {
           return NextResponse.redirect(`${origin}/pending-approval`);
+        }
+        
+        // Auto-upgrade legacy student_pending accounts
+        if (existingProfile.role === "student_pending") {
+          await supabase
+            .from("profiles")
+            .update({ role: "student" })
+            .eq("user_id", data.user.id);
         }
         
         // Existing approved user - redirect to dashboard
@@ -88,8 +98,8 @@ export async function GET(request: Request) {
 
       // For NEW users: determine the correct role from metadata or URL
       const metadataRole = data.user.user_metadata?.role;
-      const urlRole = role === "faculty" ? "faculty_pending" : (role === "student" ? "student_pending" : null);
-      const userRole = metadataRole || urlRole || "student_pending";
+      const urlRole = role === "faculty" ? "faculty_pending" : (role === "student" ? "student" : null);
+      const userRole = metadataRole === "student_pending" ? "student" : (metadataRole || urlRole || "student");
       
       console.log("Creating new profile. Role:", userRole);
       
@@ -114,7 +124,7 @@ export async function GET(request: Request) {
         // FIX: If profile was created with wrong role, update it
         if (triggerProfile.role === "student" || triggerProfile.role === "faculty") {
           const correctRole = role === "faculty" ? "faculty_pending" : 
-                             (role === "student" ? "student_pending" : triggerProfile.role);
+                             (role === "student" ? "student" : triggerProfile.role);
           
           console.log(`Correcting role from ${triggerProfile.role} to ${correctRole}`);
           
@@ -123,11 +133,21 @@ export async function GET(request: Request) {
             .update({ role: correctRole })
             .eq("user_id", data.user.id);
           
-          return NextResponse.redirect(`${origin}/pending-approval`);
+          if (correctRole === "faculty_pending") {
+            return NextResponse.redirect(`${origin}/pending-approval`);
+          }
         }
         
-        if (triggerProfile.role === "faculty_pending" || triggerProfile.role === "student_pending") {
+        if (triggerProfile.role === "faculty_pending") {
           return NextResponse.redirect(`${origin}/pending-approval`);
+        }
+
+        // Auto-upgrade legacy student_pending trigger profiles
+        if (triggerProfile.role === "student_pending") {
+          await supabase
+            .from("profiles")
+            .update({ role: "student" })
+            .eq("user_id", data.user.id);
         }
         
         return NextResponse.redirect(`${origin}${next}`);
@@ -137,7 +157,6 @@ export async function GET(request: Request) {
       const { error: insertError } = await supabase.from("profiles").insert({
         user_id: data.user.id,
         full_name: fullName,
-        email: data.user.email,
         role: userRole,
       });
 
@@ -149,7 +168,7 @@ export async function GET(request: Request) {
       }
 
       // Redirect based on role
-      if (userRole === "faculty_pending" || userRole === "student_pending") {
+      if (userRole === "faculty_pending") {
         console.log("Redirecting to pending approval");
         return NextResponse.redirect(`${origin}/pending-approval`);
       }

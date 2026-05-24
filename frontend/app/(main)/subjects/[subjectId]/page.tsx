@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import PageContainer from "@/components/layout/page-container";
 import SubjectContent from "@/components/subjects/subject-content";
 import SubjectLockOverlay from "@/components/subjects/subject-lock-overlay";
@@ -20,7 +20,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    notFound();
+    redirect("/login?redirectTo=/subjects/" + subjectId);
   }
 
   // Fetch data in parallel for better performance

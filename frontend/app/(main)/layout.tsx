@@ -10,38 +10,35 @@ export default async function MainLayout({
 }) {
   const supabase = await createClient();
 
-  // Get current user
+  // Get current user (if exists)
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
+  // Get user profile only if user is logged in
+  let profile = null;
+  if (user) {
+    const { data: userProfile, error: profileError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
 
-  // Get user profile
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+    if (!profileError) {
+      profile = userProfile;
 
-  if (profileError) {
-    console.error("Error fetching profile:", profileError);
-    redirect("/login");
-  }
-
-  // If pending (faculty or student), redirect to pending page
-  if (
-    profile?.role === "faculty_pending" ||
-    profile?.role === "student_pending"
-  ) {
-    redirect("/pending-approval");
+      // If pending faculty, redirect to pending page (students skip pending approvals)
+      if (profile?.role === "faculty_pending") {
+        redirect("/pending-approval");
+      }
+    } else {
+      console.error("Error fetching profile:", profileError);
+    }
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0D10]">
-      <Header profile={profile as Profile} />
+    <div className="min-h-screen bg-background text-foreground">
+      <Header profile={profile as Profile | null} />
       <main>{children}</main>
     </div>
   );

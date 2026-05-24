@@ -14,6 +14,7 @@ import ProgressBar from "@/components/progress/progress-bar";
 interface SubjectCardProps {
   subject: Subject;
   isLocked?: boolean;
+  isGuest?: boolean;
   showStatus?: boolean;
   canDelete?: boolean;
   onDelete?: () => void;
@@ -24,6 +25,7 @@ interface SubjectCardProps {
 export default function SubjectCard({
   subject,
   isLocked = false,
+  isGuest = false,
   showStatus = false,
   canDelete = false,
   onDelete,
@@ -173,7 +175,7 @@ export default function SubjectCard({
             )}
           </div>
         ) : (
-          <Link href={`/subjects/${subject.id}`} className="block h-full">
+          <Link href={isGuest ? `/login?redirectTo=/subjects/${subject.id}` : `/subjects/${subject.id}`} className="block h-full">
             <div 
               style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
               className={`bg-card border-2 p-6 transition-all duration-200 shadow-hard-md hover:-translate-y-1 hover:shadow-hard-lg hover:rotate-1 group h-full relative ${

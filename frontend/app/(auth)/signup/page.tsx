@@ -68,7 +68,7 @@ export default function SignUpPage() {
       {/* Back Button */}
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-[#B0B0B0] hover:text-[#D4AF37] mb-8 transition-colors group">
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-8 transition-colors group font-bold">
         <svg
           className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
           fill="none"
@@ -77,19 +77,19 @@ export default function SignUpPage() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={2.5}
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        <span className="font-medium">Back to Home</span>
+        <span className="font-bold">Back to Home</span>
       </Link>
 
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl text-[#D4AF37] mb-3 font-semibold">
-          Join StudentLMS
+        <h1 className="text-3xl md:text-4xl text-primary mb-3 font-bold font-heading">
+          Join Student LMS
         </h1>
-        <p className="text-[#B0B0B0] text-lg">
+        <p className="text-muted-foreground text-lg font-bold">
           Choose your role to get started
         </p>
       </div>
@@ -99,35 +99,41 @@ export default function SignUpPage() {
         {roleOptions.map((option) => (
           <div
             key={option.role}
-            className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-8 hover:border-[#D4AF37] transition-all duration-300 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] group">
+            style={{ borderRadius: option.role === "student" ? "15px 225px 15px 255px / 255px 15px 225px 15px" : "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+            className="bg-card border-2 border-border p-8 hover:border-primary transition-all duration-300 shadow-hard-md hover:shadow-hard-lg group relative">
+            <div className="tape-decor" />
+            
             {/* Icon */}
-            <div className="w-20 h-20 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] mb-6 group-hover:bg-[#D4AF37]/20 transition-colors">
+            <div 
+              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:bg-primary/20 transition-all border-2 border-border shadow-hard-sm wobbly-border"
+            >
               {option.icon}
             </div>
 
             {/* Title & Description */}
-            <h2 className="text-2xl text-[#EAEAEA] mb-2 font-semibold">
+            <h2 className="text-2xl text-foreground mb-2 font-bold font-heading">
               {option.title}
             </h2>
-            <p className="text-[#B0B0B0] mb-6">{option.description}</p>
+            <p className="text-muted-foreground mb-6 font-bold">{option.description}</p>
 
             {/* Benefits List */}
             <ul className="space-y-3 mb-8">
               {option.benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-[#4CAF8F] flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span className="text-[#B0B0B0] text-sm">{benefit}</span>
+                  <span className="text-muted-foreground text-sm font-medium">{benefit}</span>
                 </li>
               ))}
             </ul>
@@ -135,7 +141,8 @@ export default function SignUpPage() {
             {/* CTA Button */}
             <Link
               href={option.href}
-              className="block w-full bg-[#D4AF37] text-[#0B0D10] text-center py-3 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors">
+              style={{ borderRadius: option.role === "student" ? "255px 15px 225px 15px / 15px 225px 15px 255px" : "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+              className="block w-full bg-primary text-primary-foreground text-center py-3 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer">
               {option.buttonText}
             </Link>
           </div>
@@ -143,11 +150,11 @@ export default function SignUpPage() {
       </div>
 
       {/* Already have an account */}
-      <p className="text-center text-[#B0B0B0] mt-10">
+      <p className="text-center text-muted-foreground mt-10 font-bold">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-[#D4AF37] font-medium hover:underline">
+          className="text-accent font-bold hover:underline">
           Sign in
         </Link>
       </p>

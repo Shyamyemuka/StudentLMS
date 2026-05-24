@@ -56,7 +56,7 @@ export default function SignUpForm({ role }: SignUpFormProps) {
         options: {
           data: {
             full_name: fullName,
-            role: role === "faculty" ? "faculty_pending" : "student_pending",
+            role: role === "faculty" ? "faculty_pending" : "student",
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
@@ -79,7 +79,7 @@ export default function SignUpForm({ role }: SignUpFormProps) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const profileRole =
-        role === "faculty" ? "faculty_pending" : "student_pending";
+        role === "faculty" ? "faculty_pending" : "student";
 
       // Check if profile exists
       const { data: existingProfile, error: fetchError } = await supabase
@@ -114,10 +114,13 @@ export default function SignUpForm({ role }: SignUpFormProps) {
       }
 
       setIsLoading(false);
-      toast.success("Account created! Please check your email to verify.");
-
-      // Both faculty and students go to pending approval page
-      router.push("/pending-approval");
+      if (role === "student") {
+        toast.success("Account created successfully! Please check your email to verify, then sign in!");
+        router.push("/login");
+      } else {
+        toast.success("Account created! Please check your email to verify.");
+        router.push("/pending-approval");
+      }
     } catch (err: any) {
       console.error("Signup exception:", err);
       toast.error(err.message || "An unexpected error occurred");

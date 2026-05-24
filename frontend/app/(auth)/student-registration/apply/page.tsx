@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function StudentRegistrationApplyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B0D10] to-[#14181D] flex items-center justify-center p-4">
+    <div className="w-full min-h-screen py-16 flex items-center justify-center px-4">
       <div className="w-full max-w-2xl">
         <StudentRegistrationForm />
       </div>

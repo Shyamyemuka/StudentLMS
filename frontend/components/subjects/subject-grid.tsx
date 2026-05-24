@@ -7,6 +7,8 @@ import { GraduationCap } from "lucide-react";
 interface SubjectGridProps {
   subjects: Subject[];
   unlockedSubjectIds?: number[];
+  userRole?: string;
+  isGuest?: boolean;
   showStatus?: boolean;
   emptyMessage?: string;
   canDelete?: boolean;
@@ -16,6 +18,8 @@ interface SubjectGridProps {
 export default function SubjectGrid({
   subjects,
   unlockedSubjectIds = [],
+  userRole = "student",
+  isGuest = false,
   showStatus = false,
   emptyMessage = "No courses found",
   canDelete = false,
@@ -35,14 +39,15 @@ export default function SubjectGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {subjects.map((subject) => {
-        // A subject is locked if the user is a student, we have unlocked IDs, and this subject ID is NOT in the unlocked array
-        const isLocked = unlockedSubjectIds.length > 0 && !unlockedSubjectIds.includes(Number(subject.id));
+        // A subject is locked if the user is not an admin/faculty and this subject ID is NOT in the unlocked array
+        const isLocked = userRole !== "admin" && userRole !== "faculty" && !unlockedSubjectIds.includes(Number(subject.id));
 
         return (
           <SubjectCard
             key={subject.id}
             subject={subject}
             isLocked={isLocked}
+            isGuest={isGuest}
             showStatus={showStatus}
             canDelete={canDelete}
             onDelete={onSubjectDeleted}

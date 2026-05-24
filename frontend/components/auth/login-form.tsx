@@ -83,18 +83,16 @@ export default function LoginForm() {
         .eq("user_id", data.user.id)
         .single();
 
-      if (
-        profile?.role === "faculty_pending" ||
-        profile?.role === "student_pending"
-      ) {
+      if (profile?.role === "faculty_pending") {
         toast.info("Your account is pending approval");
         router.push("/pending-approval");
         return;
       }
     }
 
+    const redirectTo = searchParams.get("redirectTo") || "/dashboard";
     toast.success("Welcome back!");
-    router.push("/dashboard");
+    router.push(redirectTo);
   };
 
   const handleGoogleSignIn = async () => {
@@ -127,7 +125,9 @@ export default function LoginForm() {
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         suppressHydrationWarning
-        className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white text-gray-800 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+        className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-card text-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-center cursor-pointer mb-2"
+      >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
@@ -152,10 +152,10 @@ export default function LoginForm() {
       {/* Divider */}
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#2A2F35]"></div>
+          <div className="w-full border-t-2 border-dashed border-border"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-[#14181D] text-[#707070]">
+          <span className="px-4 bg-card text-muted-foreground font-bold">
             or sign in with email
           </span>
         </div>
@@ -166,7 +166,7 @@ export default function LoginForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[#B0B0B0] mb-2">
+            className="block text-sm font-bold text-foreground mb-2">
             Email Address
           </label>
           <input
@@ -175,7 +175,8 @@ export default function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             suppressHydrationWarning
-            className="w-full bg-[#0B0D10] border border-[#2A2F35] rounded-lg px-4 py-3 text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+            className="w-full bg-background border-2 border-border px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all font-body"
             placeholder="Enter your email"
             required
           />
@@ -184,7 +185,7 @@ export default function LoginForm() {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-[#B0B0B0] mb-2">
+            className="block text-sm font-bold text-foreground mb-2">
             Password
           </label>
           <div className="relative">
@@ -194,7 +195,8 @@ export default function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               suppressHydrationWarning
-              className="w-full bg-[#0B0D10] border border-[#2A2F35] rounded-lg px-4 py-3 pr-12 text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              className="w-full bg-background border-2 border-border px-4 py-3 pr-12 text-foreground placeholder:text-muted-foreground/60 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all font-body"
               placeholder="Enter your password"
               required
             />
@@ -202,7 +204,7 @@ export default function LoginForm() {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               suppressHydrationWarning
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#B0B0B0] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label={showPassword ? "Hide password" : "Show password"}>
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -217,7 +219,9 @@ export default function LoginForm() {
           type="submit"
           disabled={isLoading}
           suppressHydrationWarning
-          className="w-full bg-[#D4AF37] text-[#0B0D10] py-3 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+          className="w-full bg-primary text-primary-foreground border-[3px] border-border py-3.5 font-bold shadow-hard-md hover:bg-accent hover:text-accent-foreground btn-sketch-interactive active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer mt-4"
+        >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
               <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
@@ -248,7 +252,7 @@ export default function LoginForm() {
       <div className="mt-4 text-center">
         <Link
           href="/forgot-password"
-          className="text-sm text-[#707070] hover:text-[#D4AF37] transition-colors">
+          className="text-sm text-muted-foreground hover:text-primary transition-colors font-bold">
           Forgot your password?
         </Link>
       </div>

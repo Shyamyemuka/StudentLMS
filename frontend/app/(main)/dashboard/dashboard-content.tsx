@@ -11,6 +11,7 @@ interface DashboardContentProps {
   regulations: string[];
   userRole?: string;
   unlockedSubjectIds?: number[];
+  isGuest?: boolean;
 }
 
 export default function DashboardContent({
@@ -18,6 +19,7 @@ export default function DashboardContent({
   regulations,
   userRole,
   unlockedSubjectIds = [],
+  isGuest = false,
 }: DashboardContentProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,6 +88,8 @@ export default function DashboardContent({
       <SubjectGrid
         subjects={filteredSubjects}
         unlockedSubjectIds={unlockedSubjectIds}
+        userRole={userRole}
+        isGuest={isGuest}
         emptyMessage={
           searchQuery || selectedRegulation
             ? "No courses match your search criteria"

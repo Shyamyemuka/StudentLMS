@@ -25,12 +25,8 @@ export default async function DashboardPage() {
     profile = userProfile;
   }
 
-  // Redirect pending users to pending approval page
-  if (
-    profile &&
-    (profile?.role === "faculty_pending" ||
-      profile?.role === "student_pending")
-  ) {
+  // Redirect pending faculty to pending approval page
+  if (profile && profile?.role === "faculty_pending") {
     redirect("/pending-approval");
   }
 
@@ -145,6 +141,7 @@ export default async function DashboardPage() {
               regulations={regulations}
               userRole={profile?.role || "student"}
               unlockedSubjectIds={unlockedSubjectIds}
+              isGuest={!user}
             />
           </div>
 

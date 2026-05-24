@@ -89,7 +89,7 @@ export function StudentRegistrationForm() {
         options: {
           data: {
             full_name: formData.full_name,
-            role: "student_pending",
+            role: "student",
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
@@ -123,7 +123,7 @@ export function StudentRegistrationForm() {
         const { error: insertError } = await supabase.from("profiles").insert({
           user_id: data.user.id,
           full_name: formData.full_name,
-          role: "student_pending",
+          role: "student",
         });
 
         if (insertError) {
@@ -155,38 +155,36 @@ export function StudentRegistrationForm() {
             <CheckCircle2 className="h-16 w-16 text-secondary animate-sketch-bounce" />
           </div>
           <CardTitle className="text-2xl text-foreground font-bold">
-            Registration Submitted!
+            Registration Successful!
           </CardTitle>
           <CardDescription className="text-muted-foreground font-medium">
-            Your application is under review
+            Your student account is ready!
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Alert className="bg-accent/10 border-2 border-accent">
-            <AlertCircle className="h-4 w-4 text-accent" />
+          <Alert className="bg-secondary/15 border-2 border-secondary">
+            <CheckCircle2 className="h-4 w-4 text-secondary" />
             <AlertDescription className="text-foreground">
               <div className="space-y-2 font-medium">
-                <p className="font-bold text-lg">Verification Pending</p>
+                <p className="font-bold text-lg">Account Ready 🎉</p>
                 <p>
-                  Your student account has been created successfully. The
-                  faculty or admin team will review your application and you'll
-                  receive access once approved.
+                  Your student account has been created successfully. You can
+                  now log in and access the student dashboard immediately!
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  This typically takes 24-48 hours. Please check your email for
-                  verification and approval updates.
+                  Make sure to check your email to verify your address for a
+                  secure login experience.
                 </p>
               </div>
             </AlertDescription>
           </Alert>
 
           <div className="bg-background p-5 rounded-lg space-y-2 border-2 border-dashed border-border wobbly-border-md">
-            <h3 className="font-bold text-foreground">Next Steps:</h3>
+            <h3 className="font-bold text-foreground">What You Can Do Now:</h3>
             <ol className="list-decimal list-inside space-y-1 text-base text-muted-foreground font-medium">
-              <li>Faculty/Admin will review your registration details</li>
-              <li>Your account status will be updated to approved</li>
-              <li>You can then log in using your email and password</li>
-              <li>Start enrolling in subjects and learning!</li>
+              <li>Log in using your email and password</li>
+              <li>Browse all approved courses in the marketplace dashboard</li>
+              <li>Unlock any subject via test payment to start learning!</li>
             </ol>
           </div>
 
@@ -324,8 +322,7 @@ export function StudentRegistrationForm() {
           <Alert className="bg-accent/5 border-2 border-accent border-dashed">
             <AlertCircle className="h-4 w-4 text-accent" />
             <AlertDescription className="text-foreground font-medium text-sm">
-              <strong>Note:</strong> No payment required to register! Your account will
-              be reviewed and verified by the faculty or admin team.
+              <strong>Note:</strong> You will get instant access to the student dashboard! No upfront registration fee is required. You can pay to unlock individual subjects whenever you are ready.
             </AlertDescription>
           </Alert>
 

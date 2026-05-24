@@ -9,7 +9,7 @@ export default function LoginPage() {
       {/* Back Button */}
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-[#B0B0B0] hover:text-[#D4AF37] mb-6 transition-colors group">
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-6 transition-colors group font-bold">
         <svg
           className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
           fill="none"
@@ -18,34 +18,38 @@ export default function LoginPage() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={2.5}
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        <span className="font-medium">Back to Home</span>
+        <span className="font-bold">Back to Home</span>
       </Link>
 
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl md:text-3xl text-[#D4AF37] mb-2 font-semibold">
+        <h1 className="text-3xl md:text-4xl text-primary mb-2 font-bold font-heading">
           Welcome Back
         </h1>
-        <p className="text-[#B0B0B0]">
+        <p className="text-muted-foreground font-bold">
           Sign in to continue your learning journey
         </p>
       </div>
 
       {/* Form Card */}
-      <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-6 md:p-8">
+      <div 
+        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+        className="bg-card border-2 border-border shadow-hard-md p-6 md:p-8 relative"
+      >
+        <div className="tape-decor" />
         <LoginForm />
       </div>
 
       {/* Sign up link */}
-      <p className="mt-6 text-center text-[#B0B0B0]">
+      <p className="mt-6 text-center text-muted-foreground font-bold">
         New user?{" "}
         <Link
           href="/signup"
-          className="text-[#D4AF37] font-medium hover:underline">
+          className="text-accent font-bold hover:underline">
           Register here
         </Link>
       </p>

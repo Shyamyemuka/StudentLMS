@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import Link from "next/link";
 
+import Navigation from "@/components/landing/navigation";
+
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,44 +34,55 @@ export default function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen bg-[#0B0D10] flex items-center justify-center px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-8">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  className="w-8 h-8 text-[#D4AF37]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
+      <div className="min-h-screen bg-background text-foreground flex flex-col pt-24 relative overflow-x-hidden">
+        <Navigation />
+        <div className="flex-1 flex items-center justify-center px-4 py-8">
+          <div className="w-full max-w-md">
+            <div 
+              style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+              className="bg-card border-2 border-border shadow-hard-md p-8 relative"
+            >
+              <div className="tape-decor" />
+              <div className="text-center mb-6">
+                <div 
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-4 border-2 border-border shadow-hard-sm wobbly-border"
+                >
+                  <svg
+                    className="w-8 h-8 text-primary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-heading font-bold text-foreground mb-2">
+                  Check Your Email
+                </h2>
+                <p className="text-muted-foreground font-bold">
+                  We've sent a password reset link to{" "}
+                  <span className="text-primary font-bold">{email}</span>
+                </p>
               </div>
-              <h2 className="text-2xl font-heading font-bold text-[#EAEAEA] mb-2">
-                Check Your Email
-              </h2>
-              <p className="text-[#B0B0B0]">
-                We've sent a password reset link to{" "}
-                <span className="text-[#D4AF37]">{email}</span>
-              </p>
-            </div>
 
-            <div className="space-y-4">
-              <p className="text-sm text-[#707070] text-center">
-                Click the link in the email to reset your password. The link
-                will expire in 1 hour.
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground text-center font-medium">
+                  Click the link in the email to reset your password. The link
+                  will expire in 1 hour.
+                </p>
 
-              <Link
-                href="/login"
-                className="block w-full text-center bg-[#D4AF37] text-[#0B0D10] py-3 px-4 rounded-lg font-semibold hover:bg-[#E6C76A] transition-colors">
-                Back to Login
-              </Link>
+                <Link
+                  href="/login"
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="block w-full text-center bg-primary text-primary-foreground py-3 px-4 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer">
+                  Back to Login
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -78,50 +91,59 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0D10] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-heading font-bold text-[#D4AF37] mb-2">
-            Forgot Password?
-          </h1>
-          <p className="text-[#B0B0B0]">
-            Enter your email and we'll send you a reset link
-          </p>
-        </div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col pt-24 relative overflow-x-hidden">
+      <Navigation />
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-heading font-bold text-primary mb-2">
+              Forgot Password?
+            </h1>
+            <p className="text-muted-foreground font-bold">
+              Enter your email and we'll send you a reset link
+            </p>
+          </div>
 
-        <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-[#EAEAEA] mb-2">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-[#0B0D10] border border-[#2A2F35] rounded-lg text-[#EAEAEA] placeholder-[#707070] focus:outline-none focus:border-[#D4AF37] transition-colors"
-                placeholder="you@example.com"
-              />
+          <div 
+            style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+            className="bg-card border-2 border-border shadow-hard-md p-8 relative"
+          >
+            <div className="tape-decor" />
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-bold text-foreground mb-2">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="w-full bg-background border-2 border-border px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all font-body"
+                  placeholder="you@example.com"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                className="w-full bg-primary text-primary-foreground border-[3px] border-border py-3.5 font-bold shadow-hard-md hover:bg-accent hover:text-accent-foreground btn-sketch-interactive active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer">
+                {loading ? "Sending..." : "Send Reset Link"}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <Link
+                href="/login"
+                className="text-sm text-muted-foreground hover:text-primary font-bold transition-colors">
+                Remember your password? Sign in
+              </Link>
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#D4AF37] text-[#0B0D10] py-3 px-4 rounded-lg font-semibold hover:bg-[#E6C76A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              {loading ? "Sending..." : "Send Reset Link"}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/login"
-              className="text-sm text-[#707070] hover:text-[#D4AF37] transition-colors">
-              Remember your password? Sign in
-            </Link>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Profile } from "@/types/database";
 import NotificationBell from "@/components/notifications/notification-bell";
+import SwitchToggleThemeDemo from "@/components/ui/toggle-theme";
 
 interface HeaderProps {
   profile: Profile | null;
@@ -66,7 +67,6 @@ export default function Header({ profile }: HeaderProps) {
       toast.success("Logged out successfully");
 
       // Force hard redirect with cache busting to ensure fresh page load
-      // Use replace to prevent back button returning to authenticated state
       window.location.replace("/?logout=" + Date.now());
     } catch (error) {
       console.error("Logout error:", error);
@@ -79,11 +79,11 @@ export default function Header({ profile }: HeaderProps) {
     if (!profile) return null;
 
     const roleColors: Record<string, string> = {
-      admin: "bg-[#C94A4A] text-white",
-      faculty: "bg-[#4CAF8F] text-white",
-      faculty_pending: "bg-[#D4AF37] text-[#0B0D10]",
-      student: "bg-[#3B82F6] text-white",
-      student_pending: "bg-[#FFA500] text-[#0B0D10]",
+      admin: "bg-[#C94A4A] text-white border-2 border-border shadow-hard-sm",
+      faculty: "bg-[#4CAF8F] text-white border-2 border-border shadow-hard-sm",
+      faculty_pending: "bg-[#D4AF37] text-[#0B0D10] border-2 border-border shadow-hard-sm",
+      student: "bg-[#3B82F6] text-white border-2 border-border shadow-hard-sm",
+      student_pending: "bg-[#FFA500] text-[#0B0D10] border-2 border-border shadow-hard-sm",
     };
 
     const roleLabels: Record<string, string> = {
@@ -96,7 +96,8 @@ export default function Header({ profile }: HeaderProps) {
 
     return (
       <span
-        className={`px-2 py-0.5 rounded text-xs font-medium ${
+        style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+        className={`px-2 py-0.5 rounded text-xs font-bold ${
           roleColors[profile.role] || "bg-gray-500"
         }`}>
         {roleLabels[profile.role] || profile.role}
@@ -105,12 +106,12 @@ export default function Header({ profile }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#14181D] border-b border-[#BFA55A]/30">
+    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b-2 border-border shadow-hard-sm transition-all duration-300 py-1">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-lg overflow-hidden group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-lg overflow-hidden group-hover:scale-105 transition-transform border-2 border-border shadow-hard-sm wobbly-border">
               <img
                 src="/images/logo.png"
                 alt="Student LMS Logo"
@@ -118,10 +119,10 @@ export default function Header({ profile }: HeaderProps) {
               />
             </div>
             <div className="hidden sm:flex flex-col">
-              <span className="font-bold text-lg text-[#D4AF37] leading-tight">
+              <span className="font-bold text-lg text-foreground font-heading leading-tight">
                 Student LMS
               </span>
-              <span className="text-xs text-[#B0B0B0] leading-tight">
+              <span className="text-xs text-muted-foreground font-bold italic leading-tight">
                 Knowledge Archive
               </span>
             </div>
@@ -131,17 +132,17 @@ export default function Header({ profile }: HeaderProps) {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/dashboard"
-              className="text-[#B0B0B0] hover:text-[#D4AF37] transition-colors text-sm font-medium">
+              className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
               Dashboard
             </Link>
             <Link
               href="/my-courses"
-              className="text-[#B0B0B0] hover:text-[#D4AF37] transition-colors text-sm font-medium">
+              className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
               My Courses
             </Link>
             <Link
               href="/fun"
-              className="text-[#B0B0B0] hover:text-[#D4AF37] transition-colors text-sm font-medium">
+              className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
               Fun Zone
             </Link>
             {/* Faculty/Admin Management Links */}
@@ -149,12 +150,12 @@ export default function Header({ profile }: HeaderProps) {
               <>
                 <Link
                   href="/admin/students"
-                  className="text-[#B0B0B0] hover:text-[#4CAF8F] transition-colors text-sm font-medium">
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
                   Student Management
                 </Link>
                 <Link
                   href="/admin/student-progress"
-                  className="text-[#B0B0B0] hover:text-[#4CAF8F] transition-colors text-sm font-medium">
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
                   Student Progress
                 </Link>
               </>
@@ -162,7 +163,7 @@ export default function Header({ profile }: HeaderProps) {
             {profile?.role === "admin" && (
               <Link
                 href="/admin"
-                className="text-[#C94A4A] hover:text-[#E05555] transition-colors text-sm font-medium">
+                className="text-destructive hover:text-primary transition-colors text-sm font-bold">
                 Admin Panel
               </Link>
             )}
@@ -170,122 +171,152 @@ export default function Header({ profile }: HeaderProps) {
 
           {/* User Menu */}
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <div className="mr-1">
+              <SwitchToggleThemeDemo />
+            </div>
+
             {/* Notification Bell */}
             {profile && <NotificationBell userId={profile.user_id} />}
 
-            {/* Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1F25] transition-colors">
-                {/* Avatar */}
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] font-medium text-sm">
-                  {profile?.full_name?.charAt(0)?.toUpperCase() || "U"}
-                </div>
-
-                {/* Name & Role */}
-                <div className="hidden sm:flex flex-col items-start">
-                  <span className="text-[#EAEAEA] text-sm font-medium">
-                    {profile?.full_name || "User"}
-                  </span>
-                  {getRoleBadge()}
-                </div>
-
-                {/* Dropdown Arrow */}
-                <svg
-                  className={`w-4 h-4 text-[#B0B0B0] transition-transform ${
-                    isMenuOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-
-              {/* Dropdown Menu */}
-              {isMenuOpen && (
-                <>
-                  {/* Backdrop */}
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsMenuOpen(false)}
-                  />
-
-                  {/* Menu */}
-                  <div className="absolute right-0 mt-2 w-56 bg-[#14181D] border border-[#BFA55A]/30 rounded-lg shadow-lg z-20 py-2">
-                    {/* Mobile Navigation */}
-                    <div className="md:hidden border-b border-[#2A2F35] pb-2 mb-2">
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-4 py-2 text-[#EAEAEA] hover:bg-[#1A1F25] text-sm">
-                        Dashboard
-                      </Link>
-                      <Link
-                        href="/my-courses"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-4 py-2 text-[#EAEAEA] hover:bg-[#1A1F25] text-sm">
-                        My Courses
-                      </Link>
-                      <Link
-                        href="/fun"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-4 py-2 text-[#EAEAEA] hover:bg-[#1A1F25] text-sm">
-                        Fun Zone
-                      </Link>
-                      {/* Faculty/Admin Management Links */}
-                      {(profile?.role === "admin" ||
-                        profile?.role === "faculty") && (
-                        <>
-                          <Link
-                            href="/admin/students"
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block px-4 py-2 text-[#4CAF8F] hover:bg-[#1A1F25] text-sm font-medium">
-                            Student Management
-                          </Link>
-                          <Link
-                            href="/admin/student-progress"
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block px-4 py-2 text-[#4CAF8F] hover:bg-[#1A1F25] text-sm font-medium">
-                            Student Progress
-                          </Link>
-                        </>
-                      )}
-                      {profile?.role === "admin" && (
-                        <Link
-                          href="/admin"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-2 text-[#C94A4A] hover:bg-[#1A1F25] text-sm">
-                          Admin Panel
-                        </Link>
-                      )}
-                    </div>
-
-                    {/* User Info */}
-                    <div className="px-4 py-2 border-b border-[#2A2F35]">
-                      <p className="text-[#EAEAEA] font-medium text-sm">
-                        {profile?.full_name}
-                      </p>
-                      <p className="text-[#707070] text-xs">{profile?.role}</p>
-                    </div>
-
-                    {/* Logout */}
-                    <button
-                      onClick={handleLogout}
-                      disabled={isLoggingOut}
-                      className="w-full text-left px-4 py-2 text-[#C94A4A] hover:bg-[#1A1F25] text-sm disabled:opacity-50">
-                      {isLoggingOut ? "Logging out..." : "Logout"}
-                    </button>
+            {/* Profile Dropdown or CTAs */}
+            {profile ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="flex items-center gap-3 p-1.5 sm:p-2 rounded-lg hover:bg-muted border-2 border-transparent hover:border-border wobbly-border transition-all">
+                  {/* Avatar */}
+                  <div 
+                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                    className="w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-bold text-sm border-2 border-border shadow-hard-sm"
+                  >
+                    {profile?.full_name?.charAt(0)?.toUpperCase() || "U"}
                   </div>
-                </>
-              )}
-            </div>
+
+                  {/* Name & Role */}
+                  <div className="hidden sm:flex flex-col items-start">
+                    <span className="text-foreground text-sm font-bold">
+                      {profile?.full_name || "User"}
+                    </span>
+                    {getRoleBadge()}
+                  </div>
+
+                  {/* Dropdown Arrow */}
+                  <svg
+                    className={`w-4 h-4 text-muted-foreground transition-transform ${
+                      isMenuOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Dropdown Menu */}
+                {isMenuOpen && (
+                  <>
+                    {/* Backdrop */}
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setIsMenuOpen(false)}
+                    />
+
+                    {/* Menu */}
+                    <div 
+                      style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+                      className="absolute right-0 mt-2 w-56 bg-card border-2 border-border shadow-hard-md z-20 py-2 wobbly-border"
+                    >
+                      {/* Mobile Navigation */}
+                      <div className="md:hidden border-b-2 border-dashed border-border pb-2 mb-2">
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
+                          Dashboard
+                        </Link>
+                        <Link
+                          href="/my-courses"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
+                          My Courses
+                        </Link>
+                        <Link
+                          href="/fun"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
+                          Fun Zone
+                        </Link>
+                        {/* Faculty/Admin Management Links */}
+                        {(profile?.role === "admin" ||
+                          profile?.role === "faculty") && (
+                          <>
+                            <Link
+                              href="/admin/students"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block px-4 py-2 text-[#4CAF8F] hover:bg-muted text-sm font-bold">
+                              Student Management
+                            </Link>
+                            <Link
+                              href="/admin/student-progress"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block px-4 py-2 text-[#4CAF8F] hover:bg-muted text-sm font-bold">
+                              Student Progress
+                            </Link>
+                          </>
+                        )}
+                        {profile?.role === "admin" && (
+                          <Link
+                            href="/admin"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="block px-4 py-2 text-destructive hover:bg-muted text-sm font-bold">
+                            Admin Panel
+                          </Link>
+                        )}
+                      </div>
+
+                      {/* User Info */}
+                      <div className="px-4 py-2 border-b-2 border-dashed border-border mb-1">
+                        <p className="text-foreground font-bold text-sm">
+                          {profile?.full_name}
+                        </p>
+                        <p className="text-muted-foreground text-xs font-bold capitalize">{profile?.role?.replace("_", " ")}</p>
+                      </div>
+
+                      {/* Logout */}
+                      <button
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        className="w-full text-left px-4 py-2 text-destructive hover:bg-muted text-sm font-bold disabled:opacity-50 cursor-pointer transition-colors">
+                        {isLoggingOut ? "Logging out..." : "Logout"}
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Link
+                  href="/signup"
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="bg-accent text-accent-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  href="/login"
+                  style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+                  className="bg-card text-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer"
+                >
+                  Login
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
