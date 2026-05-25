@@ -83,7 +83,6 @@ export default function Header({ profile }: HeaderProps) {
       faculty: "bg-[#4CAF8F] text-white border-2 border-border shadow-hard-sm",
       faculty_pending: "bg-[#D4AF37] text-[#0B0D10] border-2 border-border shadow-hard-sm",
       student: "bg-[#3B82F6] text-white border-2 border-border shadow-hard-sm",
-      student_pending: "bg-[#FFA500] text-[#0B0D10] border-2 border-border shadow-hard-sm",
     };
 
     const roleLabels: Record<string, string> = {
@@ -91,7 +90,6 @@ export default function Header({ profile }: HeaderProps) {
       faculty: "Faculty",
       faculty_pending: "Pending",
       student: "Student",
-      student_pending: "Pending",
     };
 
     return (

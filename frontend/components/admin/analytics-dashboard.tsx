@@ -128,7 +128,7 @@ export default function AnalyticsDashboard() {
           value:
             profiles?.filter(
               (p) =>
-                p.role === "faculty_pending" || p.role === "student_pending",
+                p.role === "faculty_pending",
             ).length || 0,
         },
       ];

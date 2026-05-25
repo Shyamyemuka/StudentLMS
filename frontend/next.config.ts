@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   // Explicitly expose environment variables (workaround for Turbopack + workspace setup)
@@ -23,6 +24,12 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "30mb",
     },
   },
+  turbopack: {
+    resolveAlias: {
+      "react": "./node_modules/react",
+      "react-dom": "./node_modules/react-dom",
+    },
+  },
   // Suppress hydration warnings caused by browser extensions
   reactStrictMode: true,
   compiler: {
@@ -31,6 +38,14 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   compress: true, // Enable gzip/brotli compression
   poweredByHeader: false, // Remove X-Powered-By header
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "react": path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+    };
+    return config;
+  },
 };
 
-export default nextConfig;
+export default nextConfig;

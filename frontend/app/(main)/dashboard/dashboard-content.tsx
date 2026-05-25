@@ -43,6 +43,21 @@ export default function DashboardContent({
     });
   }, [subjects, searchQuery, selectedRegulation]);
 
+  // Split subjects into enrolled/paid (My Courses) and available (unpaid)
+  const myCourses = useMemo(() => {
+    return filteredSubjects.filter((subject) =>
+      unlockedSubjectIds.includes(Number(subject.id))
+    );
+  }, [filteredSubjects, unlockedSubjectIds]);
+
+  const availableCourses = useMemo(() => {
+    return filteredSubjects.filter((subject) =>
+      !unlockedSubjectIds.includes(Number(subject.id))
+    );
+  }, [filteredSubjects, unlockedSubjectIds]);
+
+  const isStudent = userRole === "student";
+
   return (
     <>
       {/* Search & Filters */}
@@ -84,22 +99,65 @@ export default function DashboardContent({
         </div>
       </div>
 
-      {/* Subject Grid */}
-      <SubjectGrid
-        subjects={filteredSubjects}
-        unlockedSubjectIds={unlockedSubjectIds}
-        userRole={userRole}
-        isGuest={isGuest}
-        emptyMessage={
-          searchQuery || selectedRegulation
-            ? "No courses match your search criteria"
-            : userRole === "student"
-              ? "No courses available yet. Check back later!"
-              : "No courses available yet. Create one to get started!"
-        }
-        canDelete={userRole === "faculty" || userRole === "admin"}
-        onSubjectDeleted={() => router.refresh()}
-      />
+      {/* Courses Display */}
+      <div className="space-y-12">
+        {/* My Courses Section - Only display if student has paid courses, or if admin/faculty */}
+        {((isStudent && myCourses.length > 0) || (!isStudent && !isGuest)) && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground font-heading flex items-center gap-2">
+              <span className="text-3xl animate-sketch-bounce">📝</span>
+              {isStudent ? "My Courses" : "All Courses"}
+            </h2>
+            <SubjectGrid
+              subjects={isStudent ? myCourses : filteredSubjects}
+              unlockedSubjectIds={unlockedSubjectIds}
+              userRole={userRole}
+              isGuest={isGuest}
+              emptyMessage={
+                searchQuery || selectedRegulation
+                  ? "No enrolled courses match your search"
+                  : "You haven't enrolled in any courses yet!"
+              }
+              canDelete={userRole === "faculty" || userRole === "admin"}
+              onSubjectDeleted={() => router.refresh()}
+            />
+          </div>
+        )}
+
+        {/* Available Courses Section - Display for students (if there are unpaid courses) or guests */}
+        {((isStudent && availableCourses.length > 0) || isGuest) && (
+          <div className={`space-y-4 ${isStudent && myCourses.length > 0 ? "pt-8 border-t-2 border-dashed border-border" : ""}`}>
+            <h2 className="text-2xl font-bold text-foreground font-heading flex items-center gap-2">
+              <span className="text-3xl text-secondary">🌐</span>
+              Available Courses
+            </h2>
+            <SubjectGrid
+              subjects={isStudent ? availableCourses : filteredSubjects}
+              unlockedSubjectIds={unlockedSubjectIds}
+              userRole={userRole}
+              isGuest={isGuest}
+              emptyMessage={
+                searchQuery || selectedRegulation
+                  ? "No available courses match your search"
+                  : "No courses available for enrollment right now."
+              }
+              canDelete={userRole === "faculty" || userRole === "admin"}
+              onSubjectDeleted={() => router.refresh()}
+            />
+          </div>
+        )}
+
+        {/* Clean Call to Action if Student has purchased everything */}
+        {isStudent && myCourses.length > 0 && availableCourses.length === 0 && (
+          <div 
+            style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+            className="bg-card border-2 border-border p-8 text-center shadow-hard-sm"
+          >
+            <p className="text-xl font-bold text-foreground font-heading">🎉 You have unlocked all available courses!</p>
+            <p className="text-muted-foreground mt-2">Check back later for new subjects and content uploads.</p>
+          </div>
+        )}
+      </div>
     </>
   );
 }

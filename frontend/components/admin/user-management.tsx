@@ -187,8 +187,6 @@ export default function UserManagement() {
         return "bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30";
       case "student":
         return "bg-[#4CAF8F]/20 text-[#4CAF8F] border-[#4CAF8F]/30";
-      case "student_pending":
-        return "bg-[#FFA500]/20 text-[#FFA500] border-[#FFA500]/30";
       default:
         return "bg-[#707070]/20 text-[#707070] border-[#707070]/30";
     }
@@ -238,7 +236,6 @@ export default function UserManagement() {
             <option value="faculty">Faculty</option>
             <option value="faculty_pending">Pending Faculty</option>
             <option value="student">Student</option>
-            <option value="student_pending">Pending Student</option>
           </select>
         </div>
 
@@ -361,32 +358,11 @@ export default function UserManagement() {
               <label className="block text-sm font-medium text-[#B0B0B0] mb-2">
                 Select New Role
               </label>
-              {selectedUser.role === "student" ||
-              selectedUser.role === "student_pending" ? (
-                <div className="space-y-3">
-                  {selectedUser.role === "student_pending" && (
-                    <div className="p-4 bg-[#4CAF8F]/10 border border-[#4CAF8F]/30 rounded-lg">
-                      <p className="text-[#4CAF8F] text-sm mb-3">
-                        ℹ️ This student account is pending approval. You can
-                        approve it by changing the role to "Student".
-                      </p>
-                      <select
-                        value={newRole}
-                        onChange={(e) => setNewRole(e.target.value)}
-                        className="w-full px-4 py-2 bg-[#0B0D10] border border-[#2A2F35] rounded-lg text-[#EAEAEA] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20">
-                        <option value="student">Student (Approve)</option>
-                        <option value="student_pending">Pending Student</option>
-                      </select>
-                    </div>
-                  )}
-                  {selectedUser.role === "student" && (
-                    <div className="p-4 bg-[#C94A4A]/10 border border-[#C94A4A]/30 rounded-lg">
-                      <p className="text-[#C94A4A] text-sm">
-                        ⚠️ Student accounts can only be set to pending status.
-                        They cannot be converted to other roles.
-                      </p>
-                    </div>
-                  )}
+              {selectedUser.role === "student" ? (
+                <div className="p-4 bg-[#C94A4A]/10 border border-[#C94A4A]/30 rounded-lg">
+                  <p className="text-[#C94A4A] text-sm">
+                    ⚠️ Student accounts cannot be changed to another role.
+                  </p>
                 </div>
               ) : (
                 <select

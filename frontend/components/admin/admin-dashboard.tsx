@@ -106,7 +106,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Users */}
         <Card className="bg-[#14181D] border-[#2A2F35] p-6">
           <div className="flex items-center justify-between mb-4">
@@ -139,24 +139,6 @@ export default function AdminDashboard() {
           <Link
             href="/admin/faculty-approvals"
             className="text-xs text-[#D4AF37] hover:underline mt-2 inline-block">
-            Review approvals →
-          </Link>
-        </Card>
-
-        {/* Pending Students */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
-          <div className="flex items-center justify-between mb-4">
-            <GraduationCap className="w-8 h-8 text-[#4CAF8F]" />
-            <span className="text-xs text-[#707070] uppercase tracking-wider">
-              Pending Students
-            </span>
-          </div>
-          <div className="text-3xl font-bold text-[#4CAF8F]">
-            {stats.pendingStudents}
-          </div>
-          <Link
-            href="/admin/student-registrations"
-            className="text-xs text-[#4CAF8F] hover:underline mt-2 inline-block">
             Review approvals →
           </Link>
         </Card>
@@ -220,18 +202,6 @@ export default function AdminDashboard() {
               </h3>
               <p className="text-sm text-[#707070]">
                 Approve or reject faculty account requests
-              </p>
-            </Card>
-          </Link>
-
-          <Link href="/admin/student-registrations">
-            <Card className="bg-[#14181D] border-[#2A2F35] p-6 hover:border-[#4CAF8F] transition-colors cursor-pointer group">
-              <GraduationCap className="w-8 h-8 text-[#4CAF8F] mb-3" />
-              <h3 className="text-lg font-semibold text-[#EAEAEA] mb-2 group-hover:text-[#4CAF8F] transition-colors">
-                Student Approvals
-              </h3>
-              <p className="text-sm text-[#707070]">
-                Approve or reject student registration applications
               </p>
             </Card>
           </Link>

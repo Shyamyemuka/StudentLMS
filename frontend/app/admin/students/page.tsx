@@ -61,36 +61,7 @@ export default async function StudentsManagementPage() {
         </div>
 
         {/* Quick Actions for Students */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Link href="/admin/student-registrations">
-            <Card className="bg-[#14181D] border-[#2A2F35] p-6 hover:border-[#4CAF8F] transition-colors cursor-pointer group">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg bg-[#4CAF8F]/10 flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-[#4CAF8F]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-[#EAEAEA] group-hover:text-[#4CAF8F] transition-colors">
-                    Approve Students
-                  </h3>
-                  <p className="text-sm text-[#707070]">
-                    Review pending registrations
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </Link>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <Link href="/admin/course-assignments">
             <Card className="bg-[#14181D] border-[#2A2F35] p-6 hover:border-[#D4AF37] transition-colors cursor-pointer group">
               <div className="flex items-center gap-4">
@@ -163,10 +134,6 @@ export default async function StudentsManagementPage() {
               management functions:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <strong className="text-[#EAEAEA]">Approve Students:</strong>{" "}
-                Review and approve pending student registration applications
-              </li>
               <li>
                 <strong className="text-[#EAEAEA]">Assign Courses:</strong>{" "}
                 Assign specific courses to approved students

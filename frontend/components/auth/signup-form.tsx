@@ -115,8 +115,8 @@ export default function SignUpForm({ role }: SignUpFormProps) {
 
       setIsLoading(false);
       if (role === "student") {
-        toast.success("Account created successfully! Please check your email to verify, then sign in!");
-        router.push("/login");
+        toast.success("Account created successfully! Welcome to your dashboard!");
+        router.push("/dashboard");
       } else {
         toast.success("Account created! Please check your email to verify.");
         router.push("/pending-approval");
