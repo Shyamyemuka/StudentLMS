@@ -1,4 +1,0 @@
-d:/Student LMS/frontend\app\admin\students\page.tsx
-d:/Student LMS/frontend\app\(auth)\student-registration\apply\page.tsx
-d:/Student LMS/frontend\components\admin\admin-dashboard.tsx
-d:/Student LMS/frontend\components\admin\registration-management.tsx

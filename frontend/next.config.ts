@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Explicitly expose environment variables (workaround for Turbopack + workspace setup)
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -23,6 +24,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "30mb",
     },
+    serverExternalPackages: ["lightningcss"],
   },
   turbopack: {
     root: path.resolve(__dirname, ".."),
@@ -49,4 +51,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default nextConfig;
