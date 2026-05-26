@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
     },
   },
   serverExternalPackages: ["lightningcss", "@tailwindcss/oxide"],
+  turbopack: {
+    resolveAlias: {
+      "react": "./node_modules/react",
+      "react-dom": "./node_modules/react-dom",
+    },
+  },
   // Suppress hydration warnings caused by browser extensions
   reactStrictMode: true,
   compiler: {
