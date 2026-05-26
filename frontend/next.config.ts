@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "30mb",
     },
-    serverExternalPackages: ["lightningcss"],
+    serverExternalPackages: ["lightningcss", "@tailwindcss/oxide"],
   },
   turbopack: {
     root: path.resolve(__dirname, ".."),
