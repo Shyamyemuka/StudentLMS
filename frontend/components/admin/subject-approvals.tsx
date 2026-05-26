@@ -240,16 +240,19 @@ export default function SubjectApprovals() {
   return (
     <div className="space-y-6">
       {loading ? (
-        <div className="text-center py-12 text-[#B0B0B0]">
+        <div className="text-center py-12 text-muted-foreground font-bold">
           Loading pending subjects...
         </div>
       ) : subjects.length === 0 ? (
-        <Card className="bg-[#14181D] border-[#BFA55A]/30 p-8 text-center">
-          <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-[#EAEAEA] mb-2">
+        <Card 
+          style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+          className="bg-card border-2 border-border p-8 text-center shadow-hard-md"
+        >
+          <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-foreground font-heading mb-2">
             All Caught Up!
           </h3>
-          <p className="text-[#B0B0B0]">
+          <p className="text-muted-foreground font-bold">
             There are no pending subject approvals at the moment.
           </p>
         </Card>
@@ -258,39 +261,40 @@ export default function SubjectApprovals() {
           {subjects.map((subject) => (
             <Card
               key={subject.id}
-              className="bg-[#14181D] border-[#BFA55A]/30 p-6">
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="bg-card border-2 border-border p-6 shadow-hard-md">
               <div className="space-y-4">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className="p-2 bg-[#D4AF37]/10 rounded-lg text-[#D4AF37]">
+                    <div className="p-2 bg-primary/10 border border-border/20 rounded-lg text-primary">
                       <BookOpen className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2 py-0.5 bg-[#D4AF37]/10 text-[#D4AF37] rounded text-xs font-medium">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="px-2.5 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded text-xs font-bold">
                           {subject.subject_code}
                         </span>
-                        <span className="px-2 py-0.5 bg-[#3B82F6]/10 text-[#3B82F6] rounded text-xs font-medium">
+                        <span className="px-2.5 py-0.5 bg-secondary/15 text-secondary border border-secondary/20 rounded text-xs font-bold">
                           {subject.regulation}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold text-[#EAEAEA] mb-1">
+                      <h3 className="text-lg font-bold text-foreground font-heading mb-1">
                         {subject.title}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-[#B0B0B0]">
+                      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground font-bold">
                         <span>Created by {subject.profiles?.full_name}</span>
-                        <span>•</span>
+                        <span className="text-border">•</span>
                         <span className="capitalize">
                           {subject.profiles?.role}
                         </span>
-                        <span>•</span>
+                        <span className="text-border">•</span>
                         <span>{formatDate(subject.created_at)}</span>
                       </div>
                     </div>
                   </div>
-                  <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                    <Clock className="w-3 h-3 mr-1" />
+                  <Badge className="bg-amber-500/20 text-amber-500 border-2 border-amber-500/30 font-bold px-2.5 py-1 rounded-full shadow-hard-sm">
+                    <Clock className="w-3.5 h-3.5 mr-1" />
                     Pending
                   </Badge>
                 </div>
@@ -298,7 +302,7 @@ export default function SubjectApprovals() {
                 {/* Description */}
                 {subject.description && (
                   <div className="pl-11">
-                    <p className="text-sm text-[#B0B0B0]">
+                    <p className="text-sm text-muted-foreground font-medium">
                       {subject.description}
                     </p>
                   </div>
@@ -309,14 +313,17 @@ export default function SubjectApprovals() {
                   <Button
                     onClick={() => handleApprove(subject.id)}
                     disabled={processing === subject.id}
-                    className="bg-green-600 hover:bg-green-700 text-white">
+                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Approve Subject
                   </Button>
                   <Button
                     onClick={() => handleReject(subject.id)}
                     disabled={processing === subject.id}
-                    variant="destructive">
+                    variant="destructive"
+                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                    className="border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
                     <XCircle className="w-4 h-4 mr-2" />
                     Reject & Delete
                   </Button>

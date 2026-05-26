@@ -178,15 +178,15 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
       <div>
         <label
           htmlFor="title"
-          className="block text-sm font-medium text-[#B0B0B0] mb-2">
-          Video Title <span className="text-[#C94A4A]">*</span>
+          className="block text-sm font-bold text-foreground mb-2 font-body">
+          Video Title <span className="text-destructive">*</span>
         </label>
         <input
           id="title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full bg-[#0B0D10] border border-[#2A2F35] rounded-lg px-4 py-3 text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+          className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body font-medium"
           placeholder="e.g., Introduction to Data Structures"
           required
         />
@@ -194,19 +194,19 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
 
       {/* Upload Mode Toggle */}
       <div>
-        <label className="block text-sm font-medium text-[#B0B0B0] mb-3">
-          Upload Method <span className="text-[#C94A4A]">*</span>
+        <label className="block text-sm font-bold text-foreground mb-3 font-body">
+          Upload Method <span className="text-destructive">*</span>
         </label>
         <div className="flex gap-3">
           <button
             type="button"
             onClick={() => setUploadMode("file")}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-xl font-bold border-2 border-border hover:scale-102 active:scale-98 transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.05)] ${
               uploadMode === "file"
-                ? "bg-[#D4AF37] text-[#0B0D10]"
-                : "bg-[#14181D] border border-[#2A2F35] text-[#B0B0B0] hover:border-[#D4AF37]/50"
+                ? "bg-primary text-primary-foreground"
+                : "bg-card text-muted-foreground hover:border-primary/50"
             }`}>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 font-body">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -225,12 +225,12 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
           <button
             type="button"
             onClick={() => setUploadMode("url")}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-xl font-bold border-2 border-border hover:scale-102 active:scale-98 transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.05)] ${
               uploadMode === "url"
-                ? "bg-[#D4AF37] text-[#0B0D10]"
-                : "bg-[#14181D] border border-[#2A2F35] text-[#B0B0B0] hover:border-[#D4AF37]/50"
+                ? "bg-primary text-primary-foreground"
+                : "bg-card text-muted-foreground hover:border-primary/50"
             }`}>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 font-body">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -252,17 +252,17 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
       {/* File Upload */}
       {uploadMode === "file" && (
         <div>
-          <label className="block text-sm font-medium text-[#B0B0B0] mb-2">
-            Upload Video File <span className="text-[#C94A4A]">*</span>
+          <label className="block text-sm font-bold text-foreground mb-2 font-body">
+            Upload Video File <span className="text-destructive">*</span>
           </label>
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-[#2A2F35] rounded-lg p-8 text-center cursor-pointer hover:border-[#D4AF37] transition-colors">
+            className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.02)]">
             {videoFile ? (
-              <div>
-                <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-[#4CAF8F]/10 flex items-center justify-center">
+              <div className="font-body font-bold">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-success/15 border-2 border-success/30 flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-[#4CAF8F]"
+                    className="w-6 h-6 text-success"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -274,8 +274,8 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
                     />
                   </svg>
                 </div>
-                <p className="text-[#EAEAEA] font-medium">{videoFile.name}</p>
-                <p className="text-[#707070] text-sm mt-1">
+                <p className="text-foreground font-black">{videoFile.name}</p>
+                <p className="text-muted-foreground text-sm mt-1">
                   {(videoFile.size / 1024 / 1024).toFixed(2)} MB
                 </p>
                 <button
@@ -285,15 +285,15 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
                     setVideoFile(null);
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
-                  className="mt-2 text-[#C94A4A] text-sm hover:underline">
+                  className="mt-2 text-destructive text-sm hover:underline font-bold cursor-pointer">
                   Remove
                 </button>
               </div>
             ) : (
-              <div>
-                <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center">
+              <div className="font-body font-bold">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-primary/10 border-2 border-primary/20 flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-[#D4AF37]"
+                    className="w-6 h-6 text-primary"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -305,13 +305,13 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
                     />
                   </svg>
                 </div>
-                <p className="text-[#EAEAEA]">
+                <p className="text-foreground">
                   Click to upload or drag and drop
                 </p>
-                <p className="text-[#707070] text-sm mt-1">
+                <p className="text-muted-foreground text-sm mt-1">
                   MP4, WebM, OGG, or other video formats
                 </p>
-                <p className="text-[#4CAF8F] text-xs mt-2">
+                <p className="text-success text-xs mt-2">
                   ✓ Uses enhanced video player with bookmarks
                 </p>
               </div>
@@ -332,19 +332,19 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
         <div>
           <label
             htmlFor="videoUrl"
-            className="block text-sm font-medium text-[#B0B0B0] mb-2">
-            Video URL <span className="text-[#C94A4A]">*</span>
+            className="block text-sm font-bold text-foreground mb-2 font-body">
+            Video URL <span className="text-destructive">*</span>
           </label>
           <input
             id="videoUrl"
             type="url"
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            className="w-full bg-[#0B0D10] border border-[#2A2F35] rounded-lg px-4 py-3 text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+            className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body font-medium"
             placeholder="https://youtube.com/... or https://dropbox.com/... or direct .mp4 link"
             required
           />
-          <p className="text-[#707070] text-xs mt-2">
+          <p className="text-muted-foreground/80 text-xs mt-2 font-bold font-body">
             Supported: YouTube, Vimeo, Google Drive, Dropbox, or direct video
             links (.mp4, .webm)
           </p>
@@ -353,22 +353,22 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
 
       {/* Supported Platforms (only for URL mode) */}
       {uploadMode === "url" && (
-        <div className="bg-[#0B0D10] border border-[#2A2F35] rounded-lg p-4">
-          <p className="text-sm text-[#B0B0B0] mb-3">Supported platforms:</p>
+        <div className="bg-background border-2 border-border rounded-xl p-4 font-body font-bold">
+          <p className="text-sm text-muted-foreground mb-3">Supported platforms:</p>
           <div className="flex flex-wrap gap-3">
-            <span className="px-3 py-1 bg-[#FF0000]/10 text-[#FF6B6B] rounded text-xs">
+            <span className="px-3 py-1 bg-destructive/10 text-destructive rounded border border-destructive/20 text-xs">
               YouTube
             </span>
-            <span className="px-3 py-1 bg-[#1AB7EA]/10 text-[#1AB7EA] rounded text-xs">
+            <span className="px-3 py-1 bg-info/10 text-info rounded border border-info/20 text-xs">
               Vimeo
             </span>
-            <span className="px-3 py-1 bg-[#4285F4]/10 text-[#4285F4] rounded text-xs">
+            <span className="px-3 py-1 bg-secondary/15 text-secondary rounded border border-secondary/30 text-xs font-bold">
               Google Drive
             </span>
-            <span className="px-3 py-1 bg-[#0061FF]/10 text-[#0061FF] rounded text-xs">
+            <span className="px-3 py-1 bg-[#0061FF]/10 text-[#0061FF] rounded border border-[#0061FF]/20 text-xs">
               Dropbox
             </span>
-            <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#D4AF37] rounded text-xs">
+            <span className="px-3 py-1 bg-primary/10 text-primary rounded border border-primary/20 text-xs">
               Direct Links
             </span>
           </div>
@@ -377,16 +377,16 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
 
       {/* Upload Progress */}
       {isLoading && uploadMode === "file" && uploadProgress > 0 && (
-        <div className="bg-[#0B0D10] border border-[#2A2F35] rounded-lg p-4">
+        <div className="bg-background border-2 border-border rounded-xl p-4 font-body font-bold">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-[#B0B0B0]">Uploading video...</span>
-            <span className="text-sm text-[#D4AF37] font-medium">
+            <span className="text-sm text-muted-foreground">Uploading video...</span>
+            <span className="text-sm text-primary font-black">
               {uploadProgress}%
             </span>
           </div>
-          <div className="w-full bg-[#2A2F35] rounded-full h-2">
+          <div className="w-full bg-muted border border-border rounded-full h-3 overflow-hidden">
             <div
-              className="bg-[#D4AF37] h-2 rounded-full transition-all duration-300"
+              className="bg-primary h-full transition-all duration-300"
               style={{ width: `${uploadProgress}%` }}
             />
           </div>
@@ -397,7 +397,8 @@ export default function VideoUploadForm({ subjectId }: VideoUploadFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-[#D4AF37] text-[#0B0D10] py-3 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+        className="w-full bg-primary text-primary-foreground border-2 border-border py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-hard-sm cursor-pointer font-heading text-lg">
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">

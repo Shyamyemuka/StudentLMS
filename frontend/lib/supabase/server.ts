@@ -7,11 +7,6 @@ export async function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Debug: Log what we're getting (only show partial key for security)
-  console.log('🔍 Debug - Supabase URL:', supabaseUrl);
-  console.log('🔍 Debug - Key exists:', !!supabaseKey);
-  console.log('🔍 Debug - Key starts with:', supabaseKey?.substring(0, 20));
-
   // Validate environment variables
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(

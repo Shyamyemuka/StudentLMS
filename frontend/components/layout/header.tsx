@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Profile } from "@/types/database";
 import NotificationBell from "@/components/notifications/notification-bell";
 import SwitchToggleThemeDemo from "@/components/ui/toggle-theme";
+import AdminSignatureUpload from "@/components/admin/AdminSignatureUpload";
 
 interface HeaderProps {
   profile: Profile | null;
@@ -134,11 +135,6 @@ export default function Header({ profile }: HeaderProps) {
               Dashboard
             </Link>
             <Link
-              href="/my-courses"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
-              My Courses
-            </Link>
-            <Link
               href="/fun"
               className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
               Fun Zone
@@ -176,6 +172,13 @@ export default function Header({ profile }: HeaderProps) {
 
             {/* Notification Bell */}
             {profile && <NotificationBell userId={profile.user_id} />}
+
+            {/* Admin Signature Upload */}
+            {profile?.role === "admin" && (
+              <div className="hidden lg:block shrink-0">
+                <AdminSignatureUpload />
+              </div>
+            )}
 
             {/* Profile Dropdown or CTAs */}
             {profile ? (
@@ -237,12 +240,6 @@ export default function Header({ profile }: HeaderProps) {
                           onClick={() => setIsMenuOpen(false)}
                           className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
                           Dashboard
-                        </Link>
-                        <Link
-                          href="/my-courses"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
-                          My Courses
                         </Link>
                         <Link
                           href="/fun"

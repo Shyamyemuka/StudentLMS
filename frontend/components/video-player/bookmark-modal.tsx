@@ -113,19 +113,19 @@ export default function BookmarkModal({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-black/95 backdrop-blur-sm p-6 border-t border-gray-700">
+    <div className="bg-card border-t-2 border-border p-6 relative">
       <div className="max-w-3xl mx-auto">
         {/* Header with Close Button */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-white text-sm">Timestamp: </span>
-            <span className="text-[#D4AF37] font-semibold">
+            <span className="text-foreground text-sm font-bold">Timestamp: </span>
+            <span className="text-primary font-bold">
               {formatTime(currentTime)}
             </span>
           </div>
           <button
             onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-muted-foreground hover:text-foreground font-bold p-1 cursor-pointer transition-colors"
             title="Close (ESC)"
             type="button">
             <svg
@@ -136,7 +136,7 @@ export default function BookmarkModal({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
@@ -148,7 +148,8 @@ export default function BookmarkModal({
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder:text-gray-500 focus:border-[#D4AF37] focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-colors resize-none"
+            style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+            className="w-full bg-card border-2 border-border px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold resize-none"
             placeholder="Add a note for this timestamp..."
             rows={3}
             maxLength={500}
@@ -159,13 +160,15 @@ export default function BookmarkModal({
             <button
               type="button"
               onClick={handleCancel}
-              className="px-6 py-2.5 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors">
+              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              className="px-6 py-2.5 border-2 border-border bg-muted/30 font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer">
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-6 py-2.5 bg-[#D4AF37] text-[#0B0D10] rounded-lg font-semibold hover:bg-[#E6C76A] transition-colors disabled:opacity-50">
+              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              className="px-6 py-2.5 bg-primary text-primary-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
               {isLoading ? "Saving..." : "Save Bookmark"}
             </button>
           </div>

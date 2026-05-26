@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     // Query profiles table
     const { data: profiles, error: profileError } = await supabase
       .from("profiles")
-      .select("user_id, full_name, phone, role, created_at, updated_at")
+      .select("user_id, full_name, role, created_at, updated_at")
       .order("created_at", { ascending: false });
 
     if (profileError) throw profileError;

@@ -20,15 +20,15 @@ export default function CourseProgressCard({
 
   return (
     <div
-      className={`bg-[#14181D] border border-[#2A2F35] rounded-lg p-5 ${
+      className={`bg-card border-2 border-border rounded-xl p-5 shadow-hard-sm transition-all duration-200 ${
         isClickable
-          ? "cursor-pointer hover:border-[#D4AF37]/50 transition-colors"
+          ? "cursor-pointer hover:border-primary/50 hover:scale-[1.01]"
           : ""
       }`}
       onClick={onClick}>
       {/* Course Name */}
       {progress.subject && (
-        <h3 className="text-lg font-semibold text-[#EAEAEA] mb-3">
+        <h3 className="text-lg font-bold text-foreground mb-3 font-heading">
           {progress.subject.title}
         </h3>
       )}
@@ -38,11 +38,11 @@ export default function CourseProgressCard({
 
       {/* Details */}
       {showDetails && (
-        <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+        <div className="mt-4 grid grid-cols-2 gap-3 text-sm font-body font-bold">
           {/* Resources Completed */}
           <div>
-            <p className="text-[#707070] text-xs mb-1">Resources</p>
-            <p className="text-[#EAEAEA] font-medium">
+            <p className="text-muted-foreground/80 text-xs mb-1">Resources</p>
+            <p className="text-foreground font-black">
               {progress.completed_resources} / {progress.total_resources}
             </p>
           </div>
@@ -50,8 +50,8 @@ export default function CourseProgressCard({
           {/* Last Accessed */}
           {progress.last_accessed && (
             <div>
-              <p className="text-[#707070] text-xs mb-1">Last Accessed</p>
-              <p className="text-[#EAEAEA] font-medium">
+              <p className="text-muted-foreground/80 text-xs mb-1">Last Accessed</p>
+              <p className="text-foreground font-black">
                 {formatDistanceToNow(new Date(progress.last_accessed), {
                   addSuffix: true,
                 })}
@@ -62,8 +62,8 @@ export default function CourseProgressCard({
           {/* Started Date */}
           {progress.started_at && (
             <div>
-              <p className="text-[#707070] text-xs mb-1">Started</p>
-              <p className="text-[#EAEAEA] font-medium">
+              <p className="text-muted-foreground/80 text-xs mb-1">Started</p>
+              <p className="text-foreground font-black">
                 {formatDate(progress.started_at)}
               </p>
             </div>
@@ -72,8 +72,8 @@ export default function CourseProgressCard({
           {/* Completed Date */}
           {progress.completed_at && (
             <div>
-              <p className="text-[#707070] text-xs mb-1">Completed</p>
-              <p className="text-[#4CAF8F] font-semibold">
+              <p className="text-muted-foreground/80 text-xs mb-1">Completed</p>
+              <p className="text-success font-black">
                 {formatDate(progress.completed_at)}
               </p>
             </div>
@@ -83,9 +83,9 @@ export default function CourseProgressCard({
 
       {/* Status Badge */}
       {progress.progress_percentage === 100 && (
-        <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-[#4CAF8F]/10 border border-[#4CAF8F]/30 rounded-full">
-          <span className="w-2 h-2 rounded-full bg-[#4CAF8F]"></span>
-          <span className="text-[#4CAF8F] text-xs font-medium">
+        <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-success/20 border-2 border-success/30 rounded-full font-body font-bold">
+          <span className="w-2 h-2 rounded-full bg-success"></span>
+          <span className="text-success text-xs font-black">
             Course Completed
           </span>
         </div>

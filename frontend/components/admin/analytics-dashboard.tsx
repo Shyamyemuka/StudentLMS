@@ -214,79 +214,80 @@ export default function AnalyticsDashboard() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="text-[#707070]">Loading analytics...</div>
+        <div className="text-muted-foreground font-bold font-body">Loading analytics...</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 transition-colors duration-200">
       {/* Header */}
       <div>
-        <Link href="/admin">
+        <Link href="/admin" className="cursor-pointer">
           <Button
             variant="outline"
             size="sm"
-            className="mb-4 bg-transparent border-[#2A2F35] text-[#B0B0B0] hover:bg-[#1A1F25] hover:text-[#D4AF37] hover:border-[#D4AF37]">
+            className="mb-4 bg-transparent border-2 border-border text-muted-foreground hover:bg-muted font-bold font-body cursor-pointer">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Admin Dashboard
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-[#EAEAEA] mb-2">
+        <h1 className="text-3xl font-bold text-foreground font-heading mb-2">
           Analytics Dashboard
         </h1>
-        <p className="text-[#B0B0B0]">Platform insights and activity trends</p>
+        <p className="text-muted-foreground font-medium font-body">Platform insights and activity trends</p>
       </div>
 
       {/* Monthly Growth Trends */}
-      <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+      <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
         <div className="flex items-center gap-3 mb-6">
-          <TrendingUp className="w-6 h-6 text-[#D4AF37]" />
-          <h2 className="text-xl font-semibold text-[#EAEAEA]">
+          <TrendingUp className="w-6 h-6 text-primary" />
+          <h2 className="text-xl font-bold text-foreground font-heading">
             Monthly Growth Trends
           </h2>
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2A2F35" />
-            <XAxis dataKey="month" stroke="#707070" />
-            <YAxis stroke="#707070" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.15} />
+            <XAxis dataKey="month" stroke="var(--foreground)" fontSize={12} fontFamily="var(--font-patrick-hand)" />
+            <YAxis stroke="var(--foreground)" fontSize={12} fontFamily="var(--font-patrick-hand)" />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#14181D",
-                border: "1px solid #2A2F35",
+                backgroundColor: "var(--card)",
+                border: "2px solid var(--border)",
                 borderRadius: "8px",
+                fontFamily: "var(--font-patrick-hand)",
               }}
-              labelStyle={{ color: "#EAEAEA" }}
-              itemStyle={{ color: "#B0B0B0" }}
+              labelStyle={{ color: "var(--foreground)", fontWeight: "bold" }}
+              itemStyle={{ color: "var(--foreground)" }}
             />
-            <Legend wrapperStyle={{ color: "#B0B0B0" }} />
+            <Legend wrapperStyle={{ color: "var(--foreground)", fontFamily: "var(--font-patrick-hand)", fontWeight: "bold" }} />
             <Line
               type="monotone"
               dataKey="users"
               stroke="#D4AF37"
-              strokeWidth={2}
+              strokeWidth={3}
               name="New Users"
             />
             <Line
               type="monotone"
               dataKey="subjects"
               stroke="#4CAF8F"
-              strokeWidth={2}
+              strokeWidth={3}
               name="New Subjects"
             />
             <Line
               type="monotone"
               dataKey="resources"
               stroke="#6B9FDB"
-              strokeWidth={2}
+              strokeWidth={3}
               name="New Resources"
             />
             <Line
               type="monotone"
               dataKey="submissions"
               stroke="#C94A4A"
-              strokeWidth={2}
+              strokeWidth={3}
               name="Submissions"
             />
           </LineChart>
@@ -296,37 +297,38 @@ export default function AnalyticsDashboard() {
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Distribution */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+        <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
           <div className="flex items-center gap-3 mb-6">
-            <Users className="w-6 h-6 text-[#D4AF37]" />
-            <h2 className="text-xl font-semibold text-[#EAEAEA]">
+            <Users className="w-6 h-6 text-primary" />
+            <h2 className="text-xl font-bold text-foreground font-heading">
               User Distribution
             </h2>
           </div>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={userRoleData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A2F35" />
-              <XAxis dataKey="name" stroke="#707070" />
-              <YAxis stroke="#707070" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.15} />
+              <XAxis dataKey="name" stroke="var(--foreground)" fontSize={12} fontFamily="var(--font-patrick-hand)" />
+              <YAxis stroke="var(--foreground)" fontSize={12} fontFamily="var(--font-patrick-hand)" />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#14181D",
-                  border: "1px solid #2A2F35",
+                  backgroundColor: "var(--card)",
+                  border: "2px solid var(--border)",
                   borderRadius: "8px",
+                  fontFamily: "var(--font-patrick-hand)",
                 }}
-                labelStyle={{ color: "#EAEAEA" }}
-                cursor={{ fill: "rgba(212, 175, 55, 0.1)" }}
+                labelStyle={{ color: "var(--foreground)", fontWeight: "bold" }}
+                cursor={{ fill: "rgba(212, 175, 55, 0.05)" }}
               />
-              <Bar dataKey="value" fill="#D4AF37" name="Users" />
+              <Bar dataKey="value" fill="#D4AF37" name="Users" stroke="var(--border)" strokeWidth={2} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
 
         {/* Submission Status */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+        <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
           <div className="flex items-center gap-3 mb-6">
-            <FileText className="w-6 h-6 text-[#D4AF37]" />
-            <h2 className="text-xl font-semibold text-[#EAEAEA]">
+            <FileText className="w-6 h-6 text-primary" />
+            <h2 className="text-xl font-bold text-foreground font-heading">
               Submission Status
             </h2>
           </div>
@@ -339,6 +341,8 @@ export default function AnalyticsDashboard() {
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
+                stroke="var(--border)"
+                strokeWidth={2}
                 label={({ value }) => (value > 0 ? value : "")}>
                 {submissionStatusData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -346,14 +350,15 @@ export default function AnalyticsDashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#14181D",
-                  border: "1px solid #2A2F35",
+                  backgroundColor: "var(--card)",
+                  border: "2px solid var(--border)",
                   borderRadius: "8px",
+                  fontFamily: "var(--font-patrick-hand)",
                 }}
-                labelStyle={{ color: "#EAEAEA" }}
+                labelStyle={{ color: "var(--foreground)", fontWeight: "bold" }}
               />
               <Legend
-                wrapperStyle={{ color: "#B0B0B0" }}
+                wrapperStyle={{ color: "var(--foreground)", fontFamily: "var(--font-patrick-hand)", fontWeight: "bold" }}
                 formatter={(value, entry: any) =>
                   `${entry.payload.name}: ${entry.payload.value} (${(
                     (entry.payload.value /
@@ -370,10 +375,10 @@ export default function AnalyticsDashboard() {
         </Card>
 
         {/* Subject Status */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+        <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
           <div className="flex items-center gap-3 mb-6">
-            <BookOpen className="w-6 h-6 text-[#D4AF37]" />
-            <h2 className="text-xl font-semibold text-[#EAEAEA]">
+            <BookOpen className="w-6 h-6 text-primary" />
+            <h2 className="text-xl font-bold text-foreground font-heading">
               Subject Status
             </h2>
           </div>
@@ -386,6 +391,8 @@ export default function AnalyticsDashboard() {
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
+                stroke="var(--border)"
+                strokeWidth={2}
                 label={({ value }) => (value > 0 ? value : "")}>
                 {subjectStatusData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -393,14 +400,15 @@ export default function AnalyticsDashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#14181D",
-                  border: "1px solid #2A2F35",
+                  backgroundColor: "var(--card)",
+                  border: "2px solid var(--border)",
                   borderRadius: "8px",
+                  fontFamily: "var(--font-patrick-hand)",
                 }}
-                labelStyle={{ color: "#EAEAEA" }}
+                labelStyle={{ color: "var(--foreground)", fontWeight: "bold" }}
               />
               <Legend
-                wrapperStyle={{ color: "#B0B0B0" }}
+                wrapperStyle={{ color: "var(--foreground)", fontFamily: "var(--font-patrick-hand)", fontWeight: "bold" }}
                 formatter={(value, entry: any) =>
                   `${entry.payload.name}: ${entry.payload.value} (${(
                     (entry.payload.value /
@@ -417,38 +425,38 @@ export default function AnalyticsDashboard() {
         </Card>
 
         {/* Activity Summary */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+        <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
           <div className="flex items-center gap-3 mb-6">
-            <Activity className="w-6 h-6 text-[#D4AF37]" />
-            <h2 className="text-xl font-semibold text-[#EAEAEA]">
+            <Activity className="w-6 h-6 text-primary" />
+            <h2 className="text-xl font-bold text-foreground font-heading">
               Activity Summary
             </h2>
           </div>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-[#0B0D10] rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-background border-2 border-border shadow-hard-sm rounded-lg wobbly-border transition-colors duration-200">
               <div className="flex items-center gap-3">
-                <Users className="w-5 h-5 text-[#D4AF37]" />
-                <span className="text-[#B0B0B0]">Total Users</span>
+                <Users className="w-5 h-5 text-primary" />
+                <span className="text-muted-foreground font-bold font-body">Total Users</span>
               </div>
-              <span className="text-2xl font-bold text-[#EAEAEA]">
+              <span className="text-2xl font-bold text-foreground font-body">
                 {userRoleData.reduce((acc, curr) => acc + curr.value, 0)}
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-[#0B0D10] rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-background border-2 border-border shadow-hard-sm rounded-lg wobbly-border transition-colors duration-200">
               <div className="flex items-center gap-3">
-                <BookOpen className="w-5 h-5 text-[#4CAF8F]" />
-                <span className="text-[#B0B0B0]">Total Subjects</span>
+                <BookOpen className="w-5 h-5 text-secondary" />
+                <span className="text-muted-foreground font-bold font-body">Total Subjects</span>
               </div>
-              <span className="text-2xl font-bold text-[#EAEAEA]">
+              <span className="text-2xl font-bold text-foreground font-body">
                 {subjectStatusData.reduce((acc, curr) => acc + curr.value, 0)}
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-[#0B0D10] rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-background border-2 border-border shadow-hard-sm rounded-lg wobbly-border transition-colors duration-200">
               <div className="flex items-center gap-3">
-                <FileText className="w-5 h-5 text-[#6B9FDB]" />
-                <span className="text-[#B0B0B0]">Total Submissions</span>
+                <FileText className="w-5 h-5 text-primary" />
+                <span className="text-muted-foreground font-bold font-body">Total Submissions</span>
               </div>
-              <span className="text-2xl font-bold text-[#EAEAEA]">
+              <span className="text-2xl font-bold text-foreground font-body">
                 {submissionStatusData.reduce(
                   (acc, curr) => acc + curr.value,
                   0,

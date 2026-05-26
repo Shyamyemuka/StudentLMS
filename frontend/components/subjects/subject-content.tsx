@@ -6,6 +6,7 @@ import ChatBox from "../chat/chat-box";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Resource } from "@/types/database";
+import CertificatePanel from "./certificate-panel";
 
 interface SubjectContentProps {
   subjectId: number;
@@ -13,6 +14,9 @@ interface SubjectContentProps {
   initialPdfs: Resource[];
   initialNotes: Resource[];
   userRole: string;
+  initialCertificateEnabled: boolean;
+  studentName: string;
+  courseName: string;
 }
 
 export default function SubjectContent({
@@ -21,6 +25,9 @@ export default function SubjectContent({
   initialPdfs,
   initialNotes,
   userRole,
+  initialCertificateEnabled,
+  studentName,
+  courseName,
 }: SubjectContentProps) {
   const [videos, setVideos] = useState(initialVideos);
   const [pdfs, setPdfs] = useState(initialPdfs);
@@ -86,10 +93,19 @@ export default function SubjectContent({
         />
       </div>
 
-      {/* Chat Box - Takes up 1 column */}
+      {/* Chat Box & Certificate Panel - Takes up 1 column */}
       <div className="lg:col-span-1">
-        <div className="sticky top-8 h-[calc(100vh-12rem)]">
-          <ChatBox subjectId={subjectId.toString()} />
+        <div className="sticky top-8 h-[calc(100vh-12rem)] flex flex-col gap-4">
+          <CertificatePanel
+            subjectId={subjectId}
+            initialCertificateEnabled={initialCertificateEnabled}
+            userRole={userRole}
+            studentName={studentName}
+            courseName={courseName}
+          />
+          <div className="flex-1 min-h-0">
+            <ChatBox subjectId={subjectId.toString()} />
+          </div>
         </div>
       </div>
     </div>

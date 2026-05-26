@@ -23,21 +23,21 @@ export default function FunPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#0B0D10]">
+    <div className="min-h-[calc(100vh-4rem)] bg-background transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-[#B0B0B0] hover:text-[#D4AF37] mb-6 transition-colors group">
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-6 transition-colors group cursor-pointer">
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-medium">Back</span>
+          <span className="font-medium font-body">Back</span>
         </Link>
 
         <div className="space-y-2 mb-6">
-          <h1 className="text-2xl md:text-3xl font-semibold text-[#D4AF37]">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground font-heading">
             Fun Zone
           </h1>
-          <p className="text-[#B0B0B0]">
+          <p className="text-muted-foreground font-medium font-body">
             Take a break and enjoy some interactive activities and games!
           </p>
         </div>

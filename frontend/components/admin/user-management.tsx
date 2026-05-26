@@ -180,22 +180,22 @@ export default function UserManagement() {
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case "admin":
-        return "bg-[#C94A4A]/20 text-[#C94A4A] border-[#C94A4A]/30";
+        return "bg-destructive/10 text-destructive border-destructive/30 border font-bold";
       case "faculty":
-        return "bg-[#6B9FDB]/20 text-[#6B9FDB] border-[#6B9FDB]/30";
+        return "bg-secondary/15 text-secondary border-secondary/30 border font-bold";
       case "faculty_pending":
-        return "bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30";
+        return "bg-primary/15 text-primary border-primary/30 border font-bold";
       case "student":
-        return "bg-[#4CAF8F]/20 text-[#4CAF8F] border-[#4CAF8F]/30";
+        return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 border font-bold";
       default:
-        return "bg-[#707070]/20 text-[#707070] border-[#707070]/30";
+        return "bg-muted text-muted-foreground border-border/30 border font-bold";
     }
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="text-[#707070]">Loading users...</div>
+        <div className="text-muted-foreground font-bold">Loading users...</div>
       </div>
     );
   }
@@ -205,10 +205,10 @@ export default function UserManagement() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h2 className="text-2xl font-bold text-[#EAEAEA] mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2 font-heading">
             User Management
           </h2>
-          <p className="text-[#B0B0B0]">
+          <p className="text-muted-foreground font-medium font-body">
             Manage user accounts, roles, and permissions
           </p>
         </div>
@@ -217,12 +217,12 @@ export default function UserManagement() {
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#707070]" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#14181D] border-[#2A2F35] text-[#EAEAEA] placeholder:text-[#707070]"
+              className="pl-10 bg-card border-2 border-border text-foreground placeholder:text-muted-foreground/60 rounded-xl"
             />
           </div>
 
@@ -230,7 +230,7 @@ export default function UserManagement() {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="px-4 py-2 bg-[#14181D] border border-[#2A2F35] rounded-lg text-[#EAEAEA] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20">
+            className="px-4 py-2 bg-card border-2 border-border rounded-xl text-foreground font-bold font-body focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
             <option value="all">All Roles</option>
             <option value="admin">Admin</option>
             <option value="faculty">Faculty</option>
@@ -241,50 +241,50 @@ export default function UserManagement() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card className="bg-[#14181D] border-[#2A2F35] p-4">
-            <div className="text-2xl font-bold text-[#EAEAEA]">
+          <Card className="bg-card border-2 border-border p-4 shadow-hard-sm rounded-xl">
+            <div className="text-2xl font-bold text-foreground">
               {filteredUsers.length}
             </div>
-            <div className="text-xs text-[#707070]">
+            <div className="text-xs text-muted-foreground font-bold">
               {roleFilter === "all" ? "Total Users" : "Filtered Users"}
             </div>
           </Card>
-          <Card className="bg-[#14181D] border-[#2A2F35] p-4">
-            <div className="text-2xl font-bold text-[#4CAF8F]">
+          <Card className="bg-card border-2 border-border p-4 shadow-hard-sm rounded-xl">
+            <div className="text-2xl font-bold text-success">
               {users.filter((u) => u.role === "student").length}
             </div>
-            <div className="text-xs text-[#707070]">Students</div>
+            <div className="text-xs text-muted-foreground font-bold">Students</div>
           </Card>
-          <Card className="bg-[#14181D] border-[#2A2F35] p-4">
-            <div className="text-2xl font-bold text-[#6B9FDB]">
+          <Card className="bg-card border-2 border-border p-4 shadow-hard-sm rounded-xl">
+            <div className="text-2xl font-bold text-secondary">
               {users.filter((u) => u.role === "faculty").length}
             </div>
-            <div className="text-xs text-[#707070]">Faculty</div>
+            <div className="text-xs text-muted-foreground font-bold">Faculty</div>
           </Card>
-          <Card className="bg-[#14181D] border-[#2A2F35] p-4">
-            <div className="text-2xl font-bold text-[#C94A4A]">
+          <Card className="bg-card border-2 border-border p-4 shadow-hard-sm rounded-xl">
+            <div className="text-2xl font-bold text-destructive">
               {users.filter((u) => u.role === "admin").length}
             </div>
-            <div className="text-xs text-[#707070]">Admins</div>
+            <div className="text-xs text-muted-foreground font-bold">Admins</div>
           </Card>
         </div>
 
         {/* Users List */}
         {filteredUsers.length === 0 ? (
-          <Card className="bg-[#14181D] border-[#2A2F35] p-12 text-center">
-            <p className="text-[#B0B0B0]">No users found</p>
+          <Card className="bg-card border-2 border-border p-12 text-center shadow-hard-sm rounded-xl">
+            <p className="text-muted-foreground font-medium font-body">No users found</p>
           </Card>
         ) : (
           <div className="space-y-3">
             {filteredUsers.map((user) => (
               <Card
                 key={user.user_id}
-                className="bg-[#14181D] border-[#2A2F35] p-4 hover:border-[#D4AF37]/50 transition-colors">
+                className="bg-card border-2 border-border p-4 hover:border-primary/50 transition-colors shadow-hard-sm rounded-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   {/* User Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-[#EAEAEA] truncate">
+                      <h3 className="text-lg font-bold text-foreground truncate font-heading">
                         {user.full_name}
                       </h3>
                       <Badge
@@ -296,7 +296,7 @@ export default function UserManagement() {
                             user.role.slice(1)}
                       </Badge>
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-[#707070]">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground font-bold font-body">
                       <span className="flex items-center gap-2">
                         <Mail className="w-4 h-4" />
                         {user.email}
@@ -315,7 +315,8 @@ export default function UserManagement() {
                       onClick={() => handleEditClick(user)}
                       size="sm"
                       variant="outline"
-                      className="bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37]/50">
+                      style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                      className="bg-primary/10 hover:bg-primary/20 text-primary border-2 border-border font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                       <Edit2 className="w-4 h-4 mr-2" />
                       Edit Role
                     </Button>
@@ -323,7 +324,8 @@ export default function UserManagement() {
                       onClick={() => handleDeleteClick(user)}
                       size="sm"
                       variant="outline"
-                      className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/30 hover:border-red-500/50">
+                      style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                      className="bg-destructive/10 hover:bg-destructive/20 text-destructive border-2 border-border font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -347,20 +349,20 @@ export default function UserManagement() {
         {selectedUser && (
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-[#B0B0B0] mb-2">
+              <p className="text-sm text-muted-foreground font-medium mb-2 font-body">
                 Changing role for:{" "}
-                <span className="text-[#EAEAEA] font-medium">
+                <span className="text-foreground font-bold">
                   {selectedUser.full_name}
                 </span>
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#B0B0B0] mb-2">
+              <label className="block text-sm font-bold text-foreground mb-2 font-body">
                 Select New Role
               </label>
               {selectedUser.role === "student" ? (
-                <div className="p-4 bg-[#C94A4A]/10 border border-[#C94A4A]/30 rounded-lg">
-                  <p className="text-[#C94A4A] text-sm">
+                <div className="p-4 bg-destructive/10 border-2 border-destructive/30 rounded-lg">
+                  <p className="text-destructive font-bold text-sm font-body">
                     ⚠️ Student accounts cannot be changed to another role.
                   </p>
                 </div>
@@ -368,7 +370,7 @@ export default function UserManagement() {
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#0B0D10] border border-[#2A2F35] rounded-lg text-[#EAEAEA] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20">
+                  className="w-full px-4 py-2 bg-background border-2 border-border rounded-xl text-foreground font-bold font-body focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
                   <option value="faculty">Faculty</option>
                   <option value="faculty_pending">Pending Faculty</option>
                   <option value="admin">Admin</option>
@@ -390,15 +392,15 @@ export default function UserManagement() {
         onConfirm={handleDeleteUser}
         onCancel={() => setShowDeleteDialog(false)}>
         {selectedUser && (
-          <div className="space-y-4">
-            <p className="text-[#B0B0B0] text-sm">
+          <div className="space-y-4 font-body">
+            <p className="text-muted-foreground font-bold text-sm">
               Are you sure you want to delete{" "}
-              <span className="text-[#EAEAEA] font-medium">
+              <span className="text-foreground font-black">
                 {selectedUser.full_name}
               </span>
               ?
             </p>
-            <p className="text-[#C94A4A] text-sm font-medium">
+            <p className="text-destructive font-black text-sm">
               This action cannot be undone. The user's profile will be
               permanently deleted.
             </p>

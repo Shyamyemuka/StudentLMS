@@ -37,7 +37,7 @@ export default async function CreateCoursePage() {
       backHref="/dashboard">
       <div className="max-w-2xl mx-auto">
         {/* Form Card */}
-        <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-6 md:p-8">
+        <div className="bg-card border-2 border-border rounded-xl p-6 md:p-8 shadow-hard-lg">
           <CreateCourseForm userRole={profile?.role || "student"} />
         </div>
       </div>

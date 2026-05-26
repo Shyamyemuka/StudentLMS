@@ -12,6 +12,12 @@ interface SubjectPageProps {
 
 export default async function SubjectPage({ params }: SubjectPageProps) {
   const { subjectId } = await params;
+  const subjectIdNum = parseInt(subjectId, 10);
+
+  if (isNaN(subjectIdNum)) {
+    notFound();
+  }
+
   const supabase = await createClient();
 
   // Get current user and session
@@ -34,27 +40,27 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     supabase.from("profiles").select("*").eq("user_id", user.id).single(),
     supabase
       .from("subjects")
-      .select("id, title, subject_code, regulation, description")
-      .eq("id", subjectId)
+      .select("id, title, subject_code, regulation, description, price, access_duration_months, certificate_enabled")
+      .eq("id", subjectIdNum)
       .single(),
     supabase
       .from("resources")
       .select("*")
-      .eq("subject_id", subjectId)
+      .eq("subject_id", subjectIdNum)
       .eq("approved", true)
       .eq("type", "video")
       .order("created_at", { ascending: false }),
     supabase
       .from("resources")
       .select("*")
-      .eq("subject_id", subjectId)
+      .eq("subject_id", subjectIdNum)
       .eq("approved", true)
       .eq("type", "pdf")
       .order("created_at", { ascending: false }),
     supabase
       .from("resources")
       .select("*")
-      .eq("subject_id", subjectId)
+      .eq("subject_id", subjectIdNum)
       .eq("approved", true)
       .eq("type", "notes")
       .order("created_at", { ascending: false }),
@@ -77,7 +83,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
       .from("course_assignments")
       .select("id")
       .eq("user_id", user.id)
-      .eq("subject_id", subjectId)
+      .eq("subject_id", subjectIdNum)
       .eq("status", "active");
 
     const hasAssignment = assignments && assignments.length > 0;
@@ -87,7 +93,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
       .from("subject_payments")
       .select("id")
       .eq("user_id", user.id)
-      .eq("subject_id", subjectId)
+      .eq("subject_id", subjectIdNum)
       .eq("status", "completed");
 
     const hasPaid = payments && payments.length > 0;
@@ -181,22 +187,27 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
         {!isUnlocked && (
           <div className="absolute inset-0 z-20 flex items-center justify-center p-6">
             <SubjectLockOverlay
-              subjectId={parseInt(subjectId)}
+              subjectId={subjectIdNum}
               subjectTitle={subject.title}
               userId={user.id}
               userEmail={user.email || ""}
               userName={profile?.full_name || "Student"}
+              subjectPrice={subject.price}
+              subjectDuration={subject.access_duration_months}
             />
           </div>
         )}
 
         <div className={!isUnlocked ? "filter blur-md opacity-35 select-none pointer-events-none" : ""}>
           <SubjectContent
-            subjectId={parseInt(subjectId)}
+            subjectId={subjectIdNum}
             initialVideos={videos || []}
             initialPdfs={pdfs || []}
             initialNotes={notes || []}
             userRole={profile?.role || "student"}
+            initialCertificateEnabled={subject.certificate_enabled}
+            studentName={profile?.full_name || "Student"}
+            courseName={subject.title}
           />
         </div>
       </div>

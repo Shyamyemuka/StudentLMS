@@ -28,7 +28,7 @@ export default function SubjectSearch({
       {/* Search Input */}
       <div className="relative flex-1">
         <svg
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#707070]"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24">
@@ -44,7 +44,7 @@ export default function SubjectSearch({
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search by subject code or title..."
-          className="w-full pl-12 pr-4 py-3 bg-[#14181D] border border-[#2A2F35] rounded-lg text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+          className="w-full pl-12 pr-4 py-3 bg-card border-2 border-border rounded-xl text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.05)]"
         />
       </div>
 
@@ -52,10 +52,10 @@ export default function SubjectSearch({
       <div className="flex gap-2 flex-wrap">
         <button
           onClick={() => onRegulationFilter("")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 border-border cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.05)] hover:scale-105 active:scale-95 ${
             selectedRegulation === ""
-              ? "bg-[#D4AF37] text-[#0B0D10]"
-              : "bg-[#14181D] text-[#B0B0B0] border border-[#2A2F35] hover:border-[#D4AF37] hover:text-[#D4AF37]"
+              ? "bg-primary text-primary-foreground"
+              : "bg-card text-muted-foreground hover:border-primary hover:text-primary"
           }`}>
           All
         </button>
@@ -63,10 +63,10 @@ export default function SubjectSearch({
           <button
             key={reg}
             onClick={() => onRegulationFilter(reg)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 border-border cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.05)] hover:scale-105 active:scale-95 ${
               selectedRegulation === reg
-                ? "bg-[#D4AF37] text-[#0B0D10]"
-                : "bg-[#14181D] text-[#B0B0B0] border border-[#2A2F35] hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                ? "bg-primary text-primary-foreground"
+                : "bg-card text-muted-foreground hover:border-primary hover:text-primary"
             }`}>
             {reg}
           </button>

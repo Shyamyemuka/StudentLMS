@@ -87,7 +87,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
       <div className="mb-6">
         <a
           href={`/subjects/${subjectId}`}
-          className="inline-flex items-center gap-2 text-[#D4AF37] hover:text-[#E6C76A] transition-colors text-sm font-medium group">
+          className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors text-sm font-bold group">
           <svg
             className="w-5 h-5 transition-transform group-hover:-translate-x-1"
             fill="none"
@@ -96,7 +96,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={2.5}
               d="M15 19l-7-7 7-7"
             />
           </svg>
@@ -106,17 +106,17 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
       {/* Video Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-heading font-bold text-[#D4AF37] mb-2">
+        <h1 className="text-3xl font-heading font-bold text-foreground mb-2">
           {resource.title}
         </h1>
-        <div className="flex items-center gap-4 text-[#B0B0B0]">
+        <div className="flex items-center gap-4 text-muted-foreground font-bold">
           <span className="flex items-center gap-2">
             📚
             <span>
               {resource.subject?.subject_code} - {resource.subject?.title}
             </span>
           </span>
-          <span className="text-[#707070]">•</span>
+          <span>•</span>
           <span>{resource.subject?.regulation}</span>
         </div>
       </div>
@@ -142,12 +142,15 @@ export default async function VideoPage({ params }: VideoPageProps) {
       </div>
 
       {/* Bookmarks Section */}
-      <div className="bg-[#14181D] border border-[#2A2F35] rounded-xl p-6">
+      <div 
+        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+        className="bg-card border-2 border-border rounded-xl p-6 shadow-hard-md"
+      >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-heading font-semibold text-[#EAEAEA]">
+          <h2 className="text-xl font-heading font-semibold text-foreground">
             My Bookmarks
           </h2>
-          <span className="text-sm text-[#707070]">
+          <span className="text-sm text-muted-foreground font-bold">
             {bookmarks?.length || 0} saved
           </span>
         </div>

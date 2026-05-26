@@ -579,17 +579,20 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-[#14181D] border border-[#2A2F35] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto m-4 shadow-2xl">
+      <div 
+        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+        className="relative bg-card border-2 border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto m-4 shadow-hard-lg"
+      >
         {/* Header */}
-        <div className="sticky top-0 bg-[#14181D] border-b border-[#2A2F35] p-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-card border-b-2 border-border p-4 flex items-center justify-between z-10">
           <div>
-            <h2 className="text-xl font-bold text-[#EAEAEA]">{game.name}</h2>
-            <p className="text-sm text-[#B0B0B0]">{game.description}</p>
+            <h2 className="text-xl font-bold text-foreground font-heading">{game.name}</h2>
+            <p className="text-sm text-muted-foreground font-bold">{game.description}</p>
           </div>
           <button
             onClick={handleClose}
-            className="text-[#B0B0B0] hover:text-[#EAEAEA] transition-colors">
-            <X className="w-5 h-5" />
+            className="text-muted-foreground hover:text-foreground font-bold p-1 cursor-pointer transition-colors">
+            <X className="w-5 h-5" strokeWidth={2.5} />
           </button>
         </div>
 
@@ -602,7 +605,8 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
                 <Button
                   onClick={startGame}
                   disabled={isLoading}
-                  className="gap-2 bg-[#D4AF37] text-[#0B0D10] hover:bg-[#E6C76A]">
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 border-2 border-border font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                   {isLoading ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -619,7 +623,8 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
                 <Button
                   onClick={stopExecution}
                   variant="destructive"
-                  className="gap-2">
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="gap-2 border-2 border-border font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                   <Square className="h-4 w-4" />
                   Stop
                 </Button>
@@ -656,7 +661,7 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
             {showCustomComponent && game?.component ? (
               <Suspense fallback={
                 <div className="flex items-center justify-center h-[480px]">
-                  <Loader2 className="h-8 w-8 animate-spin text-[#D4AF37]" />
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
               }>
                 {(() => {

@@ -106,11 +106,14 @@ export default function BookmarkList({
   if (bookmarks.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-3xl">
+        <div 
+          style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+          className="w-16 h-16 mx-auto mb-4 bg-primary/10 border-2 border-border flex items-center justify-center text-3xl shadow-hard-sm"
+        >
           🔖
         </div>
-        <p className="text-[#707070] mb-2">No bookmarks yet</p>
-        <p className="text-[#707070] text-sm">
+        <p className="text-muted-foreground font-bold mb-2">No bookmarks yet</p>
+        <p className="text-muted-foreground/80 font-bold text-sm">
           Click the bookmark button while watching to save important moments
         </p>
       </div>
@@ -122,20 +125,22 @@ export default function BookmarkList({
       {bookmarks.map((bookmark) => (
         <div
           key={bookmark.id}
-          className="bg-[#0B0D10] border border-[#2A2F35] rounded-lg p-4 hover:border-[#D4AF37] transition-all group">
+          style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+          className="bg-card border-2 border-border p-4 hover:border-primary transition-all group shadow-hard-sm">
           <div className="flex items-start gap-4">
             {/* Timestamp Button */}
             <button
               onClick={() => handleSeekToBookmark(bookmark.timestamp_sec)}
-              className="flex-shrink-0 w-16 h-16 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] font-semibold hover:bg-[#D4AF37]/20 transition-colors"
+              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              className="flex-shrink-0 w-16 h-16 border-2 border-border bg-primary/10 flex items-center justify-center text-primary font-bold hover:bg-primary/20 transition-all cursor-pointer shadow-hard-sm"
               suppressHydrationWarning>
               {formatTime(bookmark.timestamp_sec)}
             </button>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <p className="text-[#EAEAEA] mb-2">{bookmark.note}</p>
-              <p className="text-[#707070] text-xs">
+              <p className="text-foreground font-bold mb-2">{bookmark.note}</p>
+              <p className="text-muted-foreground/80 font-bold text-xs">
                 {formatDate(bookmark.created_at)}
               </p>
             </div>
@@ -144,7 +149,7 @@ export default function BookmarkList({
             <button
               onClick={() => handleDelete(bookmark.id)}
               disabled={deletingId === bookmark.id}
-              className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-[#C94A4A] hover:text-[#FF6B6B] disabled:opacity-50"
+              className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive/80 disabled:opacity-50 cursor-pointer p-1"
               suppressHydrationWarning>
               {deletingId === bookmark.id ? (
                 <svg
@@ -174,7 +179,7 @@ export default function BookmarkList({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>

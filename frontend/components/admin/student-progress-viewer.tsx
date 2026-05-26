@@ -259,48 +259,48 @@ export function StudentProgressViewer() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="bg-card border-2 border-border shadow-hard-xl rounded-xl">
         <CardHeader>
-          <CardTitle>Student Progress Tracker</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-foreground font-heading">Student Progress Tracker</CardTitle>
+          <CardDescription className="text-muted-foreground font-medium font-body">
             View individual student progress across all courses
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#EAEAEA] mb-2">
+              <label className="block text-sm font-bold text-foreground mb-2 font-body">
                 Select Student
               </label>
               {/* Search Input for Students */}
               <div className="relative mb-2">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#707070]" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search students by name..."
                   value={studentSearchTerm}
                   onChange={(e) => setStudentSearchTerm(e.target.value)}
-                  className="pl-10 bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA]"
+                  className="pl-10 bg-background border-2 border-border text-foreground placeholder:text-muted-foreground/60 rounded-xl"
                 />
               </div>
               {/* Student Dropdown */}
               <Select
                 value={selectedStudent}
                 onValueChange={handleStudentChange}>
-                <SelectTrigger className="bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA]">
+                <SelectTrigger className="bg-background border-2 border-border text-foreground rounded-xl">
                   <SelectValue placeholder="Choose a student" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#14181D] border-[#BFA55A]/30 max-h-[300px]">
+                <SelectContent className="bg-card border-2 border-border max-h-[300px]">
                   {filteredStudents.length > 0 ? (
                     filteredStudents.map((student) => (
                       <SelectItem
                         key={student.user_id}
                         value={student.user_id}
-                        className="text-[#EAEAEA]">
+                        className="text-foreground focus:bg-primary/10">
                         {student.full_name}
                       </SelectItem>
                     ))
                   ) : (
-                    <div className="px-2 py-2 text-sm text-[#707070] text-center">
+                    <div className="px-2 py-2 text-sm text-muted-foreground/80 text-center font-bold font-body">
                       No students found
                     </div>
                   )}
@@ -310,28 +310,28 @@ export function StudentProgressViewer() {
 
             {selectedStudent && (
               <>
-                <div className="flex items-center justify-between pt-4 border-t border-[#BFA55A]/20">
-                  <h3 className="text-lg font-semibold text-[#EAEAEA]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t-2 border-border">
+                  <h3 className="text-lg font-bold text-foreground font-heading">
                     Progress for {selectedStudentData?.full_name}
                   </h3>
-                  <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#707070]" />
+                  <div className="relative w-full sm:w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search courses..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA]"
+                      className="pl-10 bg-background border-2 border-border text-foreground placeholder:text-muted-foreground/60 rounded-xl"
                     />
                   </div>
                 </div>
 
                 {loading && !selectedCourse ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#D4AF37]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
                 ) : filteredProgress.length === 0 ? (
-                  <Alert className="bg-[#0B0D10] border-[#BFA55A]/30">
-                    <AlertDescription className="text-[#B0B0B0]">
+                  <Alert className="bg-background border-2 border-border rounded-xl">
+                    <AlertDescription className="text-muted-foreground font-bold font-body">
                       No courses assigned to this student yet.
                     </AlertDescription>
                   </Alert>
@@ -340,25 +340,25 @@ export function StudentProgressViewer() {
                     {filteredProgress.map((course) => (
                       <Card
                         key={course.subject_id}
-                        className="bg-[#0B0D10] border-[#BFA55A]/30 hover:border-[#D4AF37] transition-colors cursor-pointer"
+                        className="bg-background border-2 border-border hover:border-primary transition-colors cursor-pointer shadow-hard-sm rounded-xl"
                         onClick={() => handleCourseSelect(course.subject_id)}>
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between mb-3">
                             <div>
-                              <h4 className="font-semibold text-[#EAEAEA]">
+                              <h4 className="font-bold text-foreground font-heading text-base">
                                 {course.subject_title}
                               </h4>
-                              <p className="text-sm text-[#B0B0B0]">
+                              <p className="text-sm text-muted-foreground font-medium font-body">
                                 {course.subject_code}
                               </p>
                             </div>
                             <Badge
                               className={
                                 course.progress_percentage === 100
-                                  ? "bg-[#4CAF8F]/20 text-[#4CAF8F] border-[#4CAF8F]/30"
+                                  ? "bg-success/20 text-success border-success/30 font-bold"
                                   : course.progress_percentage > 50
-                                    ? "bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30"
-                                    : "bg-orange-500/20 text-orange-500 border-orange-500/30"
+                                    ? "bg-primary/20 text-primary border-primary/30 font-bold"
+                                    : "bg-warning/20 text-warning border-warning/30 font-bold"
                               }>
                               {course.progress_percentage}% Complete
                             </Badge>
@@ -369,23 +369,23 @@ export function StudentProgressViewer() {
                             className="mb-3"
                           />
 
-                          <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-bold font-body">
                             <div className="flex items-center gap-2">
-                              <BookOpen className="h-4 w-4 text-[#D4AF37]" />
-                              <span className="text-[#B0B0B0]">
+                              <BookOpen className="h-4 w-4 text-primary" />
+                              <span className="text-muted-foreground">
                                 {course.completed_resources}/
                                 {course.total_resources} Resources
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-[#D4AF37]" />
-                              <span className="text-[#B0B0B0]">
+                              <Clock className="h-4 w-4 text-primary" />
+                              <span className="text-muted-foreground">
                                 {formatTime(course.time_spent_seconds)}
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <TrendingUp className="h-4 w-4 text-[#D4AF37]" />
-                              <span className="text-[#B0B0B0]">
+                              <TrendingUp className="h-4 w-4 text-primary" />
+                              <span className="text-muted-foreground">
                                 {course.last_accessed
                                   ? `Last: ${formatDate(course.last_accessed)}`
                                   : "Not started"}
@@ -400,12 +400,12 @@ export function StudentProgressViewer() {
 
                 {/* Resource-level progress */}
                 {selectedCourse && (
-                  <Card className="mt-6 bg-[#0B0D10] border-[#BFA55A]/30">
+                  <Card className="mt-6 bg-background border-2 border-border shadow-hard-sm rounded-xl">
                     <CardHeader>
-                      <CardTitle className="text-[#EAEAEA]">
+                      <CardTitle className="text-foreground font-heading">
                         Resource Progress
                       </CardTitle>
-                      <CardDescription className="text-[#B0B0B0]">
+                      <CardDescription className="text-muted-foreground font-medium font-body">
                         Detailed progress for{" "}
                         {
                           courseProgress.find(
@@ -417,26 +417,26 @@ export function StudentProgressViewer() {
                     <CardContent>
                       {loading ? (
                         <div className="flex items-center justify-center py-8">
-                          <Loader2 className="h-8 w-8 animate-spin text-[#D4AF37]" />
+                          <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
                       ) : (
-                        <div className="border border-[#BFA55A]/20 rounded-lg overflow-hidden">
+                        <div className="border-2 border-border rounded-xl overflow-hidden shadow-hard-sm bg-card">
                           <Table>
                             <TableHeader>
-                              <TableRow className="border-[#BFA55A]/20 hover:bg-[#0B0D10]/50">
-                                <TableHead className="text-[#B0B0B0]">
+                              <TableRow className="border-b-2 border-border hover:bg-muted/50">
+                                <TableHead className="text-muted-foreground font-bold font-body">
                                   Resource
                                 </TableHead>
-                                <TableHead className="text-[#B0B0B0]">
+                                <TableHead className="text-muted-foreground font-bold font-body">
                                   Type
                                 </TableHead>
-                                <TableHead className="text-[#B0B0B0]">
+                                <TableHead className="text-muted-foreground font-bold font-body">
                                   Status
                                 </TableHead>
-                                <TableHead className="text-[#B0B0B0]">
+                                <TableHead className="text-muted-foreground font-bold font-body">
                                   Time Spent
                                 </TableHead>
-                                <TableHead className="text-[#B0B0B0]">
+                                <TableHead className="text-muted-foreground font-bold font-body">
                                   Completed At
                                 </TableHead>
                               </TableRow>
@@ -446,7 +446,7 @@ export function StudentProgressViewer() {
                                 <TableRow>
                                   <TableCell
                                     colSpan={5}
-                                    className="text-center py-8 text-[#707070]">
+                                    className="text-center py-8 text-muted-foreground font-bold font-body">
                                     No resources found for this course
                                   </TableCell>
                                 </TableRow>
@@ -454,33 +454,33 @@ export function StudentProgressViewer() {
                                 resourceProgress.map((resource) => (
                                   <TableRow
                                     key={resource.resource_id}
-                                    className="border-[#BFA55A]/20 hover:bg-[#0B0D10]/50">
-                                    <TableCell className="text-[#EAEAEA]">
+                                    className="border-b-2 border-border/50 hover:bg-muted/50 font-body">
+                                    <TableCell className="text-foreground font-bold">
                                       {resource.resource_title}
                                     </TableCell>
                                     <TableCell>
                                       <Badge
                                         variant="outline"
-                                        className="border-[#BFA55A]/30 text-[#B0B0B0]">
+                                        className="border-2 border-border text-muted-foreground font-bold">
                                         {resource.resource_type}
                                       </Badge>
                                     </TableCell>
                                     <TableCell>
                                       {resource.completed ? (
-                                        <div className="flex items-center gap-2 text-[#4CAF8F]">
+                                        <div className="flex items-center gap-2 text-success font-bold">
                                           <CheckCircle2 className="h-4 w-4" />
                                           Completed
                                         </div>
                                       ) : (
-                                        <span className="text-[#707070]">
+                                        <span className="text-muted-foreground/80 font-bold">
                                           In Progress
                                         </span>
                                       )}
                                     </TableCell>
-                                    <TableCell className="text-[#B0B0B0]">
+                                    <TableCell className="text-muted-foreground font-bold">
                                       {formatTime(resource.time_spent_seconds)}
                                     </TableCell>
-                                    <TableCell className="text-[#B0B0B0]">
+                                    <TableCell className="text-muted-foreground font-bold">
                                       {resource.completed_at
                                         ? formatDate(resource.completed_at)
                                         : "-"}

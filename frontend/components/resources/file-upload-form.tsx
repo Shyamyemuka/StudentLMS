@@ -114,16 +114,16 @@ export default function FileUploadForm({
       <div>
         <label
           htmlFor="title"
-          className="block text-sm font-medium text-[#B0B0B0] mb-2">
+          className="block text-sm font-bold text-foreground mb-2 font-body">
           {type === "pdf" ? "PDF" : "Notes"} Title{" "}
-          <span className="text-[#C94A4A]">*</span>
+          <span className="text-destructive">*</span>
         </label>
         <input
           id="title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full bg-[#0B0D10] border border-[#2A2F35] rounded-lg px-4 py-3 text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-colors"
+          className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body font-medium"
           placeholder={`e.g., Chapter 1 - ${
             type === "pdf" ? "Lecture Slides" : "Study Notes"
           }`}
@@ -133,17 +133,17 @@ export default function FileUploadForm({
 
       {/* File Upload */}
       <div>
-        <label className="block text-sm font-medium text-[#B0B0B0] mb-2">
-          Upload File <span className="text-[#C94A4A]">*</span>
+        <label className="block text-sm font-bold text-foreground mb-2 font-body">
+          Upload File <span className="text-destructive">*</span>
         </label>
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-[#2A2F35] rounded-lg p-8 text-center cursor-pointer hover:border-[#D4AF37] transition-colors">
+          className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.02)]">
           {file ? (
-            <div>
-              <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-[#4CAF8F]/10 flex items-center justify-center">
+            <div className="font-body font-bold">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-success/15 border-2 border-success/30 flex items-center justify-center">
                 <svg
-                  className="w-6 h-6 text-[#4CAF8F]"
+                  className="w-6 h-6 text-success"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24">
@@ -155,8 +155,8 @@ export default function FileUploadForm({
                   />
                 </svg>
               </div>
-              <p className="text-[#EAEAEA] font-medium">{file.name}</p>
-              <p className="text-[#707070] text-sm mt-1">
+              <p className="text-foreground font-black">{file.name}</p>
+              <p className="text-muted-foreground text-sm mt-1">
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
               <button
@@ -166,15 +166,15 @@ export default function FileUploadForm({
                   setFile(null);
                   if (fileInputRef.current) fileInputRef.current.value = "";
                 }}
-                className="mt-2 text-[#C94A4A] text-sm hover:underline">
+                className="mt-2 text-destructive text-sm hover:underline font-bold cursor-pointer">
                 Remove
               </button>
             </div>
           ) : (
-            <div>
-              <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center">
+            <div className="font-body font-bold">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-primary/10 border-2 border-primary/20 flex items-center justify-center">
                 <svg
-                  className="w-6 h-6 text-[#D4AF37]"
+                  className="w-6 h-6 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24">
@@ -186,8 +186,8 @@ export default function FileUploadForm({
                   />
                 </svg>
               </div>
-              <p className="text-[#EAEAEA]">Click to upload or drag and drop</p>
-              <p className="text-[#707070] text-sm mt-1">
+              <p className="text-foreground">Click to upload or drag and drop</p>
+              <p className="text-muted-foreground text-sm mt-1">
                 {type === "pdf" ? "PDF files" : "TXT, MD, DOC, DOCX files"}
               </p>
             </div>
@@ -206,7 +206,8 @@ export default function FileUploadForm({
       <button
         type="submit"
         disabled={isLoading || !file}
-        className="w-full bg-[#D4AF37] text-[#0B0D10] py-3 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+        className="w-full bg-primary text-primary-foreground border-2 border-border py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-hard-sm cursor-pointer font-heading text-lg">
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">

@@ -26,9 +26,22 @@ export interface Subject {
   approved_at: string | null;
   created_at: string;
   updated_at: string;
+  price: number;
+  access_duration_months: number | null;
+  certificate_enabled: boolean;
   // Joined data
   creator?: Profile;
   approver?: Profile;
+}
+
+export interface CreateSubject {
+  subject_code: string;
+  title: string;
+  regulation: string;
+  description?: string;
+  price: number;
+  access_duration_months: number | null;
+  certificate_enabled?: boolean;
 }
 
 export interface Resource {
@@ -89,13 +102,7 @@ export interface VideoBookmark {
   updated_at: string;
 }
 
-// Type for creating new records (without auto-generated fields)
-export interface CreateSubject {
-  subject_code: string;
-  title: string;
-  regulation: string;
-  description?: string;
-}
+
 
 export interface CreateResource {
   subject_id: number;

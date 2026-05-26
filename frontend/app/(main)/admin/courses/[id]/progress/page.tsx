@@ -53,8 +53,8 @@ export default async function CourseProgressPage({
         title="Course Not Found"
         subtitle="The requested course could not be found"
         showBackButton
-        backHref="/my-courses">
-        <p className="text-[#B0B0B0]">Course not found.</p>
+        backHref="/dashboard">
+        <p className="text-muted-foreground font-bold">Course not found.</p>
       </PageContainer>
     );
   }
@@ -91,38 +91,38 @@ export default async function CourseProgressPage({
       backHref={`/subjects/${subjectId}`}>
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[#14181D] border border-[#2A2F35] rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Total Students</p>
-          <p className="text-3xl font-bold text-[#EAEAEA]">{totalStudents}</p>
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm font-bold mb-1">Total Students</p>
+          <p className="text-3xl font-bold text-foreground font-heading">{totalStudents}</p>
         </div>
-        <div className="bg-[#14181D] border border-[#4CAF8F]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Completed</p>
-          <p className="text-3xl font-bold text-[#4CAF8F]">
+        <div className="bg-card border-2 border-emerald-500/40 rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm font-bold mb-1">Completed</p>
+          <p className="text-3xl font-bold text-emerald-500 font-heading">
             {completedStudents}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-[#D4AF37]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">In Progress</p>
-          <p className="text-3xl font-bold text-[#D4AF37]">{activeStudents}</p>
+        <div className="bg-card border-2 border-primary/40 rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm font-bold mb-1">In Progress</p>
+          <p className="text-3xl font-bold text-primary font-heading">{activeStudents}</p>
         </div>
-        <div className="bg-[#14181D] border border-blue-500/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Average Progress</p>
-          <p className="text-3xl font-bold text-blue-400">{averageProgress}%</p>
+        <div className="bg-card border-2 border-secondary/40 rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm font-bold mb-1">Average Progress</p>
+          <p className="text-3xl font-bold text-secondary font-heading">{averageProgress}%</p>
         </div>
       </div>
 
       {/* Student Progress Table */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-[#EAEAEA] mb-4">
+        <h2 className="text-xl font-bold text-foreground font-heading mb-4">
           Student Progress
         </h2>
         <StudentProgressTable progressList={progressList} />
       </div>
 
       {/* Note */}
-      <div className="bg-[#14181D] border border-[#2A2F35] rounded-lg p-4">
-        <p className="text-[#B0B0B0] text-sm">
-          <strong className="text-[#EAEAEA]">Note:</strong> Progress is
+      <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+        <p className="text-muted-foreground text-sm font-bold">
+          <strong className="text-foreground">Note:</strong> Progress is
           calculated based on resources marked as complete by each student. Only
           students who have started the course are shown in this list.
         </p>

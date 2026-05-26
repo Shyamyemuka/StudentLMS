@@ -13,6 +13,8 @@ interface SubjectLockOverlayProps {
   userId: string;
   userEmail: string;
   userName: string;
+  subjectPrice: number;
+  subjectDuration: number | null;
 }
 
 export default function SubjectLockOverlay({
@@ -21,10 +23,18 @@ export default function SubjectLockOverlay({
   userId,
   userEmail,
   userName,
+  subjectPrice,
+  subjectDuration,
 }: SubjectLockOverlayProps) {
   const [isPaying, setIsPaying] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  const durationText = subjectDuration
+    ? subjectDuration % 12 === 0
+      ? `${subjectDuration / 12} ${subjectDuration === 12 ? "year" : "years"}`
+      : `${subjectDuration} ${subjectDuration === 1 ? "month" : "months"}`
+    : "lifetime";
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -54,10 +64,10 @@ export default function SubjectLockOverlay({
 
     const options = {
       key: keyId,
-      amount: 49900, // ₹499 in paise
+      amount: Math.round(subjectPrice * 100), // convert to paise
       currency: "INR",
       name: "Student LMS",
-      description: `Unlock lifetime access to ${subjectTitle}`,
+      description: `Unlock ${durationText} access to ${subjectTitle}`,
       image: "/images/logo.png",
       handler: async function (response: any) {
         try {
@@ -68,7 +78,7 @@ export default function SubjectLockOverlay({
             subject_id: subjectId,
             payment_id: response.razorpay_payment_id,
             order_id: response.razorpay_order_id || null,
-            amount: 499.00,
+            amount: subjectPrice,
             currency: "INR",
             status: "completed",
           });
@@ -88,6 +98,13 @@ export default function SubjectLockOverlay({
           setIsPaying(false);
         }
       },
+      modal: {
+        ondismiss: function () {
+          setIsPaying(false);
+          toast.error("Payment was not successful. The subject remains locked.");
+          router.push("/dashboard");
+        }
+      },
       prefill: {
         name: userName,
         email: userEmail,
@@ -103,6 +120,12 @@ export default function SubjectLockOverlay({
 
     try {
       const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        console.error("Razorpay payment failed:", response.error);
+        toast.error(`Payment failed: ${response.error.description || "Transaction rejected."}`);
+        setIsPaying(false);
+        router.push("/dashboard");
+      });
       rzp.open();
     } catch (err) {
       console.error("Razorpay initiation error:", err);
@@ -125,18 +148,18 @@ export default function SubjectLockOverlay({
 
       {/* Heading */}
       <h2 className="text-2xl font-bold text-foreground mb-3 font-heading">
-        Unlock Lifetime Access!
+        Unlock {durationText.charAt(0).toUpperCase() + durationText.slice(1)} Access!
       </h2>
       
       {/* Description */}
       <p className="text-foreground/90 font-medium text-base mb-6 leading-relaxed font-body">
         You haven&apos;t purchased <span className="border-b-2 border-dashed border-secondary text-secondary font-bold">{subjectTitle}</span> yet. 
-        Unlock lifetime access to all lectures, bookmarks, PDF slides, study notes, and student communities for this subject!
+        Unlock {durationText} access to all lectures, bookmarks, PDF slides, study notes, and student communities for this subject!
       </p>
 
       {/* Price tag badge */}
       <div className="inline-block bg-muted border-2 border-border px-5 py-2 text-xl font-bold text-primary shadow-hard-sm wobbly-border-md mb-8">
-        🏷️ Price: ₹499.00
+        🏷️ Price: ₹{subjectPrice.toFixed(2)}
       </div>
 
       {/* Pay CTA */}

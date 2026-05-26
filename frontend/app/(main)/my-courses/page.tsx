@@ -52,7 +52,8 @@ export default async function MyCoursesPage() {
         canCreateCourse ? (
           <Link
             href="/create-course"
-            className="flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E6C76A] transition-colors">
+            style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+            className="flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-4 py-2 rounded-xl text-sm font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -70,22 +71,22 @@ export default async function MyCoursesPage() {
         ) : undefined
       }>
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-[#14181D] border border-[#4CAF8F]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm">Approved</p>
-          <p className="text-2xl font-semibold text-[#4CAF8F]">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 font-body font-bold">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm">Approved</p>
+          <p className="text-2xl font-black text-success">
             {approvedCourses.length}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-[#D4AF37]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm">Pending</p>
-          <p className="text-2xl font-semibold text-[#D4AF37]">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm">Pending</p>
+          <p className="text-2xl font-black text-primary">
             {pendingCourses.length}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-[#C94A4A]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm">Rejected</p>
-          <p className="text-2xl font-semibold text-[#C94A4A]">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm">Rejected</p>
+          <p className="text-2xl font-black text-destructive">
             {rejectedCourses.length}
           </p>
         </div>
@@ -93,9 +94,9 @@ export default async function MyCoursesPage() {
 
       {/* Pending Courses */}
       {pendingCourses.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold text-[#D4AF37] mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+        <div className="mb-12 font-heading">
+          <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-primary border border-border"></span>
             Pending Approval
           </h2>
           <SubjectGrid subjects={pendingCourses} showStatus />
@@ -104,9 +105,9 @@ export default async function MyCoursesPage() {
 
       {/* Approved Courses */}
       {approvedCourses.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold text-[#4CAF8F] mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#4CAF8F]"></span>
+        <div className="mb-12 font-heading">
+          <h2 className="text-xl font-bold text-success mb-4 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-success border border-border"></span>
             Approved Courses
           </h2>
           <SubjectGrid subjects={approvedCourses} showStatus />
@@ -115,9 +116,9 @@ export default async function MyCoursesPage() {
 
       {/* Rejected Courses */}
       {rejectedCourses.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold text-[#C94A4A] mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#C94A4A]"></span>
+        <div className="mb-12 font-heading">
+          <h2 className="text-xl font-bold text-destructive mb-4 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-destructive border border-border"></span>
             Rejected
           </h2>
           <SubjectGrid subjects={rejectedCourses} showStatus />
@@ -126,10 +127,10 @@ export default async function MyCoursesPage() {
 
       {/* Empty State */}
       {subjects?.length === 0 && (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#14181D] flex items-center justify-center">
+        <div className="text-center py-16 font-body font-bold">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-border flex items-center justify-center shadow-hard-sm">
             <svg
-              className="w-8 h-8 text-[#707070]"
+              className="w-8 h-8 text-muted-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24">
@@ -141,7 +142,7 @@ export default async function MyCoursesPage() {
               />
             </svg>
           </div>
-          <p className="text-[#707070] mb-4">
+          <p className="text-muted-foreground mb-4">
             {canCreateCourse
               ? "You haven't created any courses yet"
               : "No courses available"}
@@ -149,7 +150,8 @@ export default async function MyCoursesPage() {
           {canCreateCourse && (
             <Link
               href="/create-course"
-              className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-6 py-2 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors">
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-6 py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer">
               Create Your First Course
             </Link>
           )}

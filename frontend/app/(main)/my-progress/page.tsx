@@ -71,28 +71,28 @@ export default async function MyProgressPage() {
       showBackButton
       backHref="/dashboard">
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[#14181D] border border-[#4CAF8F]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Completed Courses</p>
-          <p className="text-3xl font-bold text-[#4CAF8F]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 font-body font-bold">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm mb-1">Completed Courses</p>
+          <p className="text-3xl font-black text-success">
             {completedCourses}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-[#D4AF37]/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">In Progress</p>
-          <p className="text-3xl font-bold text-[#D4AF37]">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm mb-1">In Progress</p>
+          <p className="text-3xl font-black text-primary">
             {inProgressCourses}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-blue-500/30 rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Total Courses</p>
-          <p className="text-3xl font-bold text-blue-400">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm mb-1">Total Courses</p>
+          <p className="text-3xl font-black text-secondary">
             {progressList.length}
           </p>
         </div>
-        <div className="bg-[#14181D] border border-[#2A2F35] rounded-lg p-4">
-          <p className="text-[#707070] text-sm mb-1">Resources Completed</p>
-          <p className="text-3xl font-bold text-[#EAEAEA]">
+        <div className="bg-card border-2 border-border rounded-xl p-4 shadow-hard-sm">
+          <p className="text-muted-foreground text-sm mb-1">Resources Completed</p>
+          <p className="text-3xl font-black text-foreground">
             {completedResources}/{totalResources}
           </p>
         </div>
@@ -104,8 +104,8 @@ export default async function MyProgressPage() {
           {/* Completed Courses */}
           {completedCourses > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-[#4CAF8F] mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#4CAF8F]"></span>
+              <h2 className="text-xl font-bold text-success mb-4 flex items-center gap-2 font-heading">
+                <span className="w-3 h-3 rounded-full bg-success border border-border"></span>
                 Completed Courses ({completedCourses})
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -127,8 +127,8 @@ export default async function MyProgressPage() {
           {/* In Progress Courses */}
           {inProgressCourses > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-[#D4AF37] mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+              <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2 font-heading">
+                <span className="w-3 h-3 rounded-full bg-primary border border-border"></span>
                 In Progress ({inProgressCourses})
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -152,10 +152,10 @@ export default async function MyProgressPage() {
           )}
         </div>
       ) : (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#14181D] flex items-center justify-center">
+        <div className="text-center py-16 font-body font-bold">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-border flex items-center justify-center shadow-hard-sm">
             <svg
-              className="w-8 h-8 text-[#707070]"
+              className="w-8 h-8 text-muted-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24">
@@ -167,12 +167,13 @@ export default async function MyProgressPage() {
               />
             </svg>
           </div>
-          <p className="text-[#707070] mb-4">
+          <p className="text-muted-foreground mb-4">
             You haven&apos;t started any courses yet
           </p>
           <Link
-            href="/subjects"
-            className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-6 py-2 rounded-lg font-medium hover:bg-[#E6C76A] transition-colors">
+            href="/dashboard"
+            style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-6 py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer">
             Browse Courses
           </Link>
         </div>

@@ -63,15 +63,15 @@ export default async function AddResourcePage({
       backHref={`/subjects/${subjectId}`}>
       <div className="max-w-2xl mx-auto">
         {/* Type Selector */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-8 flex-wrap">
           {(["video", "pdf", "notes"] as const).map((t) => (
             <a
               key={t}
               href={`/subjects/${subjectId}/add-resource?type=${t}`}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold border-2 border-border transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.05)] hover:scale-105 active:scale-95 ${
                 resourceType === t
-                  ? "bg-[#D4AF37] text-[#0B0D10]"
-                  : "bg-[#14181D] text-[#B0B0B0] border border-[#2A2F35] hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-card text-muted-foreground hover:border-primary hover:text-primary"
               }`}>
               {t === "video" ? "🎥 Video" : t === "pdf" ? "📄 PDF" : "📝 Notes"}
             </a>
@@ -79,7 +79,7 @@ export default async function AddResourcePage({
         </div>
 
         {/* Form Card */}
-        <div className="bg-[#14181D] border border-[#BFA55A]/30 rounded-xl p-6 md:p-8">
+        <div className="bg-card border-2 border-border rounded-xl p-6 md:p-8 shadow-hard-lg">
           {resourceType === "video" ? (
             <VideoUploadForm subjectId={parseInt(subjectId)} />
           ) : (

@@ -444,17 +444,17 @@ export function CourseAssignmentManager() {
               open={dialogOpen}
               onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-border shadow-hard-sm wobbly-border font-bold">
                   <Plus className="mr-2 h-4 w-4" />
                   Assign Course
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-[#14181D] border-[#BFA55A]/30">
+              <DialogContent className="bg-card border-[3px] border-border text-foreground shadow-hard-lg rounded-xl wobbly-border">
                 <DialogHeader>
-                  <DialogTitle className="text-[#EAEAEA]">
+                  <DialogTitle className="text-foreground font-heading font-bold text-lg">
                     Assign Course to Student
                   </DialogTitle>
-                  <DialogDescription className="text-[#B0B0B0]">
+                  <DialogDescription className="text-muted-foreground font-medium">
                     Select a student and course to create an assignment
                   </DialogDescription>
                 </DialogHeader>
@@ -462,7 +462,7 @@ export function CourseAssignmentManager() {
                   <div>
                     <Label
                       htmlFor="student"
-                      className="text-[#EAEAEA] mb-2 block">
+                      className="text-foreground mb-2 block font-medium">
                       Student
                     </Label>
                     <DialogPrimitive.Root
@@ -472,7 +472,7 @@ export function CourseAssignmentManager() {
                         <Button
                           variant="outline"
                           role="combobox"
-                          className="w-full justify-between bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA] hover:bg-[#14181D]">
+                          className="w-full justify-between bg-background border-2 border-border text-foreground hover:bg-muted font-medium">
                           {selectedStudent
                             ? students.find(
                                 (s) => s.user_id === selectedStudent,
@@ -483,8 +483,8 @@ export function CourseAssignmentManager() {
                       </DialogPrimitive.Trigger>
                       <DialogPrimitive.Portal>
                         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80" />
-                        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] bg-[#14181D] rounded-lg border border-[#BFA55A]/30 shadow-md p-4">
-                          <DialogPrimitive.Title className="text-lg font-semibold text-[#D4AF37] mb-4">
+                        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] bg-card rounded-xl border-[3px] border-border shadow-hard-lg p-4 wobbly-border text-foreground">
+                          <DialogPrimitive.Title className="text-lg font-bold text-foreground mb-4 font-heading">
                             Select a student
                           </DialogPrimitive.Title>
                           <div className="space-y-3">
@@ -509,10 +509,10 @@ export function CourseAssignmentManager() {
                                       setStudentSearchOpen(false);
                                     }}
                                     className={cn(
-                                      "flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-colors",
+                                      "flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-colors font-medium",
                                       selectedStudent === student.user_id
-                                        ? "bg-[#BFA55A]/20 text-[#D4AF37]"
-                                        : "hover:bg-[#1A1F25] text-[#EAEAEA]"
+                                        ? "bg-primary/20 text-primary border border-primary/30"
+                                        : "hover:bg-muted text-foreground"
                                     )}>
                                     <CheckIcon
                                       className={cn(
@@ -535,7 +535,7 @@ export function CourseAssignmentManager() {
                   <div>
                     <Label
                       htmlFor="subject"
-                      className="text-[#EAEAEA] mb-2 block">
+                      className="text-foreground mb-2 block font-medium">
                       Course
                     </Label>
                     <DialogPrimitive.Root
@@ -545,7 +545,7 @@ export function CourseAssignmentManager() {
                         <Button
                           variant="outline"
                           role="combobox"
-                          className="w-full justify-between bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA] hover:bg-[#14181D]">
+                          className="w-full justify-between bg-background border-2 border-border text-foreground hover:bg-muted font-medium">
                           {selectedSubject
                             ? subjects.find(
                                 (s) => s.id.toString() === selectedSubject,
@@ -558,8 +558,8 @@ export function CourseAssignmentManager() {
                       </DialogPrimitive.Trigger>
                       <DialogPrimitive.Portal>
                         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80" />
-                        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] bg-[#14181D] rounded-lg border border-[#BFA55A]/30 shadow-md p-4">
-                          <DialogPrimitive.Title className="text-lg font-semibold text-[#D4AF37] mb-4">
+                        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] bg-card rounded-xl border-[3px] border-border shadow-hard-lg p-4 wobbly-border text-foreground">
+                          <DialogPrimitive.Title className="text-lg font-bold text-foreground mb-4 font-heading">
                             Select a course
                           </DialogPrimitive.Title>
                           <div className="space-y-3">
@@ -588,10 +588,10 @@ export function CourseAssignmentManager() {
                                       setCourseSearchOpen(false);
                                     }}
                                     className={cn(
-                                      "flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-colors",
+                                      "flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-colors font-medium",
                                       selectedSubject === subject.id.toString()
-                                        ? "bg-[#BFA55A]/20 text-[#D4AF37]"
-                                        : "hover:bg-[#1A1F25] text-[#EAEAEA]"
+                                        ? "bg-primary/20 text-primary border border-primary/30"
+                                        : "hover:bg-muted text-foreground"
                                     )}>
                                     <CheckIcon
                                       className={cn(
@@ -622,7 +622,7 @@ export function CourseAssignmentManager() {
                     <Button
                       onClick={assignCourse}
                       disabled={loading || !selectedStudent || !selectedSubject}
-                      className="flex-1 bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]">
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-border shadow-hard-sm wobbly-border font-bold">
                       {loading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -638,7 +638,7 @@ export function CourseAssignmentManager() {
                     <Button
                       onClick={() => setDialogOpen(false)}
                       variant="outline"
-                      className="border-[#BFA55A]/30 text-[#EAEAEA]">
+                      className="border-2 border-border text-foreground hover:bg-muted font-bold">
                       Cancel
                     </Button>
                   </div>
@@ -649,9 +649,9 @@ export function CourseAssignmentManager() {
         </CardHeader>
         <CardContent>
           {success && (
-            <Alert className="mb-4 bg-[#4CAF8F]/10 border-[#4CAF8F]/30">
-              <Check className="h-4 w-4 text-[#4CAF8F]" />
-              <AlertDescription className="text-[#EAEAEA]">
+            <Alert className="mb-4 bg-green-500/15 border-green-500/30 text-green-600 dark:text-green-400">
+              <Check className="h-4 w-4 text-green-500" />
+              <AlertDescription className="text-foreground font-bold">
                 {success}
               </AlertDescription>
             </Alert>
@@ -659,42 +659,42 @@ export function CourseAssignmentManager() {
 
           <div className="mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#707070]" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search by student name, course title, or code..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-[#0B0D10] border-[#BFA55A]/30 text-[#EAEAEA]"
+                className="pl-10 bg-background border-2 border-border text-foreground font-medium"
               />
             </div>
           </div>
 
-          <div className="border border-[#BFA55A]/20 rounded-lg overflow-hidden">
+          <div className="border-2 border-border rounded-xl overflow-hidden shadow-hard-sm bg-card">
             <Table>
               <TableHeader>
-                <TableRow className="border-[#BFA55A]/20 hover:bg-[#0B0D10]/50">
-                  <TableHead className="text-[#B0B0B0]">Student</TableHead>
-                  <TableHead className="text-[#B0B0B0]">Course</TableHead>
-                  <TableHead className="text-[#B0B0B0]">Code</TableHead>
-                  <TableHead className="text-[#B0B0B0]">Status</TableHead>
-                  <TableHead className="text-[#B0B0B0]">
+                <TableRow className="border-b-2 border-border hover:bg-muted/50">
+                  <TableHead className="text-muted-foreground font-bold">Student</TableHead>
+                  <TableHead className="text-muted-foreground font-bold">Course</TableHead>
+                  <TableHead className="text-muted-foreground font-bold">Code</TableHead>
+                  <TableHead className="text-muted-foreground font-bold">Status</TableHead>
+                  <TableHead className="text-muted-foreground font-bold">
                     Assigned Date
                   </TableHead>
-                  <TableHead className="text-[#B0B0B0]">Actions</TableHead>
+                  <TableHead className="text-muted-foreground font-bold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#D4AF37]" />
+                      <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
                     </TableCell>
                   </TableRow>
                 ) : filteredAssignments.length === 0 ? (
                   <TableRow>
                     <TableCell
                       colSpan={6}
-                      className="text-center py-8 text-[#707070]">
+                      className="text-center py-8 text-muted-foreground font-bold">
                       No course assignments found
                     </TableCell>
                   </TableRow>
@@ -703,18 +703,18 @@ export function CourseAssignmentManager() {
                     <TableRow
                       key={assignment.id}
                       onClick={() => openProgressDialog(assignment)}
-                      className="border-[#BFA55A]/20 hover:bg-[#0B0D10]/50 cursor-pointer transition-colors">
-                      <TableCell className="text-[#EAEAEA]">
+                      className="border-b border-border hover:bg-muted/50 cursor-pointer transition-colors">
+                      <TableCell className="text-foreground font-bold">
                         {assignment.student.full_name}
                       </TableCell>
-                      <TableCell className="text-[#EAEAEA]">
+                      <TableCell className="text-foreground font-medium">
                         {assignment.subject.title}
                       </TableCell>
-                      <TableCell className="text-[#B0B0B0]">
+                      <TableCell className="text-muted-foreground font-bold">
                         {assignment.subject.subject_code}
                       </TableCell>
                       <TableCell>{getStatusBadge(assignment.status)}</TableCell>
-                      <TableCell className="text-[#B0B0B0]">
+                      <TableCell className="text-muted-foreground font-bold">
                         {formatDate(assignment.assigned_at)}
                       </TableCell>
                       <TableCell>
@@ -731,7 +731,7 @@ export function CourseAssignmentManager() {
                                   "suspended",
                                 )
                               }
-                              className="border-[#BFA55A]/30 text-[#EAEAEA] hover:bg-[#D4AF37]/10">
+                              className="border-2 border-border text-foreground hover:bg-muted font-bold">
                               Suspend
                             </Button>
                           )}
@@ -742,7 +742,7 @@ export function CourseAssignmentManager() {
                               onClick={() =>
                                 updateAssignmentStatus(assignment.id, "active")
                               }
-                              className="border-[#BFA55A]/30 text-[#EAEAEA] hover:bg-[#D4AF37]/10">
+                              className="border-2 border-border text-foreground hover:bg-muted font-bold">
                               Activate
                             </Button>
                           )}
@@ -767,13 +767,13 @@ export function CourseAssignmentManager() {
       <DialogPrimitive.Root
         open={progressDialogOpen}
         onOpenChange={setProgressDialogOpen}>
-        <DialogContent className="bg-[#14181D] border-[#BFA55A]/30 max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogContent className="bg-card border-[3px] border-border max-w-2xl max-h-[80vh] overflow-hidden flex flex-col wobbly-border shadow-hard-lg text-foreground">
           <DialogHeader>
-            <DialogTitle className="text-[#EAEAEA] flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-[#D4AF37]" />
+            <DialogTitle className="text-foreground flex items-center gap-2 font-heading font-bold text-lg">
+              <BarChart3 className="h-5 w-5 text-primary" />
               Student Progress
             </DialogTitle>
-            <DialogDescription className="text-[#B0B0B0]">
+            <DialogDescription className="text-muted-foreground font-medium">
               {selectedAssignment && (
                 <>
                   {selectedAssignment.student.full_name} -{" "}
@@ -786,42 +786,42 @@ export function CourseAssignmentManager() {
           <div className="flex-1 overflow-y-auto space-y-6 pr-2">
             {loadingProgress ? (
               <div className="flex justify-center items-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-[#D4AF37]" />
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : progressData ? (
               <>
                 {/* Progress Summary */}
-                <Card className="bg-[#0B0D10] border-[#BFA55A]/20">
+                <Card className="bg-card border-2 border-border wobbly-border shadow-hard-sm">
                   <CardHeader>
-                    <CardTitle className="text-lg text-[#EAEAEA]">
+                    <CardTitle className="text-lg text-foreground font-heading font-bold">
                       Overall Progress
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#B0B0B0]">Completion</span>
-                        <span className="text-[#D4AF37] font-semibold">
+                      <div className="flex justify-between text-sm font-bold">
+                        <span className="text-muted-foreground">Completion</span>
+                        <span className="text-primary font-semibold">
                           {progressData.progressPercentage}%
                         </span>
                       </div>
                       <Progress
                         value={progressData.progressPercentage}
-                        className="h-2 bg-[#2A2F35]"
+                        className="h-2 bg-muted border border-border"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2">
-                      <div className="bg-[#14181D] p-3 rounded-lg border border-[#BFA55A]/20">
+                      <div className="bg-background p-3 rounded-xl border-2 border-border shadow-inner font-bold">
                         <div className="text-2xl font-bold text-[#4CAF8F]">
                           {progressData.completedResources}
                         </div>
-                        <div className="text-xs text-[#B0B0B0]">Completed</div>
+                        <div className="text-xs text-muted-foreground">Completed</div>
                       </div>
-                      <div className="bg-[#14181D] p-3 rounded-lg border border-[#BFA55A]/20">
-                        <div className="text-2xl font-bold text-[#EAEAEA]">
+                      <div className="bg-background p-3 rounded-xl border-2 border-border shadow-inner font-bold">
+                        <div className="text-2xl font-bold text-foreground">
                           {progressData.totalResources}
                         </div>
-                        <div className="text-xs text-[#B0B0B0]">
+                        <div className="text-xs text-muted-foreground">
                           Total Resources
                         </div>
                       </div>
@@ -830,16 +830,16 @@ export function CourseAssignmentManager() {
                 </Card>
 
                 {/* Resources List */}
-                <Card className="bg-[#0B0D10] border-[#BFA55A]/20">
+                <Card className="bg-card border-2 border-border wobbly-border shadow-hard-sm">
                   <CardHeader>
-                    <CardTitle className="text-lg text-[#EAEAEA] flex items-center gap-2">
+                    <CardTitle className="text-lg text-foreground flex items-center gap-2 font-heading font-bold">
                       <BookOpen className="h-5 w-5" />
                       Resources
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     {progressData.resources.length === 0 ? (
-                      <div className="text-center py-8 text-[#707070]">
+                      <div className="text-center py-8 text-muted-foreground font-bold">
                         No resources available for this course
                       </div>
                     ) : (
@@ -848,10 +848,10 @@ export function CourseAssignmentManager() {
                           <div
                             key={resource.id}
                             className={cn(
-                              "flex items-center justify-between p-3 rounded-lg border transition-colors",
+                              "flex items-center justify-between p-3 rounded-lg border-2 transition-colors",
                               resource.completed
-                                ? "bg-[#4CAF8F]/10 border-[#4CAF8F]/30"
-                                : "bg-[#14181D] border-[#2A2F35] hover:border-[#BFA55A]/30",
+                                ? "bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400"
+                                : "bg-background border-border hover:border-primary/50",
                             )}>
                             <div className="flex items-center gap-3">
                               <div className="flex-shrink-0">
@@ -860,20 +860,20 @@ export function CourseAssignmentManager() {
                                     <Check className="h-3 w-3 text-white" />
                                   </div>
                                 ) : (
-                                  <div className="w-5 h-5 rounded-full border-2 border-[#2A2F35]" />
+                                  <div className="w-5 h-5 rounded-full border-2 border-border" />
                                 )}
                               </div>
                               <div>
-                                <div className="text-sm font-medium text-[#EAEAEA]">
+                                <div className="text-sm font-bold text-foreground">
                                   {resource.title}
                                 </div>
-                                <div className="text-xs text-[#707070]">
+                                <div className="text-xs text-muted-foreground font-bold">
                                   {resource.type}
                                 </div>
                               </div>
                             </div>
                             {resource.completed && (
-                              <Badge className="bg-[#4CAF8F]/20 text-[#4CAF8F] border-[#4CAF8F]/30">
+                              <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30 font-bold">
                                 Completed
                               </Badge>
                             )}
@@ -885,16 +885,16 @@ export function CourseAssignmentManager() {
                 </Card>
               </>
             ) : (
-              <div className="text-center py-12 text-[#707070]">
+              <div className="text-center py-12 text-muted-foreground font-bold">
                 No progress data available
               </div>
             )}
           </div>
 
-          <div className="pt-4 border-t border-[#2A2F35]">
+          <div className="pt-4 border-t-2 border-border">
             <Button
               onClick={() => setProgressDialogOpen(false)}
-              className="w-full bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]">
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-border shadow-hard-sm font-bold">
               Close
             </Button>
           </div>

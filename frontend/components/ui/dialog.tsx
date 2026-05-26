@@ -53,44 +53,49 @@ export function Dialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={handleBackdropClick}>
-      <div className="bg-[#14181D] border border-[#2A2F35] rounded-xl max-w-md w-full shadow-2xl animate-in fade-in-0 zoom-in-95">
+      <div 
+        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+        className="bg-card border-2 border-border max-w-md w-full shadow-hard-lg animate-in fade-in-0 zoom-in-95"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#2A2F35]">
-          <h2 className="text-lg font-semibold text-[#EAEAEA]">{title}</h2>
+        <div className="flex items-center justify-between p-6 border-b-2 border-border">
+          <h2 className="text-xl font-heading font-bold text-foreground">{title}</h2>
           <button
             onClick={onClose}
-            className="text-[#707070] hover:text-[#EAEAEA] transition-colors">
-            <X className="w-5 h-5" />
+            className="text-muted-foreground hover:text-foreground transition-colors font-bold p-1 cursor-pointer">
+            <X className="w-5 h-5" strokeWidth={2.5} />
           </button>
         </div>
 
         {/* Content */}
         <div className="p-6">
           {description && (
-            <p className="text-[#B0B0B0] text-sm mb-4">{description}</p>
+            <p className="text-muted-foreground text-sm font-bold mb-4">{description}</p>
           )}
           {children}
         </div>
 
         {/* Footer */}
         {(onConfirm || onCancel) && (
-          <div className="flex items-center justify-end gap-3 p-6 border-t border-[#2A2F35]">
+          <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-border">
             {onCancel && (
               <button
                 onClick={onCancel}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-[#B0B0B0] hover:text-[#EAEAEA] hover:bg-[#1A1F25] transition-colors">
+                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                className="px-4 py-2 border-2 border-border hover:bg-muted font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer">
                 {cancelText}
               </button>
             )}
             {onConfirm && (
               <button
                 onClick={onConfirm}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                className={`px-4 py-2 font-bold border-2 border-border transition-all shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer ${
                   confirmVariant === "danger"
-                    ? "bg-[#C94A4A] hover:bg-[#E05555] text-white"
-                    : "bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]"
+                    ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                 }`}>
                 {confirmText}
               </button>

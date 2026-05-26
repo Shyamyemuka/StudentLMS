@@ -29,17 +29,17 @@ export default function ProgressBar({
 
   // Color based on progress
   const getProgressColor = () => {
-    if (clampedProgress === 100) return "bg-[#4CAF8F]"; // Green for complete
-    if (clampedProgress >= 70) return "bg-[#D4AF37]"; // Gold for high progress
-    if (clampedProgress >= 40) return "bg-blue-500"; // Blue for medium
-    return "bg-gray-500"; // Gray for low progress
+    if (clampedProgress === 100) return "bg-success"; // Green for complete
+    if (clampedProgress >= 70) return "bg-primary"; // Gold for high progress
+    if (clampedProgress >= 40) return "bg-secondary"; // Secondary for medium
+    return "bg-muted-foreground/60"; // Muted for low progress
   };
 
   return (
     <div className={cn("w-full", className)}>
       <div
         className={cn(
-          "w-full bg-[#14181D] rounded-full overflow-hidden border border-[#2A2F35]",
+          "w-full bg-muted rounded-full overflow-hidden border-2 border-border",
           heights[size],
         )}>
         <div
@@ -57,11 +57,11 @@ export default function ProgressBar({
       {showLabel && (
         <p
           className={cn(
-            "text-xs text-[#B0B0B0] mt-1.5 text-right",
+            "text-xs text-muted-foreground font-bold font-body mt-1.5 text-right",
             labelClassName,
           )}>
           {clampedProgress === 100 ? (
-            <span className="text-[#4CAF8F] font-semibold">✓ Completed</span>
+            <span className="text-success font-black">✓ Completed</span>
           ) : (
             `${clampedProgress}% Complete`
           )}

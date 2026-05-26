@@ -46,25 +46,25 @@ export default function ResourceTabs({
   return (
     <div>
       {/* Tab Headers */}
-      <div className="flex flex-wrap gap-2 border-b border-[#2A2F35] mb-6">
+      <div className="flex flex-wrap gap-2 border-b-2 border-border mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium transition-colors relative ${
+            className={`px-4 py-3 text-sm font-bold transition-all relative cursor-pointer ${
               activeTab === tab.id
-                ? "text-[#D4AF37]"
-                : "text-[#B0B0B0] hover:text-[#EAEAEA]"
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}>
             <span className="flex items-center gap-2">
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
               {tab.count !== undefined && (
                 <span
-                  className={`px-2 py-0.5 rounded-full text-xs ${
+                  className={`px-2 py-0.5 rounded-full text-xs font-bold border-2 border-border ${
                     activeTab === tab.id
-                      ? "bg-[#D4AF37] text-[#0B0D10]"
-                      : "bg-[#2A2F35] text-[#B0B0B0]"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground"
                   }`}>
                   {tab.count}
                 </span>
@@ -72,7 +72,7 @@ export default function ResourceTabs({
             </span>
             {/* Active indicator */}
             {activeTab === tab.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4AF37]" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary" />
             )}
           </button>
         ))}
@@ -86,7 +86,8 @@ export default function ResourceTabs({
             {canUpload && (
               <Link
                 href={`/subjects/${subjectId}/add-resource?type=video`}
-                className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E6C76A] transition-colors mb-6">
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-4 py-2 rounded-xl text-sm font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer mb-6">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -133,7 +134,8 @@ export default function ResourceTabs({
             {canUpload && (
               <Link
                 href={`/subjects/${subjectId}/add-resource?type=pdf`}
-                className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E6C76A] transition-colors mb-6">
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-4 py-2 rounded-xl text-sm font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer mb-6">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -180,7 +182,8 @@ export default function ResourceTabs({
             {canUpload && (
               <Link
                 href={`/subjects/${subjectId}/add-resource?type=notes`}
-                className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0B0D10] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E6C76A] transition-colors mb-6">
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-4 py-2 rounded-xl text-sm font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer mb-6">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -236,13 +239,13 @@ function EmptyState({
   subMessage?: string;
 }) {
   return (
-    <div className="text-center py-12">
-      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#14181D] flex items-center justify-center text-3xl">
+    <div className="text-center py-12 font-body font-bold">
+      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-border flex items-center justify-center text-3xl shadow-hard-sm">
         {icon}
       </div>
-      <p className="text-[#707070]">{message}</p>
+      <p className="text-muted-foreground">{message}</p>
       {subMessage && (
-        <p className="text-[#707070] text-sm mt-1">{subMessage}</p>
+        <p className="text-muted-foreground/80 text-sm mt-1">{subMessage}</p>
       )}
     </div>
   );
@@ -405,26 +408,26 @@ function ResourceCard({
     <>
       <div className="relative group/card">
         <Link href={href}>
-          <div className="bg-[#14181D] border border-[#2A2F35] rounded-lg p-4 hover:border-[#D4AF37] transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] group">
+          <div className="bg-card border-2 border-border rounded-xl p-4 hover:border-primary transition-all duration-300 hover:shadow-hard-md group h-full shadow-hard-sm">
             {/* Icon & Type */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3 font-body font-bold">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center text-xl">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 border-2 border-primary/20 flex items-center justify-center text-xl">
                   {typeIcons[resource.type]}
                 </div>
-                <span className="text-xs text-[#707070] uppercase tracking-wider">
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">
                   {resource.type}
                 </span>
               </div>
             </div>
 
             {/* Title */}
-            <h4 className="text-[#EAEAEA] font-medium group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+            <h4 className="text-foreground font-bold font-heading group-hover:text-primary transition-colors line-clamp-2 text-base">
               {resource.title}
             </h4>
 
             {/* Date */}
-            <p className="text-[#707070] text-xs mt-2">
+            <p className="text-muted-foreground/80 text-xs mt-2 font-bold font-body">
               {formatDate(resource.created_at)}
             </p>
           </div>
@@ -435,7 +438,7 @@ function ResourceCard({
           <button
             onClick={handleDeleteClick}
             disabled={isDeleting}
-            className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-lg opacity-0 md:group-hover/card:opacity-100 md:opacity-0 opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed z-10"
+            className="absolute top-2 right-2 bg-destructive text-destructive-foreground border-2 border-border p-2 rounded-xl opacity-0 md:group-hover/card:opacity-100 md:opacity-0 opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed z-10 hover:scale-105 active:scale-95 cursor-pointer shadow-hard-sm"
             title="Delete resource">
             <Trash2 className="w-4 h-4" />
           </button>

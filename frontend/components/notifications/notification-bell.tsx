@@ -117,10 +117,10 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
 
     // Get color for notification type
     const getNotificationColor = (type: string) => {
-        if (type.includes("approved")) return "text-[#4CAF8F]";
-        if (type.includes("rejected")) return "text-[#C94A4A]";
-        if (type === "new_submission" || type === "new_faculty_signup") return "text-[#D4AF37]";
-        return "text-[#B0B0B0]";
+        if (type.includes("approved")) return "text-emerald-500";
+        if (type.includes("rejected")) return "text-destructive";
+        if (type === "new_submission" || type === "new_faculty_signup") return "text-primary";
+        return "text-muted-foreground";
     };
 
     return (
@@ -128,14 +128,14 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
             {/* Bell Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 rounded-lg hover:bg-[#1A1F25] transition-colors"
+                className="relative p-2 rounded-lg hover:bg-muted border-2 border-transparent hover:border-border transition-all cursor-pointer wobbly-border"
                 aria-label="Notifications"
             >
-                <Bell className="w-5 h-5 text-[#B0B0B0] hover:text-[#D4AF37] transition-colors" />
+                <Bell className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
 
                 {/* Unread Badge */}
                 {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-[#C94A4A] text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                    <span className="absolute -top-0.5 -right-0.5 bg-destructive text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 border-2 border-border shadow-hard-sm animate-sketch-bounce">
                         {unreadCount > 99 ? "99+" : unreadCount}
                     </span>
                 )}
@@ -151,15 +151,18 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                     />
 
                     {/* Dropdown Panel */}
-                    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#14181D] border border-[#2A2F35] rounded-xl shadow-2xl z-50 overflow-hidden">
+                    <div 
+                        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-card border-2 border-border rounded-xl shadow-hard-lg z-50 overflow-hidden"
+                    >
                         {/* Header */}
-                        <div className="px-4 py-3 border-b border-[#2A2F35] flex items-center justify-between">
-                            <h3 className="text-[#EAEAEA] font-semibold">Notifications</h3>
+                        <div className="px-4 py-3 border-b-2 border-border flex items-center justify-between">
+                            <h3 className="text-foreground font-bold font-heading">Notifications</h3>
                             <div className="flex items-center gap-2">
                                 {unreadCount > 0 && (
                                     <button
                                         onClick={handleMarkAllAsRead}
-                                        className="text-xs text-[#D4AF37] hover:text-[#E6C76A] transition-colors flex items-center gap-1"
+                                        className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-bold cursor-pointer"
                                     >
                                         <CheckCheck className="w-3.5 h-3.5" />
                                         Mark all read
@@ -167,9 +170,9 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                                 )}
                                 <button
                                     onClick={() => setIsOpen(false)}
-                                    className="p-1 hover:bg-[#1A1F25] rounded transition-colors md:hidden"
+                                    className="p-1 hover:bg-muted border-2 border-transparent hover:border-border rounded transition-all md:hidden cursor-pointer"
                                 >
-                                    <X className="w-4 h-4 text-[#707070]" />
+                                    <X className="w-4 h-4 text-muted-foreground" />
                                 </button>
                             </div>
                         </div>
@@ -177,13 +180,13 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                         {/* Notification List */}
                         <div className="max-h-[400px] overflow-y-auto">
                             {loading ? (
-                                <div className="px-4 py-8 text-center text-[#707070]">
+                                <div className="px-4 py-8 text-center text-muted-foreground font-bold">
                                     Loading...
                                 </div>
                             ) : notifications.length === 0 ? (
                                 <div className="px-4 py-8 text-center">
-                                    <Bell className="w-8 h-8 text-[#2A2F35] mx-auto mb-2" />
-                                    <p className="text-[#707070] text-sm">No notifications yet</p>
+                                    <Bell className="w-8 h-8 text-muted/60 mx-auto mb-2" />
+                                    <p className="text-muted-foreground font-bold text-sm">No notifications yet</p>
                                 </div>
                             ) : (
                                 <ul>
@@ -191,7 +194,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                                         <li key={notification.id}>
                                             <button
                                                 onClick={() => handleNotificationClick(notification)}
-                                                className={`w-full px-4 py-3 text-left hover:bg-[#1A1F25] transition-colors border-b border-[#2A2F35]/50 last:border-b-0 ${!notification.is_read ? "bg-[#1A1F25]/50" : ""
+                                                className={`w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors border-b-2 border-border/40 last:border-b-0 cursor-pointer ${!notification.is_read ? "bg-muted/30" : ""
                                                     }`}
                                             >
                                                 <div className="flex gap-3">
@@ -208,21 +211,21 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-start justify-between gap-2">
                                                             <p
-                                                                className={`text-sm font-medium truncate ${!notification.is_read
-                                                                        ? "text-[#EAEAEA]"
-                                                                        : "text-[#B0B0B0]"
+                                                                className={`text-sm font-bold truncate ${!notification.is_read
+                                                                        ? "text-foreground"
+                                                                        : "text-muted-foreground"
                                                                     }`}
                                                             >
                                                                 {notification.title}
                                                             </p>
                                                             {!notification.is_read && (
-                                                                <span className="w-2 h-2 bg-[#D4AF37] rounded-full flex-shrink-0 mt-1.5" />
+                                                                <span className="w-2.5 h-2.5 bg-primary border-2 border-border rounded-full flex-shrink-0 mt-1.5 shadow-hard-sm" />
                                                             )}
                                                         </div>
-                                                        <p className="text-xs text-[#707070] mt-0.5 line-clamp-2">
+                                                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 font-bold">
                                                             {notification.message}
                                                         </p>
-                                                        <p className="text-xs text-[#505050] mt-1">
+                                                        <p className="text-xs text-muted-foreground/60 mt-1 font-bold">
                                                             {formatDistanceToNow(new Date(notification.created_at), {
                                                                 addSuffix: true,
                                                             })}
@@ -238,8 +241,8 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
 
                         {/* Footer */}
                         {notifications.length > 0 && (
-                            <div className="px-4 py-2 border-t border-[#2A2F35] bg-[#0B0D10]">
-                                <p className="text-xs text-[#505050] text-center">
+                            <div className="px-4 py-2 border-t-2 border-border bg-muted/40">
+                                <p className="text-xs text-muted-foreground/60 text-center font-bold">
                                     Showing last {notifications.length} notifications
                                 </p>
                             </div>

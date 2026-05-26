@@ -149,10 +149,10 @@ export default function DocumentViewerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B0D10] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center transition-colors duration-200">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto mb-4"></div>
-          <p className="text-[#B0B0B0]">Loading document...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground font-medium font-body">Loading document...</p>
         </div>
       </div>
     );
@@ -160,16 +160,16 @@ export default function DocumentViewerPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0B0D10] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center transition-colors duration-200">
         <div className="text-center">
           <div className="text-6xl mb-4">📄</div>
-          <h1 className="text-xl font-bold text-[#EAEAEA] mb-2">
+          <h1 className="text-2xl font-bold text-foreground font-heading mb-2">
             Document Not Found
           </h1>
-          <p className="text-[#B0B0B0] mb-4">{error}</p>
+          <p className="text-muted-foreground font-medium font-body mb-4">{error}</p>
           <Link
             href={`/subjects/${subjectId}`}
-            className="text-[#D4AF37] hover:underline">
+            className="text-primary font-bold hover:underline font-body">
             ← Back to Subject
           </Link>
         </div>
@@ -183,14 +183,14 @@ export default function DocumentViewerPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0B0D10] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col transition-colors duration-200">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[#14181D] border-b border-[#2A2F35] px-6 py-4">
+      <div className="sticky top-0 z-10 bg-card border-b-2 border-border px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href={`/subjects/${subjectId}`}
-              className="text-[#B0B0B0] hover:text-[#EAEAEA] transition-colors">
+              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -205,10 +205,10 @@ export default function DocumentViewerPage() {
               </svg>
             </Link>
             <div>
-              <h1 className="text-lg font-semibold text-[#EAEAEA]">
+              <h1 className="text-lg font-bold text-foreground font-heading">
                 {resource?.title || "Document"}
               </h1>
-              <p className="text-sm text-[#707070]">
+              <p className="text-xs text-muted-foreground font-medium font-body">
                 {fileExt.toUpperCase()} Document
               </p>
             </div>
@@ -228,9 +228,10 @@ export default function DocumentViewerPage() {
 
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-[#0B0D10] rounded-lg font-medium hover:bg-[#E6C76A] transition-colors">
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer text-sm">
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -251,7 +252,7 @@ export default function DocumentViewerPage() {
       <div className="flex-1 p-4">
         <div className="max-w-7xl mx-auto h-full">
           {viewerUrl ? (
-            <div className="w-full h-[calc(100vh-140px)] bg-[#14181D] rounded-lg overflow-hidden border border-[#2A2F35]">
+            <div className="w-full h-[calc(100vh-140px)] bg-card rounded-lg overflow-hidden border-2 border-border shadow-hard-sm">
               {isPdf(resource?.storage_path ?? null) ? (
                 // PDF - embed directly
                 <iframe
@@ -272,15 +273,16 @@ export default function DocumentViewerPage() {
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-6xl mb-4">📄</div>
-                    <h2 className="text-xl font-bold text-[#EAEAEA] mb-2">
+                    <h2 className="text-xl font-bold text-foreground font-heading mb-2">
                       Preview not available
                     </h2>
-                    <p className="text-[#B0B0B0] mb-4">
+                    <p className="text-muted-foreground font-body font-medium mb-4">
                       This file type cannot be previewed in the browser.
                     </p>
                     <button
                       onClick={handleDownload}
-                      className="px-6 py-3 bg-[#D4AF37] text-[#0B0D10] rounded-lg font-medium hover:bg-[#E6C76A] transition-colors">
+                      style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                      className="px-6 py-3 bg-accent text-accent-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer">
                       Download File
                     </button>
                   </div>
@@ -288,10 +290,10 @@ export default function DocumentViewerPage() {
               )}
             </div>
           ) : (
-            <div className="w-full h-[calc(100vh-140px)] bg-[#14181D] rounded-lg flex items-center justify-center border border-[#2A2F35]">
+            <div className="w-full h-[calc(100vh-140px)] bg-card rounded-lg flex items-center justify-center border-2 border-border shadow-hard-sm">
               <div className="text-center">
                 <div className="text-6xl mb-4">⚠️</div>
-                <p className="text-[#B0B0B0]">Unable to load document viewer</p>
+                <p className="text-muted-foreground font-body font-medium">Unable to load document viewer</p>
               </div>
             </div>
           )}

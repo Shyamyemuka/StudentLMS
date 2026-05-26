@@ -41,7 +41,7 @@ export default function SocialLinks() {
   ];
 
   return (
-    <section className="py-16 bg-[#0B0D10]">
+    <section className="py-16 bg-background border-t-2 border-border transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Social Links Grid */}
         <div className="flex flex-wrap justify-center gap-6">
@@ -51,11 +51,11 @@ export default function SocialLinks() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-6 py-4 bg-[#14181D] border border-[#BFA55A]/30 rounded-lg hover:border-[#D4AF37] hover:scale-105 transition-all duration-300 group">
-              <span className="text-[#B0B0B0] group-hover:text-[#D4AF37] transition-colors">
+              className="flex items-center gap-3 px-6 py-4 bg-card border-2 border-border rounded-xl hover:border-primary hover:scale-105 transition-all duration-300 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.05)] cursor-pointer">
+              <span className="text-muted-foreground group-hover:text-primary transition-colors">
                 {social.icon}
               </span>
-              <span className="text-[#EAEAEA] font-medium group-hover:text-[#D4AF37] transition-colors">
+              <span className="text-foreground font-bold group-hover:text-primary transition-colors font-body">
                 {social.name}
               </span>
             </a>

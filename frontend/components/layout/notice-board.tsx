@@ -25,8 +25,6 @@ interface Notice {
   created_by: string;
   created_at: string;
   pinned: boolean;
-  pinned_at: string | null;
-  pinned_by: string | null;
   profiles?: {
     full_name: string;
     role: string;
@@ -105,8 +103,6 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
           created_by,
           created_at,
           pinned,
-          pinned_at,
-          pinned_by,
           profiles:created_by (
             full_name,
             role
@@ -126,15 +122,10 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
           : notice.profiles,
       }));
 
-      // Sort: pinned notices first (by pinned_at desc), then unpinned by created_at desc
+      // Sort: pinned notices first, then unpinned by created_at desc
       const sorted = [...transformedData].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
         if (!a.pinned && b.pinned) return 1;
-        if (a.pinned && b.pinned) {
-          return (
-            new Date(b.pinned_at!).getTime() - new Date(a.pinned_at!).getTime()
-          );
-        }
         return (
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
@@ -247,8 +238,6 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
         .from("notices")
         .update({
           pinned: !currentPinned,
-          pinned_at: !currentPinned ? new Date().toISOString() : null,
-          pinned_by: !currentPinned ? userId : null,
         })
         .eq("id", noticeId);
 
@@ -294,13 +283,13 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
   };
 
   return (
-    <Card className="bg-[#14181D] border-[#2A2F35] h-full flex flex-col">
+    <Card className="bg-card border-2 border-border shadow-hard-sm h-full flex flex-col wobbly-border-md transition-colors duration-200">
       {/* Header */}
-      <div className="p-4 border-b border-[#2A2F35]">
+      <div className="p-4 border-b-2 border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Megaphone className="w-5 h-5 text-[#D4AF37]" />
-            <h3 className="text-lg font-semibold text-[#EAEAEA]">
+            <Megaphone className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-bold text-foreground font-heading">
               Notice Board
             </h3>
           </div>
@@ -308,13 +297,14 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
             <Button
               onClick={() => setShowForm(true)}
               size="sm"
-              className="bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]">
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="bg-accent text-accent-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer text-xs">
               <Bell className="w-4 h-4 mr-2" />
               Post Notice
             </Button>
           )}
         </div>
-        <p className="text-xs text-[#707070]">
+        <p className="text-xs text-muted-foreground font-medium font-body">
           {canPost
             ? "Post important announcements for all users"
             : "View announcements from faculty and admin"}
@@ -323,14 +313,14 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
 
       {/* Post Form */}
       {showForm && (
-        <div className="p-4 border-b border-[#2A2F35] bg-[#0B0D10]">
+        <div className="p-4 border-b-2 border-border bg-background transition-colors duration-200">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-medium text-[#EAEAEA]">
+            <h4 className="text-sm font-bold text-foreground font-heading">
               Create Notice
             </h4>
             <button
               onClick={() => setShowForm(false)}
-              className="text-[#707070] hover:text-[#EAEAEA] transition-colors">
+              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -340,7 +330,7 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
               placeholder="Notice title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-[#14181D] border border-[#2A2F35] rounded-lg px-3 py-2 text-sm text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20"
+              className="w-full bg-card border-2 border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none font-body font-medium"
               maxLength={100}
               disabled={submitting}
             />
@@ -348,7 +338,7 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
               placeholder="Notice content..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full bg-[#14181D] border border-[#2A2F35] rounded-lg px-3 py-2 text-sm text-[#EAEAEA] placeholder:text-[#707070] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 resize-none"
+              className="w-full bg-card border-2 border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none resize-none font-body font-medium"
               rows={3}
               maxLength={500}
               disabled={submitting}
@@ -359,14 +349,15 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
                 onClick={() => setShowForm(false)}
                 variant="outline"
                 size="sm"
-                className="bg-transparent border-[#2A2F35] text-[#B0B0B0] hover:bg-[#1A1F25]"
+                className="bg-transparent border-2 border-border text-muted-foreground font-bold hover:bg-muted font-body"
                 disabled={submitting}>
                 Cancel
               </Button>
               <Button
                 type="submit"
                 size="sm"
-                className="bg-[#D4AF37] hover:bg-[#E6C76A] text-[#0B0D10]"
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="bg-accent text-accent-foreground border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 transition-all text-center cursor-pointer text-xs"
                 disabled={submitting}>
                 <Send className="w-4 h-4 mr-2" />
                 {submitting ? "Posting..." : "Post"}
@@ -377,17 +368,17 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
       )}
 
       {/* Notices List */}
-      <div className="notices-list flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="notices-list flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
         {loading ? (
-          <div className="text-center py-8 text-[#707070]">
+          <div className="text-center py-8 text-muted-foreground font-body font-medium">
             Loading notices...
           </div>
         ) : notices.length === 0 ? (
           <div className="text-center py-8">
-            <Bell className="w-12 h-12 text-[#707070] mx-auto mb-3" />
-            <p className="text-[#707070] text-sm">No notices yet</p>
+            <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground font-body font-medium text-sm">No notices yet</p>
             {canPost && (
-              <p className="text-[#707070] text-xs mt-1">
+              <p className="text-muted-foreground font-body text-xs mt-1">
                 Be the first to post an announcement
               </p>
             )}
@@ -397,25 +388,25 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
             {notices.map((notice) => (
               <div
                 key={notice.id}
-                className={`bg-[#0B0D10] border rounded-lg p-4 hover:border-[#D4AF37]/30 transition-colors ${
+                className={`bg-background border-2 rounded-lg p-4 hover:border-primary/50 transition-all duration-200 shadow-hard-sm ${
                   notice.pinned
-                    ? "border-[#D4AF37] bg-[#D4AF37]/5"
-                    : "border-[#2A2F35]"
+                    ? "border-primary bg-primary/5"
+                    : "border-border"
                 }`}>
                 {/* Header */}
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       {notice.pinned && (
-                        <Pin className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" />
+                        <Pin className="w-4 h-4 text-primary fill-primary" />
                       )}
-                      <h4 className="text-[#EAEAEA] font-semibold text-sm break-words">
+                      <h4 className="text-foreground font-bold text-sm font-heading break-words">
                         {notice.title}
                       </h4>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-[#707070]">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span
-                        className={`flex items-center gap-1 ${getRoleColor(
+                        className={`flex items-center gap-1 font-body font-bold ${getRoleColor(
                           notice.profiles?.role || "",
                         )}`}>
                         <User className="w-3 h-3" />
@@ -424,24 +415,24 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
                       {notice.profiles?.role && (
                         <>
                           <span>•</span>
-                          <span className="text-[#D4AF37] text-xs px-2 py-0.5 bg-[#D4AF37]/10 rounded">
+                          <span className="text-primary font-bold font-body text-xs px-2 py-0.5 bg-primary/10 rounded border border-primary/20">
                             {getRoleBadge(notice.profiles.role)}
                           </span>
                         </>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     {isAdmin && (
                       <button
                         onClick={() =>
                           handleTogglePin(notice.id, notice.pinned)
                         }
                         disabled={pinning === notice.id}
-                        className={`transition-colors disabled:opacity-50 ${
+                        className={`transition-colors disabled:opacity-50 cursor-pointer ${
                           notice.pinned
-                            ? "text-[#D4AF37] hover:text-[#D4AF37]/80"
-                            : "text-[#707070] hover:text-[#D4AF37]"
+                            ? "text-primary hover:text-primary/80"
+                            : "text-muted-foreground hover:text-primary"
                         }`}
                         title={
                           notice.pinned ? "Unpin notice" : "Pin notice (max 3)"
@@ -459,7 +450,7 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
                       <button
                         onClick={() => handleDelete(notice.id)}
                         disabled={deleting === notice.id}
-                        className="text-[#707070] hover:text-red-400 transition-colors disabled:opacity-50"
+                        className="text-muted-foreground hover:text-red-400 transition-colors disabled:opacity-50 cursor-pointer"
                         title="Delete notice">
                         {deleting === notice.id ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -472,12 +463,12 @@ export default function NoticeBoard({ userRole, userId }: NoticeBoardProps) {
                 </div>
 
                 {/* Content */}
-                <p className="text-[#B0B0B0] text-sm mb-2 whitespace-pre-wrap break-words">
+                <p className="text-foreground text-sm font-medium font-body mb-2 whitespace-pre-wrap break-words leading-relaxed">
                   {notice.content}
                 </p>
 
                 {/* Footer */}
-                <div className="flex items-center gap-1 text-xs text-[#707070]">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground font-bold font-body">
                   <Calendar className="w-3 h-3" />
                   <span>
                     {new Date(notice.created_at).toLocaleDateString("en-US", {

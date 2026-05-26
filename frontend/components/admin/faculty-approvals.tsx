@@ -135,7 +135,7 @@ export default function FacultyApprovals() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="text-[#707070]">Loading pending requests...</div>
+        <div className="text-muted-foreground font-bold">Loading pending requests...</div>
       </div>
     );
   }
@@ -145,23 +145,26 @@ export default function FacultyApprovals() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h2 className="text-2xl font-bold text-[#EAEAEA] mb-2">
+          <h2 className="text-2xl font-bold text-foreground font-heading mb-2">
             Faculty Approvals
           </h2>
-          <p className="text-[#B0B0B0]">
+          <p className="text-muted-foreground font-bold">
             Review and approve faculty account requests
           </p>
         </div>
 
         {/* Stats */}
-        <Card className="bg-[#14181D] border-[#2A2F35] p-6">
+        <Card 
+          style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+          className="bg-card border-2 border-border p-6 shadow-hard-sm"
+        >
           <div className="flex items-center gap-4">
-            <UserCheck className="w-8 h-8 text-[#D4AF37]" />
+            <UserCheck className="w-8 h-8 text-primary" />
             <div>
-              <div className="text-2xl font-bold text-[#EAEAEA]">
+              <div className="text-2xl font-bold text-foreground font-heading">
                 {pendingUsers.length}
               </div>
-              <div className="text-sm text-[#707070]">
+              <div className="text-sm text-muted-foreground font-bold">
                 Pending Faculty Request{pendingUsers.length !== 1 ? "s" : ""}
               </div>
             </div>
@@ -170,30 +173,34 @@ export default function FacultyApprovals() {
 
         {/* Pending List */}
         {pendingUsers.length === 0 ? (
-          <Card className="bg-[#14181D] border-[#2A2F35] p-12 text-center">
-            <UserCheck className="w-12 h-12 text-[#707070] mx-auto mb-3" />
-            <p className="text-[#B0B0B0]">No pending faculty requests</p>
+          <Card 
+            style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+            className="bg-card border-2 border-border p-12 text-center shadow-hard-md"
+          >
+            <UserCheck className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+            <p className="text-muted-foreground font-bold">No pending faculty requests</p>
           </Card>
         ) : (
           <div className="space-y-4">
             {pendingUsers.map((user) => (
               <Card
                 key={user.user_id}
-                className="bg-[#14181D] border-[#2A2F35] p-6">
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="bg-card border-2 border-border p-6 shadow-hard-md">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   {/* User Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-[#EAEAEA] mb-2">
+                    <h3 className="text-lg font-bold text-foreground font-heading mb-2">
                       {user.full_name}
                     </h3>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-[#707070]">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground font-bold">
                       <span className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
+                        <Mail className="w-4 h-4 text-primary" />
                         {user.email}
                       </span>
-                      <span className="hidden sm:inline">•</span>
+                      <span className="hidden sm:inline text-border">•</span>
                       <span className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="w-4 h-4 text-primary" />
                         Requested {formatDate(user.created_at)}
                       </span>
                     </div>
@@ -205,7 +212,8 @@ export default function FacultyApprovals() {
                       onClick={() => handleApprove(user.user_id)}
                       disabled={processing === user.user_id}
                       size="sm"
-                      className="bg-[#4CAF8F] hover:bg-[#4CAF8F]/90 text-white">
+                      style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white border-2 border-border font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                       <CheckCircle className="w-4 h-4 mr-2" />
                       {processing === user.user_id ? "Approving..." : "Approve"}
                     </Button>
@@ -214,7 +222,8 @@ export default function FacultyApprovals() {
                       disabled={processing === user.user_id}
                       size="sm"
                       variant="outline"
-                      className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/30 hover:border-red-500/50">
+                      style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                      className="bg-destructive/10 hover:bg-destructive/20 text-destructive border-2 border-destructive/30 font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                       <XCircle className="w-4 h-4 mr-2" />
                       Reject
                     </Button>
@@ -237,15 +246,15 @@ export default function FacultyApprovals() {
         onConfirm={handleReject}
         onCancel={() => setShowRejectDialog(false)}>
         {selectedUser && (
-          <div className="space-y-4">
-            <p className="text-[#B0B0B0] text-sm">
+          <div className="space-y-4 font-bold">
+            <p className="text-muted-foreground text-sm">
               Are you sure you want to reject the faculty request from{" "}
-              <span className="text-[#EAEAEA] font-medium">
+              <span className="text-foreground font-bold">
                 {selectedUser.full_name}
               </span>
               ?
             </p>
-            <p className="text-[#C94A4A] text-sm font-medium">
+            <p className="text-destructive text-sm font-bold">
               This will delete their account. They will need to sign up again if
               they wish to reapply.
             </p>

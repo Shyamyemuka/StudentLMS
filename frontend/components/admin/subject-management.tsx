@@ -204,7 +204,7 @@ export default function SubjectManagement() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="text-[#707070]">Loading subjects...</div>
+        <div className="text-muted-foreground font-bold">Loading subjects...</div>
       </div>
     );
   }
@@ -214,31 +214,34 @@ export default function SubjectManagement() {
       {/* Header with Search */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-[#EAEAEA] mb-1">
+          <h2 className="text-xl font-bold text-foreground font-heading mb-1">
             Manage Subjects
           </h2>
-          <p className="text-[#B0B0B0] text-sm">
+          <p className="text-muted-foreground text-sm font-bold">
             {filteredSubjects.length} approved subject
             {filteredSubjects.length !== 1 ? "s" : ""}
           </p>
         </div>
 
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#707070]" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search subjects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#14181D] border-[#2A2F35] text-[#EAEAEA] placeholder:text-[#707070]"
+            className="pl-10 bg-card border-2 border-border text-foreground placeholder:text-muted-foreground/60 rounded-xl focus:border-primary focus:outline-none font-bold"
           />
         </div>
       </div>
 
       {/* Subjects List */}
       {filteredSubjects.length === 0 ? (
-        <Card className="bg-[#14181D] border-[#2A2F35] p-12 text-center">
-          <BookOpen className="w-12 h-12 text-[#707070] mx-auto mb-3" />
-          <p className="text-[#B0B0B0]">
+        <Card 
+          style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+          className="bg-card border-2 border-border p-12 text-center shadow-hard-md"
+        >
+          <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground font-bold">
             {searchQuery
               ? "No subjects found matching your search"
               : "No approved subjects yet"}
@@ -249,30 +252,31 @@ export default function SubjectManagement() {
           {filteredSubjects.map((subject) => (
             <Card
               key={subject.id}
-              className="bg-[#14181D] border-[#2A2F35] p-6 hover:border-[#D4AF37]/50 transition-colors">
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="bg-card border-2 border-border p-6 shadow-hard-md hover:border-primary transition-all duration-200 hover:-translate-y-0.5">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 {/* Subject Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0">
-                      <BookOpen className="w-5 h-5 text-[#D4AF37]" />
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                      <BookOpen className="w-5 h-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <h3 className="text-lg font-semibold text-[#EAEAEA]">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <h3 className="text-lg font-bold text-foreground font-heading">
                           {subject.title}
                         </h3>
                         <Badge
                           variant="outline"
-                          className="bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/30">
+                          className="bg-primary/10 text-primary border border-primary/25 rounded font-bold">
                           {subject.subject_code}
                         </Badge>
                       </div>
-                      <p className="text-[#B0B0B0] text-sm mb-2">
+                      <p className="text-muted-foreground text-sm font-bold mb-2">
                         Regulation: {subject.regulation}
                       </p>
                       {subject.description && (
-                        <p className="text-[#707070] text-sm line-clamp-2">
+                        <p className="text-muted-foreground text-sm font-medium line-clamp-2">
                           {subject.description}
                         </p>
                       )}
@@ -280,14 +284,14 @@ export default function SubjectManagement() {
                   </div>
 
                   {/* Creator Info */}
-                  <div className="flex items-center gap-4 text-xs text-[#707070] mt-3 pt-3 border-t border-[#2A2F35]">
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground font-bold mt-3 pt-3 border-t-2 border-dashed border-border/40">
                     <span>
                       Created by:{" "}
-                      <span className="text-[#B0B0B0]">
+                      <span className="text-foreground font-bold">
                         {subject.profiles?.full_name || "Unknown"}
                       </span>
                     </span>
-                    <span>•</span>
+                    <span className="text-border">•</span>
                     <span>{formatDate(subject.created_at)}</span>
                   </div>
                 </div>
@@ -299,7 +303,8 @@ export default function SubjectManagement() {
                     disabled={deleting === subject.id}
                     variant="outline"
                     size="sm"
-                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/30 hover:border-red-500/50">
+                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                    className="bg-destructive/10 hover:bg-destructive/20 text-destructive border-2 border-destructive/30 font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                     <Trash2 className="w-4 h-4 mr-2" />
                     {deleting === subject.id ? "Deleting..." : "Delete"}
                   </Button>

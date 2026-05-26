@@ -245,7 +245,7 @@ export default function SubjectCard({
                 </span>
                 {isLocked ? (
                   <span className="text-accent text-sm font-bold group-hover:underline flex items-center gap-1">
-                    Buy Course (₹499) 🔒
+                    Buy Course (₹{subject.price !== undefined ? Math.round(subject.price) : 499}) 🔒
                   </span>
                 ) : (
                   <span className="text-primary text-sm font-bold group-hover:underline flex items-center gap-1">
