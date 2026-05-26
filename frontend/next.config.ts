@@ -24,15 +24,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "30mb",
     },
-    serverExternalPackages: ["lightningcss", "@tailwindcss/oxide"],
   },
-  turbopack: {
-    root: path.resolve(__dirname, ".."),
-    resolveAlias: {
-      "react": "./node_modules/react",
-      "react-dom": "./node_modules/react-dom",
-    },
-  },
+  serverExternalPackages: ["lightningcss", "@tailwindcss/oxide"],
   // Suppress hydration warnings caused by browser extensions
   reactStrictMode: true,
   compiler: {
