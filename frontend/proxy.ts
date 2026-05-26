@@ -7,7 +7,7 @@ const publicRoutes = ["/", "/login", "/signup", "/auth/callback", "/dashboard"];
 // Routes only for admin
 const adminRoutes = ["/admin"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
   const { pathname, searchParams } = request.nextUrl;
 

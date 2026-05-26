@@ -19,6 +19,9 @@ const patrickHand = Patrick_Hand({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   title: "Student LMS - Knowledge Archive",
   description:
     "A modern learning management system for students and faculty. Access organized resources, real-time collaboration, and smart video learning.",
@@ -49,8 +52,7 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${kalam.variable} ${patrickHand.variable} font-body antialiased min-h-screen bg-background text-foreground`}
-        suppressHydrationWarning
-      >
+        suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
           <Toaster

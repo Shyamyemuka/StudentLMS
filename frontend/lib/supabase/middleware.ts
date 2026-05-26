@@ -15,8 +15,6 @@ export async function updateSession(request: NextRequest) {
       supabaseKey.includes('your_') ||
       !supabaseUrl.startsWith('http')) {
     console.error('❌ Invalid or missing Supabase environment variables');
-    console.error('Please create frontend/.env.local with your actual Supabase credentials');
-    console.error('Copy from .env.local.example and fill in your values');
     return { supabaseResponse, user: null };
   }
 
@@ -39,46 +37,70 @@ export async function updateSession(request: NextRequest) {
             supabaseResponse.cookies.set(name, value, {
               ...options,
               httpOnly: true,
-              // Use 'lax' for better compatibility, but allow secure cross-site
               sameSite: 'lax',
               path: '/',
               secure: process.env.NODE_ENV === 'production',
-              // Ensure cookies persist across UA changes (mobile desktop mode)
-              // Use longer maxAge for session cookies
               maxAge: options?.maxAge ?? 60 * 60 * 24 * 30, // 30 days default
             })
           );
         },
       },
+      // Set a short timeout for fetch to prevent server-side hangs
+      global: {
+        fetch: (url, options) => {
+          return fetch(url, {
+            ...options,
+            signal: AbortSignal.timeout(5000), // 5 second timeout
+          });
+        },
+      },
     }
   );
 
-  // Refresh session if expired - this keeps users logged in
-  // Wrap in try-catch to handle edge cases like flow_state errors
+  // Race the Supabase call against a 5-second timeout.
+  // Without this, a slow/offline Supabase connection blocks EVERY page request
+  // for 60-70 seconds, causing the 4-6 minute render times seen in the terminal.
   try {
+    const timeoutPromise = new Promise<{ data: { user: null }; error: Error }>(
+      (resolve) =>
+        setTimeout(
+          () =>
+            resolve({
+              data: { user: null },
+              error: new Error("Supabase auth timeout"),
+            }),
+          5000
+        )
+    );
+
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser();
+    } = await Promise.race([supabase.auth.getUser(), timeoutPromise]);
 
     if (error) {
-      // Only log errors in development and if they're not "Auth session missing"
-      if (process.env.NODE_ENV === 'development' && !error.message.includes('Auth session missing')) {
-        console.warn('Session refresh warning:', error.message);
+      const msg = error.message ?? "";
+      const isNoisy =
+        msg.includes("Auth session missing") ||
+        msg.includes("Supabase auth timeout") ||
+        msg.includes("fetch failed");
+      if (process.env.NODE_ENV === "development" && !isNoisy) {
+        console.warn("Session refresh warning:", msg);
       }
 
-      // If it's a flow_state error, the user just needs to re-authenticate
-      // Don't return the error, just return null user
-      if (error.message.includes('flow_state') || error.message.includes('invalid_grant')) {
+      if (
+        msg.includes("flow_state") ||
+        msg.includes("invalid_grant") ||
+        msg.includes("Supabase auth timeout") ||
+        msg.includes("fetch failed")
+      ) {
         return { supabaseResponse, user: null };
       }
     }
 
     return { supabaseResponse, user };
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Session refresh error:', err);
-    }
+    // Network error — don't block the request, just proceed as unauthenticated
     return { supabaseResponse, user: null };
   }
 }

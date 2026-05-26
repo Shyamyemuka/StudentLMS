@@ -60,22 +60,45 @@ export async function createClient() {
           }
         },
       },
+      // Set a short timeout for fetch to prevent server-side hangs
+      global: {
+        fetch: (url, options) => {
+          return fetch(url, {
+            ...options,
+            signal: AbortSignal.timeout(5000), // 5 second timeout
+          });
+        },
+      },
     }
   );
 }
 
 export async function getUser() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error) return null;
+    return user;
+  } catch (err) {
+    console.error("Supabase getUser timeout/error:", err);
+    return null;
+  }
 }
 
 export async function getSession() {
   const supabase = await createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return session;
+  try {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    if (error) return null;
+    return session;
+  } catch (err) {
+    console.error("Supabase getSession timeout/error:", err);
+    return null;
+  }
 }

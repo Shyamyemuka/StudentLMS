@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
@@ -35,6 +35,7 @@ export default function CertificatePanel({
   const [enabled, setEnabled] = useState(initialCertificateEnabled);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const certRef = useRef<any>(null);
 
   const isAdminOrFaculty = userRole === "admin" || userRole === "faculty";
 
@@ -147,7 +148,7 @@ export default function CertificatePanel({
       {/* Modal for Certificate Preview & Download */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in zoom-in-95 duration-200">
-          <div className="w-full max-w-[1200px] bg-card border-4 border-border rounded-2xl p-4 shadow-hard-lg flex flex-col items-center max-h-[95vh]">
+          <div className="w-full max-w-[1200px] bg-card border-4 border-border rounded-2xl p-4 shadow-hard-lg flex flex-col items-center max-h-[95vh] overflow-hidden">
             {/* Modal Header Controls */}
             <div className="w-full flex justify-between items-center mb-4 px-2">
               <h4 className="font-heading font-black text-lg text-foreground flex items-center gap-2">
@@ -155,23 +156,52 @@ export default function CertificatePanel({
               </h4>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                className="px-4 py-2 border-2 border-border font-bold shadow-hard-sm rounded-lg hover:scale-105 active:scale-95 bg-[#C94A4A] text-white transition-all cursor-pointer text-xs"
+                className="w-8 h-8 flex items-center justify-center border-2 border-border font-bold shadow-hard-sm rounded-lg hover:scale-105 active:scale-95 bg-[#C94A4A] text-white transition-all cursor-pointer text-sm"
+                title="Close"
               >
-                Close ❌
+                ✕
               </button>
             </div>
 
             {/* Scrollable Certificate Wrapper */}
             <div className="w-full overflow-auto flex-1 min-h-0 py-2 border-2 border-dashed border-border rounded-xl bg-background/50 flex justify-start lg:justify-center">
-              <div className="min-w-[1140px] px-4 flex justify-center items-center">
-                <Certificate studentName={studentName} courseName={courseName} />
+              <div className="min-w-[1140px] px-4 flex justify-center items-start py-6">
+                <Certificate ref={certRef} studentName={studentName} courseName={courseName} />
               </div>
             </div>
             
-            <p className="text-xs text-muted-foreground font-bold mt-3 text-center">
-              * Note: For best results, download as a high-fidelity PDF by clicking the button on the certificate.
-            </p>
+            {/* Note & Download Box */}
+            <div 
+              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+              className="w-full mt-4 p-4 bg-muted border-2 border-border flex flex-col sm:flex-row items-center justify-between gap-4 font-heading"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">💡</span>
+                <p className="text-xs text-foreground font-bold leading-relaxed">
+                  <strong>Note:</strong> For best results, download as a high-fidelity vector landscape PDF document.
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+                  className="bg-[#C94A4A] hover:bg-[#B33E3E] text-white font-bold py-2.5 px-5 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
+                >
+                  Close ❌
+                </button>
+                <button
+                  onClick={() => certRef.current?.downloadPDF()}
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="bg-yellow-500 hover:bg-yellow-400 text-[#2d2d2d] font-bold py-2.5 px-6 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
+                >
+                  <svg className="w-4 h-4 animate-sketch-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Download PDF
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
