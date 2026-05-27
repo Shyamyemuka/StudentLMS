@@ -47,6 +47,8 @@ graph TD
 ## 🛠️ Feature Set
 
 * **🎓 Subject & Content Management:** Structured multi-unit course modules with organized files, documents, and bookmarked video lessons.
+* **🔖 Video Bookmarking:** Students can bookmark specific timestamps within video lessons to quickly reference important material later.
+* **🔔 Notifications & Progress Tracking:** Automated alerts instantly notify students when new videos or materials are posted. Teachers utilize dedicated tracking tools to monitor individual student progress and engagement.
 * **🛡️ Granular Role Access Control:** 
   * *Admin:* User directory administration, system-wide analytics, faculty application processing, and manual certificate release management.
   * *Faculty:* Create courses, compile subjects, upload curriculum resources, and monitor classroom progress.
@@ -97,14 +99,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anonymous-api-key
 NEXT_PUBLIC_RAZORPAY_KEY_ID=your-razorpay-checkout-key-id
 ```
 
-### 4. Database Schema Setup
-Execute the backend SQL scripts located under the `backend/` folder directly within your Supabase SQL Editor in numerical order:
-1. `01_schema.sql` (Creates profiles, courses, payments, messages tables)
-2. `02_rls_policies.sql` (Secures database rows using postgres Row-Level Security)
-3. `04_storage.sql` (Sets up secure file attachments & resource buckets)
-4. `05_admin_setup.sql` (Grants the initial root admin profile credentials)
-
-### 5. Running the Application
+### 4. Running the Application
 ```bash
 # Run local compilation & Hot Module Reload server
 npm run dev
@@ -131,5 +126,4 @@ StudentLMS/
 
 ## 👨‍💻 Author
 **Shyam Yemuka**  
-* GitHub: [@Shyamyemuka](https://github.com/Shyamyemuka)
-* Live Portal: [Student LMS Portal](https://studentlms.online)
+
