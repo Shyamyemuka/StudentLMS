@@ -14,14 +14,6 @@ export function createClient() {
   // Adding isSingleton to keep session persistent across browser restarts
   return createBrowserClient(supabaseUrl, supabaseKey, {
     isSingleton: true,
-    global: {
-      fetch: (url, options) => {
-        return fetch(url, {
-          ...options,
-          signal: AbortSignal.timeout(5000), // 5 second timeout
-        });
-      },
-    },
   });
 }
 

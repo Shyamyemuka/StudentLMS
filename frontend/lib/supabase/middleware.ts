@@ -45,15 +45,6 @@ export async function updateSession(request: NextRequest) {
           );
         },
       },
-      // Set a short timeout for fetch to prevent server-side hangs
-      global: {
-        fetch: (url, options) => {
-          return fetch(url, {
-            ...options,
-            signal: AbortSignal.timeout(5000), // 5 second timeout
-          });
-        },
-      },
     }
   );
 

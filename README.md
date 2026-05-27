@@ -4,7 +4,7 @@ A premium, production-grade, highly interactive Learning Management System (LMS)
 
 ---
 
-## 🏛️ System Architecture & Workflow
+## Project Overview
 
 The architecture is built on a 1-to-1 decoupling of a client-side server-rendered **Next.js SPA** and a secure, transaction-safe **Supabase Cloud Backend**.
 
@@ -44,7 +44,7 @@ graph TD
 
 ---
 
-## 🛠️ Feature Set
+## Features Implemented
 
 * **🎓 Subject & Content Management:** Structured multi-unit course modules with organized files, documents, and bookmarked video lessons.
 * **🔖 Video Bookmarking:** Students can bookmark specific timestamps within video lessons to quickly reference important material later.
@@ -60,7 +60,7 @@ graph TD
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack Used
 
 * **Core Framework:** Next.js 16.1 & React 19.2 (using Turbopack Edge Compiler)
 * **Typed Safety:** TypeScript 5
@@ -71,7 +71,7 @@ graph TD
 
 ---
 
-## 🚀 Installation & Quick Start
+## Setup Instructions
 
 ### 1. Prerequisites
 * **Node.js:** v18.x or v20.x
