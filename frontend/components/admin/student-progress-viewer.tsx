@@ -100,23 +100,32 @@ export function StudentProgressViewer() {
     setLoading(true);
     const supabase = createClient();
 
-    // Get all courses assigned to the student
+    // 1. Get courses manually assigned to the student (legacy)
     const { data: assignments } = await supabase
       .from("course_assignments")
-      .select(
-        `
-        subject_id,
-        subject:subjects(
-          id,
-          title,
-          subject_code
-        )
-      `,
-      )
+      .select(`subject_id, subject:subjects(id, title, subject_code)`)
       .eq("user_id", studentId)
       .eq("status", "active");
 
-    if (!assignments || assignments.length === 0) {
+    // 2. Get courses successfully purchased by the student (new organic flow)
+    const { data: payments } = await supabase
+      .from("subject_payments")
+      .select(`subject_id, subject:subjects(id, title, subject_code)`)
+      .eq("user_id", studentId)
+      .eq("status", "completed");
+
+    const allCourses = [...(assignments || []), ...(payments || [])];
+    
+    // Deduplicate courses by subject_id
+    const uniqueCoursesMap = new Map();
+    for (const course of allCourses) {
+      if (!uniqueCoursesMap.has(course.subject_id)) {
+        uniqueCoursesMap.set(course.subject_id, course);
+      }
+    }
+    const uniqueCourses = Array.from(uniqueCoursesMap.values());
+
+    if (uniqueCourses.length === 0) {
       setCourseProgress([]);
       setLoading(false);
       return;
@@ -125,11 +134,11 @@ export function StudentProgressViewer() {
     // For each course, calculate progress
     const progressData: CourseProgress[] = [];
 
-    for (const assignment of assignments) {
-      const subjectId = assignment.subject_id;
-      const subject = Array.isArray(assignment.subject)
-        ? assignment.subject[0]
-        : assignment.subject;
+    for (const course of uniqueCourses) {
+      const subjectId = course.subject_id;
+      const subject = Array.isArray(course.subject)
+        ? course.subject[0]
+        : course.subject;
 
       // Get total resources for this subject
       const { count: totalResources } = await supabase
@@ -332,7 +341,7 @@ export function StudentProgressViewer() {
                 ) : filteredProgress.length === 0 ? (
                   <Alert className="bg-background border-2 border-border rounded-xl">
                     <AlertDescription className="text-muted-foreground font-bold font-body">
-                      No courses assigned to this student yet.
+                      No courses accessed by this student yet.
                     </AlertDescription>
                   </Alert>
                 ) : (

@@ -33,7 +33,7 @@ export default async function StudentProgressPage() {
       title="Student Progress Tracking"
       subtitle="Monitor and track individual student progress across courses"
       showBackButton
-      backHref="/admin/students"
+      backHref="/dashboard"
     >
       <StudentProgressViewer />
     </PageContainer>

@@ -143,11 +143,6 @@ export default function Header({ profile }: HeaderProps) {
             {(profile?.role === "admin" || profile?.role === "faculty") && (
               <>
                 <Link
-                  href="/admin/students"
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
-                  Student Management
-                </Link>
-                <Link
                   href="/admin/student-progress"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold">
                   Student Progress
@@ -251,12 +246,6 @@ export default function Header({ profile }: HeaderProps) {
                         {(profile?.role === "admin" ||
                           profile?.role === "faculty") && (
                           <>
-                            <Link
-                              href="/admin/students"
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block px-4 py-2 text-[#4CAF8F] hover:bg-muted text-sm font-bold">
-                              Student Management
-                            </Link>
                             <Link
                               href="/admin/student-progress"
                               onClick={() => setIsMenuOpen(false)}
