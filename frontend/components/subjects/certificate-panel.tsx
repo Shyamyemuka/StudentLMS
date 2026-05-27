@@ -37,7 +37,8 @@ export default function CertificatePanel({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const certRef = useRef<any>(null);
 
-  const isAdminOrFaculty = userRole === "admin" || userRole === "faculty";
+  const isAdmin = userRole === "admin";
+  const isFaculty = userRole === "faculty";
 
   // Sync state if initial prop changes (e.g. server component re-fetches)
   useEffect(() => {
@@ -71,8 +72,13 @@ export default function CertificatePanel({
     }
   };
 
+  // Hide the panel completely for faculty users
+  if (isFaculty) {
+    return null;
+  }
+
   // If user is student and certificate is not enabled, hide panel completely
-  if (!isAdminOrFaculty && !enabled) {
+  if (!isAdmin && !enabled) {
     return null;
   }
 
@@ -82,7 +88,7 @@ export default function CertificatePanel({
         style={{ borderRadius: "12px 225px 12px 255px / 255px 12px 225px 12px" }}
         className="w-full bg-card border-2 border-border p-5 shadow-hard-sm wobbly-border"
       >
-        {isAdminOrFaculty ? (
+        {isAdmin ? (
           <div className="flex flex-col gap-3 font-heading">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🎓</span>

@@ -21,3 +21,7 @@ Thumbs.db
 # Backend & Documentation
 backend/
 docs/
+
+# Local files untracked from git repo
+certificate_template.html
+razorpayapi.csv

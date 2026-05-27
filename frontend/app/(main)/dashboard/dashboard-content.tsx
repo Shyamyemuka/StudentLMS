@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Subject } from "@/types/database";
 import SubjectGrid from "@/components/subjects/subject-grid";
 import SubjectSearch from "@/components/subjects/subject-search";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface DashboardContentProps {
   subjects: Subject[];
@@ -22,8 +23,40 @@ export default function DashboardContent({
   isGuest = false,
 }: DashboardContentProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegulation, setSelectedRegulation] = useState("");
+  const [showErrorBanner, setShowErrorBanner] = useState(false);
+  const [failedSubject, setFailedSubject] = useState("");
+  const [failedReason, setFailedReason] = useState("");
+
+  useEffect(() => {
+    const paymentFailed = searchParams.get("payment_failed");
+    const subjectTitle = searchParams.get("subject_title");
+    const reason = searchParams.get("reason");
+
+    if (paymentFailed) {
+      const displayReason = reason || "Transaction rejected.";
+      setFailedSubject(subjectTitle || "Subject");
+      setFailedReason(displayReason);
+      setShowErrorBanner(true);
+
+      const timer = setTimeout(() => {
+        toast.error(
+          `Payment failed for course "${subjectTitle || "Subject"}": ${displayReason}. The subject remains locked.`,
+          {
+            duration: 6000,
+          }
+        );
+
+        // Clean up the URL parameters so the toast doesn't re-trigger on reload
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   const filteredSubjects = useMemo(() => {
     return subjects.filter((subject) => {
@@ -60,6 +93,29 @@ export default function DashboardContent({
 
   return (
     <>
+      {showErrorBanner && (
+        <div 
+          style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+          className="bg-[#C94A4A]/10 border-2 border-[#C94A4A] p-4 mb-6 flex items-start justify-between gap-3 font-heading shadow-hard-sm"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl animate-sketch-bounce">⚠️</span>
+            <div>
+              <p className="font-bold text-[#C94A4A] text-lg">Payment Unsuccessful</p>
+              <p className="text-xs text-foreground font-bold mt-1 leading-relaxed">
+                The payment for course <span className="underline decoration-dashed font-black">{failedSubject}</span> failed ({failedReason}). The subject remains locked.
+              </p>
+            </div>
+          </div>
+          <button 
+            onClick={() => setShowErrorBanner(false)}
+            className="text-[#C94A4A] font-black hover:scale-110 active:scale-90 transition-all text-sm shrink-0 cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Search & Filters */}
       <SubjectSearch
         onSearch={setSearchQuery}

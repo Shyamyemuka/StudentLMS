@@ -1,175 +1,135 @@
-<div align="center">
-  <img src="frontend/public/images/logo.png" alt="Tenspick LMS Logo" width="120" height="120">
-  
-  # Tenspick LMS
-  
-  **A Modern Learning Management System for Educational Institutions**
-  
-  [![Next.js](https://img.shields.io/badge/Next.js-16.1-black?logo=next.js)](https://nextjs.org/)
-  [![React](https://img.shields.io/badge/React-19.2-blue?logo=react)](https://reactjs.org/)
-  [![Supabase](https://img.shields.io/badge/Supabase-Backend-green?logo=supabase)](https://supabase.com/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
-  [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-  
-  [Live Demo](https://tenspicklms.online) • [Report Bug](https://github.com/Shyamyemuka/TenspickLMS/issues) • [Request Feature](https://github.com/Shyamyemuka/TenspickLMS/issues)
-</div>
+# Student LMS
+
+A premium, production-grade, highly interactive Learning Management System (LMS) built for modern universities and educational institutions. Leveraging a robust serverless architecture, real-time sync networks, digital signature verification, and machine learning components, Student LMS provides an unparalleled workspace for student communities, faculty instruction, and administrative management.
 
 ---
 
-## ��� About
+## 🏛️ System Architecture & Workflow
 
-Tenspick LMS is a comprehensive Learning Management System built with Next.js and Supabase. It provides course management, progress tracking, user approval workflows, and interactive learning features for educational institutions.
+The architecture is built on a 1-to-1 decoupling of a client-side server-rendered **Next.js SPA** and a secure, transaction-safe **Supabase Cloud Backend**.
 
-### ✨ Key Features
+```mermaid
+graph TD
+    A[Client Browser / Next.js SPA] -->|HTTPS Requests| B[Next.js Server Actions / Edge Router]
+    A -->|Real-Time WS Subscriptions| C[Supabase Realtime Sync Engine]
+    A -->|Prefilled Secure Checkout| D[Razorpay Payment Modal API]
+    
+    B -->|Authenticated RPC Queries| E[(Supabase PostgreSQL Database)]
+    B -->|Signed Media Tokens| F[Supabase Cloud Storage Buckets]
+    
+    D -->|Webhooks / Insertion Handlers| E
+    
+    subgraph Client-Side Local Execution
+        G[MediaPipe FaceMesh API] -->|Facial Landmark Coordinates| H[Three.js Canvas Render Engine]
+        I[MediaPipe HandTracking API] -->|Vector Gestures| J[Chalkboard Paint Engine]
+    end
+```
 
-- ��� **Course Management** - Multi-unit structure with approval workflows
-- ��� **Progress Tracking** - Real-time student progress monitoring with analytics
-- ��� **Role-Based Access** - Admin, Faculty, and Student roles with granular permissions
-- ��� **Course Assignments** - Faculty/Admin controlled course access for students
-- ��� **Resource Management** - Upload and organize PDFs, documents, videos
-- ��� **Notifications** - Real-time updates for approvals and submissions
-- ��� **Notice Board** - Announcements with pinning capabilities
-- ��� **Fun Zone** - AI-powered interactive games (Mood Analyzer, Hand Drawing, Gesture Control)
-- ��� **Secure Auth** - Email/password + Google OAuth with approval-based registration
+### Key Workflow Loops
+
+1. **Course Unlock & Payment Registry:**
+   * **Subject Lock:** Unpurchased courses display a secure ink-sketch lock overlay.
+   * **Initiation:** Triggering unlock opens the pre-filled, transaction-safe Razorpay Checkout.
+   * **Success:** Inserts a verified `status: completed` transaction row in PostgreSQL, auto-unlocks resources, and pushes a client refresh.
+   * **Failure:** Triggers a programmatic `rzp.close()` immediately dismissing the lingering iframe modal, redirects to `/dashboard` with query parameters, displays a non-blocking toast warning, and clears history variables immediately to prevent recurrence.
+
+2. **Digital Certificate Verification:**
+   * **Prerequisites:** Complete all course lectures. Once complete, if the **Admin** has set the certificate to *Available* (controlled via an admin-exclusive subject control panel), the student sees the "Get the certificate" CTA.
+   * **Holographic Rendering:** The modal pre-fetches a base64 string of the Admin's authentic digital signature.
+   * **Landscape Vector Vectorization:** Triggering print injects the active Next.js stylesheets (Tailwind + cached Google Fonts) and maps the certificate layout exactly onto a physical `297mm x 210mm` (A4 landscape) print boundary, rendering identical outputs under default browser margins without overflow truncation.
+
+3. **Whiteboard Discussion Boards:**
+   * **Real-time Broadcast:** Messages sent inside subjects are instantly broadcast via postgres-changes triggers.
+   * **Presence Tracking:** Tracks active users typing via presence syncing state channels.
 
 ---
 
-## ���️ Tech Stack
+## 🛠️ Feature Set
 
-**Frontend:** Next.js 16.1, React 19.2, TypeScript, TailwindCSS 4  
-**Backend:** Supabase (PostgreSQL, Auth, Storage, Realtime)  
-**UI Components:** Radix UI, Lucide Icons, Sonner Notifications  
-**Forms & Validation:** React Hook Form, Zod  
-**AI/ML:** MediaPipe (Face Mesh, Hand Tracking)  
-**3D Graphics:** Three.js  
-**Charts:** Recharts
+* **🎓 Subject & Content Management:** Structured multi-unit course modules with organized files, documents, and bookmarked video lessons.
+* **🛡️ Granular Role Access Control:** 
+  * *Admin:* User directory administration, system-wide analytics, faculty application processing, and manual certificate release management.
+  * *Faculty:* Create courses, compile subjects, upload curriculum resources, and monitor classroom progress.
+  * *Student:* Watch courses, participate in peer group whiteboard chats, download verified credentials, and trace progress.
+* **🎮 Fun Zone (Gesture & AI Engine):**
+  * *Mood Analyzer:* Real-time user mood assessment using MediaPipe FaceMesh to check study fatigue.
+  * *Hand Drawing:* Hand-tracking paint canvas for interactive drawing.
+  * *Hand Gesture Sphere:* 3D particle sphere responding to hand rotation matrices in real-time.
 
 ---
 
-## ��� Quick Start
+## ⚙️ Tech Stack
 
-### Prerequisites
+* **Core Framework:** Next.js 16.1 & React 19.2 (using Turbopack Edge Compiler)
+* **Typed Safety:** TypeScript 5
+* **Styling & Layout:** TailwindCSS 4, Radix UI Primitive Foundations
+* **Authentication & Backend:** Supabase (Auth, Storage Bucket networks, Realtime Websocket Channels)
+* **Payment Gateway:** Razorpay API Core Integration
+* **Visuals & AI Engine:** Three.js, MediaPipe FaceMesh, MediaPipe HandTracking
 
-- Node.js 18+ and npm 9+
-- Supabase account
+---
 
-### Installation
+## 🚀 Installation & Quick Start
 
+### 1. Prerequisites
+* **Node.js:** v18.x or v20.x
+* **Database:** Active Supabase cloud database instance
+
+### 2. Quick Install
 ```bash
 # Clone the repository
-git clone https://github.com/Shyamyemuka/TenspickLMS.git
-cd TenspickLMS
+git clone https://github.com/Shyamyemuka/StudentLMS.git
+cd StudentLMS
 
-# Install dependencies
-npm run setup
+# Install dependency tree
+npm install
 
-# Set up environment variables
+# Switch to frontend sub-module
 cd frontend
-cp .env.example .env.local
-# Edit .env.local with your Supabase credentials
+npm install
+```
 
-# Run development server
+### 3. Environment Configurations
+Create a `.env.local` file inside the `frontend/` directory:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anonymous-api-key
+NEXT_PUBLIC_RAZORPAY_KEY_ID=your-razorpay-checkout-key-id
+```
+
+### 4. Database Schema Setup
+Execute the backend SQL scripts located under the `backend/` folder directly within your Supabase SQL Editor in numerical order:
+1. `01_schema.sql` (Creates profiles, courses, payments, messages tables)
+2. `02_rls_policies.sql` (Secures database rows using postgres Row-Level Security)
+3. `04_storage.sql` (Sets up secure file attachments & resource buckets)
+4. `05_admin_setup.sql` (Grants the initial root admin profile credentials)
+
+### 5. Running the Application
+```bash
+# Run local compilation & Hot Module Reload server
 npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) to view the app.
-
-### Backend Setup
-
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Run SQL scripts from `backend/` folder in order (01_schema.sql, 02_rls_policies.sql, etc.)
-3. Create admin account using `backend/05_admin_setup.sql`
-4. Configure storage buckets as specified in `backend/04_storage.sql`
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## ��� Project Structure
+## 📂 Project Directory Structure
 
 ```
-TenspickLMS/
-├── frontend/          # Next.js application
-│   ├── app/           # App router pages
-│   ├── components/    # React components
-│   ├── lib/           # Utilities and hooks
-│   └── types/         # TypeScript types
-├── backend/           # SQL scripts (60+ migrations)
-└── package.json       # Root configuration
+StudentLMS/
+├── frontend/
+│   ├── app/           # Next.js App Router (Layouts, server actions, route handlers)
+│   ├── components/    # Reusable React UI (Subjects, chat boards, notification bells)
+│   ├── lib/           # Supabase client declarations, middleware hooks, auth checks
+│   ├── types/         # Strongly-typed database interfaces
+│   └── public/        # Asset bundles (images, vector logs, signatures)
+├── backend/           # Serverless SQL migrations & RLS setups
+└── README.md          # Project documentation
 ```
 
 ---
 
-## ��� User Roles & Authentication
-
-- **Admin**: Full system access, approve all users, manage all content
-- **Faculty**: Create courses, approve students, assign courses, view progress (admin approval required)
-- **Student**: Access assigned courses, track progress (faculty/admin approval required)
-
-**Authentication:** Email/password or Google OAuth with approval-based registration system.
-
----
-
----
-
-## ��� Deployment
-
-### Vercel (Recommended)
-
-```bash
-# Push to GitHub
-git add .
-git commit -m "Deploy to production"
-git push origin main
-
-# Deploy on Vercel
-# 1. Import repository at vercel.com
-# 2. Add environment variables
-# 3. Deploy
-```
-
-### Environment Variables
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
----
-
-## ��� Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## ��� License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## ���‍��� Author
-
+## 👨‍💻 Author
 **Shyam Yemuka**  
-GitHub: [@Shyamyemuka](https://github.com/Shyamyemuka)
-
----
-
-## ��� Acknowledgments
-
-- [Next.js](https://nextjs.org/) - React Framework
-- [Supabase](https://supabase.com/) - Backend Platform
-- [MediaPipe](https://mediapipe.dev/) - ML Solutions
-- [Radix UI](https://www.radix-ui.com/) - UI Components
-- [TailwindCSS](https://tailwindcss.com/) - CSS Framework
-
----
-
-<div align="center">
-  Made with ❤️ for Education by Shyam Yemuka
-</div>
+* GitHub: [@Shyamyemuka](https://github.com/Shyamyemuka)
+* Live Portal: [Student LMS Portal](https://studentlms.online)

@@ -101,8 +101,7 @@ export default function SubjectLockOverlay({
       modal: {
         ondismiss: function () {
           setIsPaying(false);
-          toast.error("Payment was not successful. The subject remains locked.");
-          router.push("/dashboard");
+          router.push(`/dashboard?payment_failed=true&subject_title=${encodeURIComponent(subjectTitle)}`);
         }
       },
       prefill: {
@@ -122,9 +121,13 @@ export default function SubjectLockOverlay({
       const rzp = new (window as any).Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
         console.error("Razorpay payment failed:", response.error);
-        toast.error(`Payment failed: ${response.error.description || "Transaction rejected."}`);
+        try {
+          rzp.close();
+        } catch (e) {
+          console.error("Error closing Razorpay modal:", e);
+        }
         setIsPaying(false);
-        router.push("/dashboard");
+        window.location.href = `/dashboard?payment_failed=true&subject_title=${encodeURIComponent(subjectTitle)}&reason=${encodeURIComponent(response.error.description || "Transaction rejected.")}`;
       });
       rzp.open();
     } catch (err) {

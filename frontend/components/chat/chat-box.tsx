@@ -374,36 +374,39 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#14181D] rounded-lg border border-[#BFA55A]/30">
+    <div 
+      style={{ borderRadius: "12px 225px 12px 255px / 255px 12px 225px 12px" }}
+      className="flex flex-col h-full bg-card border-[3px] border-border shadow-hard-md overflow-hidden"
+    >
       {/* Chat Header */}
-      <div className="px-4 py-3 border-b border-[#BFA55A]/30">
-        <h3 className="text-lg font-semibold text-[#EAEAEA]">Discussion</h3>
-        <p className="text-sm text-[#B0B0B0]">
+      <div className="px-4 py-3 border-b-2 border-dashed border-border font-heading">
+        <h3 className="text-lg font-bold text-foreground">Discussion</h3>
+        <p className="text-xs text-muted-foreground font-bold">
           {messages.length} {messages.length === 1 ? "message" : "messages"}
         </p>
       </div>
 
       {/* Messages List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background/25">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-16 h-16 rounded-full bg-[#D4AF37]/10 flex items-center justify-center mb-3">
+          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+            <div className="w-16 h-16 rounded-full bg-accent/15 border-2 border-dashed border-accent flex items-center justify-center mb-4 animate-sketch-bounce">
               <svg
-                className="w-8 h-8 text-[#D4AF37]"
+                className="w-8 h-8 text-accent"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1.5}
+                  strokeWidth={2}
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 />
               </svg>
             </div>
-            <p className="text-[#B0B0B0]">No messages yet</p>
-            <p className="text-sm text-[#808080] mt-1">
-              Be the first to start the conversation
+            <p className="text-foreground font-bold text-lg">No messages yet</p>
+            <p className="text-sm text-muted-foreground font-bold mt-1 leading-relaxed">
+              Be the first to start the conversation!
             </p>
           </div>
         ) : (
@@ -417,7 +420,10 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
                 }`}>
                 {/* Avatar */}
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#BFA55A] flex items-center justify-center text-[#0B0D10] font-semibold text-sm">
+                  <div 
+                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                    className="w-10 h-10 border-2 border-border bg-accent text-accent-foreground flex items-center justify-center font-bold text-sm shadow-hard-xs"
+                  >
                     {getInitials(message.profiles.full_name)}
                   </div>
                 </div>
@@ -431,21 +437,21 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
                     className={`flex items-center gap-2 mb-1 ${
                       isOwnMessage ? "flex-row-reverse" : ""
                     }`}>
-                    <span className="text-sm font-medium text-[#EAEAEA]">
+                    <span className="text-sm font-bold text-foreground">
                       {isOwnMessage ? "You" : message.profiles.full_name}
                     </span>
                     {getRoleBadge(message.profiles.role)}
-                    <span className="text-xs text-[#808080]">
+                    <span className="text-[10px] text-muted-foreground font-bold">
                       {formatTime(message.created_at)}
                     </span>
                   </div>
                   <div
-                    className={`px-4 py-2 rounded-lg max-w-[70%] ${
+                    className={`px-4 py-2 rounded-lg max-w-[85%] border-2 border-border font-body shadow-hard-xs ${
                       isOwnMessage
-                        ? "bg-[#2A2F35] text-[#EAEAEA] border border-[#D4AF37]/50"
-                        : "bg-[#1A1F25] text-[#EAEAEA]"
+                        ? "bg-accent/10 text-foreground"
+                        : "bg-muted text-foreground"
                     }`}>
-                    <p className="text-sm font-medium whitespace-pre-wrap break-words">
+                    <p className="text-sm font-semibold whitespace-pre-wrap break-words">
                       {message.body}
                     </p>
                   </div>
@@ -457,18 +463,18 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
 
         {/* Typing Indicator */}
         {Object.keys(typingUsers).length > 0 && (
-          <div className="flex items-center gap-2 px-4 py-2 text-sm text-[#B0B0B0]">
+          <div className="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground font-bold">
             <div className="flex gap-1">
               <div
-                className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce"
+                className="w-2 h-2 bg-primary rounded-full animate-bounce"
                 style={{ animationDelay: "0ms" }}
               />
               <div
-                className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce"
+                className="w-2 h-2 bg-primary rounded-full animate-bounce"
                 style={{ animationDelay: "150ms" }}
               />
               <div
-                className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce"
+                className="w-2 h-2 bg-primary rounded-full animate-bounce"
                 style={{ animationDelay: "300ms" }}
               />
             </div>
@@ -486,7 +492,8 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
       {/* Message Input */}
       <form
         onSubmit={handleSendMessage}
-        className="p-4 border-t border-[#BFA55A]/30">
+        className="p-4 border-t-2 border-dashed border-border bg-card font-heading"
+      >
         <div className="flex gap-2">
           <input
             type="text"
@@ -496,15 +503,17 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
               handleTyping();
             }}
             placeholder="Type your message..."
-            className="flex-1 px-4 py-2 bg-[#1A1F25] border border-[#BFA55A]/30 rounded-lg text-[#EAEAEA] placeholder:text-[#808080] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+            className="flex-1 px-4 py-2 bg-background border-2 border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-semibold text-sm"
             disabled={sending}
           />
           <button
             type="submit"
             disabled={!newMessage.trim() || sending}
-            className="px-6 py-2 bg-[#D4AF37] text-[#0B0D10] rounded-lg font-medium hover:bg-[#E6C76A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+            className="px-6 py-2 bg-accent text-accent-foreground border-2 border-border rounded-lg font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm cursor-pointer"
+          >
             {sending ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#0B0D10]" />
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-foreground" />
             ) : (
               <span>Send</span>
             )}
