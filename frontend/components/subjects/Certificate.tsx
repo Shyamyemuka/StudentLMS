@@ -42,6 +42,11 @@ const Certificate = React.forwardRef<any, CertificateProps>(
     const downloadPDF = (): void => {
       if (!certificateRef.current) return;
 
+      // Copy all parent document stylesheets (Tailwind, loaded Google Fonts, global styles)
+      const parentStyles = Array.from(document.querySelectorAll("style, link[rel='stylesheet']"))
+        .map(el => el.outerHTML)
+        .join("\n");
+
       // Capture cert HTML — signature img will have base64 src if loaded,
       // or the relative path if still loading. Fix relative paths to absolute.
       let certHtml = certificateRef.current.outerHTML;
@@ -60,87 +65,41 @@ const Certificate = React.forwardRef<any, CertificateProps>(
 <head>
   <meta charset="utf-8">
   <title>${studentName} - Certificate of Completion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@400;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  ${parentStyles}
   <style>
-    *,*::before,*::after{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#fdfbf7;overflow:hidden}
-
-    /* ── Cert custom classes ── */
-    .wobbly-border-outer{border-radius:255px 15px 225px 15px/15px 225px 15px 255px}
-    .wobbly-border-inner{border-radius:15px 225px 15px 255px/255px 15px 225px 15px}
-    .dot-grid{background-color:#fdfbf7!important;background-image:radial-gradient(#d1cfc9 1.5px,transparent 1.5px)!important;background-size:24px 24px!important}
-    .wobbly-underline{position:relative}
-    .wobbly-underline::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:3px;background-color:#2d2d2d!important;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;transform:rotate(-1deg)}
-    .cert-font-serif{font-family:'Playfair Display',Georgia,serif}
-    .cert-font-cursive{font-family:'Dancing Script',cursive}
-    .cert-font-tech{font-family:'Space Grotesk',sans-serif}
-    .cert-font-sans{font-family:'Outfit',sans-serif}
-    .cert-text-dark{color:#2d2d2d!important}
-    .cert-text-muted{color:#7c7a72!important}
-    .cert-text-gold{color:#d97706!important}
-    .cert-border-dark{border-color:#2d2d2d!important}
-    .cert-bg-paper{background-color:#fdfbf7!important}
-
-    /* ── Tailwind utilities ── */
-    .relative{position:relative}.absolute{position:absolute}
-    .flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}
-    .items-start{align-items:flex-start}.items-center{align-items:center}.items-end{align-items:flex-end}
-    .justify-between{justify-content:space-between}.justify-center{justify-content:center}
-    .text-center{text-align:center}.text-right{text-align:right}
-    .font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.font-light{font-weight:300}
-    .uppercase{text-transform:uppercase}.italic{font-style:italic}
-    .opacity-70{opacity:.7}.opacity-80{opacity:.8}.opacity-50{opacity:.5}
-    .overflow-hidden{overflow:hidden}.select-none{user-select:none}.shrink-0{flex-shrink:0}.inline-block{display:inline-block}.hidden{display:none}
-    .rounded-full{border-radius:9999px}.border-dashed{border-style:dashed}.border-solid{border-style:solid}
-    .border-2{border-width:2px!important}.border-4{border-width:4px!important}
-    .pointer-events-none{pointer-events:none}.z-0{z-index:0}.z-10{z-index:10}
-    .w-full{width:100%}.h-full{height:100%}
-    /* Fixed-size utilities — CRITICAL for logo SVG and seal */
-    .w-10{width:2.5rem!important}.h-10{height:2.5rem!important}
-    .w-16{width:4rem}.h-16{height:4rem}.w-32{width:8rem}.h-32{height:8rem}.w-96{width:24rem}.h-96{height:24rem}.w-48{width:12rem}
-    .h-0\\.5{height:.125rem}.p-4{padding:1rem}.p-12{padding:3rem}
-    .px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.px-12{padding-left:3rem;padding-right:3rem}
-    .py-2{padding-top:.5rem;padding-bottom:.5rem}
-    .pb-0\\.5{padding-bottom:.125rem}.pb-2{padding-bottom:.5rem}
-    .mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}
-    .mt-4{margin-top:1rem}.-mt-1{margin-top:-.25rem}.-mb-4{margin-bottom:-1rem}.my-4{margin-top:1rem;margin-bottom:1rem}
-    .gap-3{gap:.75rem}.inset-4{inset:1rem}.inset-5{inset:1.25rem}
-    .top-1\\/2{top:50%}.left-1\\/2{left:50%}
-    .-translate-x-1\\/2{transform:translateX(-50%)!important}
-    .-translate-y-1\\/2{transform:translateY(-50%)!important}
-    .-rotate-2{transform:rotate(-2deg)}
-    .tracking-wide{letter-spacing:.025em}.tracking-widest{letter-spacing:.1em}
-    .tracking-\\[0\\.4em\\]{letter-spacing:.4em}
-    .tracking-wider{letter-spacing:.05em}
-    .leading-tight{line-height:1.25}.leading-relaxed{line-height:1.625}
-    .text-7xl{font-size:4.5rem!important;line-height:1}
-    .text-5xl{font-size:3rem;line-height:1}
-    .text-3xl{font-size:1.875rem}.text-2xl{font-size:1.5rem}.text-xl{font-size:1.25rem}
-    .text-lg{font-size:1.125rem}.text-md{font-size:1rem}.text-sm{font-size:.875rem}.text-xs{font-size:.75rem}
-    .bg-\\[\\#2d2d2d\\]{background-color:#2d2d2d!important}
-    .text-\\[\\#fbbf24\\]{color:#fbbf24!important}.text-\\[\\#d97706\\]{color:#d97706!important}
-    .border-\\[\\#d97706\\]{border-color:#d97706!important}
-    .max-h-16{max-height:4rem}.max-w-\\[180px\\]{max-width:180px}.object-contain{object-fit:contain}
-    .rounded-\\[10px_20px_10px_20px\\/20px_10px_20px_10px\\]{border-radius:10px 20px 10px 20px/20px 10px 20px 10px}
-    .w-2\\/3{width:66.6667%}.mx-auto{margin-left:auto;margin-right:auto}
-    .animate-\\[spin_30s_linear_infinite\\]{animation:none!important}
-    .transform{}
-    .opacity-\\[0\\.03\\]{opacity:.03}
-    .border-b-2{border-bottom-width:2px}
-    .border-t-transparent{border-top-color:transparent}
-
-    /* ── LANDSCAPE page — forces Chrome to default to Landscape layout ── */
-    @page { size: A4 landscape; margin: 0mm }
+    /* ── LANDSCAPE page — forces landscape orientation ── */
+    @page { size: landscape; margin: 0 }
 
     @media print {
-      html,body{
-        -webkit-print-color-adjust:exact!important;
-        print-color-adjust:exact!important;
-        color-adjust:exact!important;
-        width:1123px!important;height:794px!important
+      html, body {
+        width: 297mm !important;
+        height: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: #fdfbf7 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        overflow: hidden !important;
       }
-      #certificate-wrapper{box-shadow:none!important}
-      *{animation:none!important;transition:none!important}
+      #certificate-wrapper {
+        width: 297mm !important;
+        height: 210mm !important;
+        max-width: 297mm !important;
+        max-height: 210mm !important;
+        box-shadow: none !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        padding: 12mm !important;
+      }
+      /* Ensure text and SVGs scale down to print bounds */
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
@@ -224,12 +183,12 @@ const Certificate = React.forwardRef<any, CertificateProps>(
             {/* Header: Logo + Certificate ID */}
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-3">
-                <div className="w-16 h-16 bg-[#2d2d2d] text-[#fbbf24] flex items-center justify-center rounded-[10px_20px_10px_20px/20px_10px_20px_10px] transform -rotate-2 border-2 border-[#2d2d2d]">
-                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6" />
-                  </svg>
+                <div className="w-16 h-16 bg-[#2d2d2d] flex items-center justify-center rounded-[10px_20px_10px_20px/20px_10px_20px_10px] transform -rotate-2 border-2 border-[#2d2d2d] overflow-hidden">
+                  <img
+                    src="/images/logo.png"
+                    alt="Student LMS Logo"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h2 className="cert-font-tech font-bold text-xl cert-text-dark tracking-wide leading-tight">Student LMS</h2>
