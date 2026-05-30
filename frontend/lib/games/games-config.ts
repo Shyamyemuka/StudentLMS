@@ -1,9 +1,11 @@
 import dynamic from 'next/dynamic';
 
 // Dynamically import the components
+const HandGestureSphere = dynamic(() => import('@/components/fun/hand-gesture-sphere'), { ssr: false });
 const HandDrawing = dynamic(() => import('@/components/fun/hand-drawing'), { ssr: false });
 const MoodAnalyzer = dynamic(() => import('@/components/fun/mood-analyzer'), { ssr: false });
-const HandGestureSphere = dynamic(() => import('@/components/fun/hand-gesture-sphere'), { ssr: false });
+const MathBlitz = dynamic(() => import('@/components/fun/math-blitz'), { ssr: false });
+const CodeRacer = dynamic(() => import('@/components/fun/code-racer'), { ssr: false });
 
 export interface Game {
   id: string;
@@ -16,6 +18,22 @@ export interface Game {
 }
 
 export const GAMES: Game[] = [
+  {
+    id: 'math-blitz',
+    name: 'Math Blitz ⚡',
+    description: 'Fast-paced mental math sprint! Answer as many math problems as you can in 60 seconds with multipliers for streaks.',
+    image: '/images/games/math-blitz.png',
+    type: 'javascript',
+    component: MathBlitz
+  },
+  {
+    id: 'code-racer',
+    name: 'Code Racer 🏎️',
+    description: 'Type out blocks of code as fast and accurately as possible under the timer. Race for the top typing WPM!',
+    image: '/images/games/code-racer.png',
+    type: 'javascript',
+    component: CodeRacer
+  },
   {
     id: 'hand-gesture-sphere',
     name: 'Hand Gesture 3D Sphere',

@@ -245,8 +245,7 @@ export default function SubjectApprovals() {
         </div>
       ) : subjects.length === 0 ? (
         <Card 
-          style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-          className="bg-card border-2 border-border p-8 text-center shadow-hard-md"
+          className="bg-card border-2 border-border rounded-xl p-8 text-center shadow-hard-md"
         >
           <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-foreground font-heading mb-2">
@@ -261,8 +260,7 @@ export default function SubjectApprovals() {
           {subjects.map((subject) => (
             <Card
               key={subject.id}
-              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
-              className="bg-card border-2 border-border p-6 shadow-hard-md">
+              className="bg-card border-2 border-border rounded-xl p-6 shadow-hard-md">
               <div className="space-y-4">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4">
@@ -313,8 +311,7 @@ export default function SubjectApprovals() {
                   <Button
                     onClick={() => handleApprove(subject.id)}
                     disabled={processing === subject.id}
-                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white border-2 border-border rounded-xl font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Approve Subject
                   </Button>
@@ -322,8 +319,7 @@ export default function SubjectApprovals() {
                     onClick={() => handleReject(subject.id)}
                     disabled={processing === subject.id}
                     variant="destructive"
-                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                    className="border-2 border-border font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
+                    className="border-2 border-border rounded-xl font-bold shadow-hard-sm hover:scale-105 active:scale-95 cursor-pointer transition-all">
                     <XCircle className="w-4 h-4 mr-2" />
                     Reject & Delete
                   </Button>

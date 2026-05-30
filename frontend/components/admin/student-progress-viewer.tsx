@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import AttentionHeatmap from "../analytics/attention-heatmap";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { formatDate } from "@/lib/utils";
@@ -75,6 +76,7 @@ export function StudentProgressViewer() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [studentSearchTerm, setStudentSearchTerm] = useState("");
+  const [activeHeatmapResource, setActiveHeatmapResource] = useState<number | null>(null);
 
   useEffect(() => {
     loadStudents();
@@ -465,7 +467,18 @@ export function StudentProgressViewer() {
                                     key={resource.resource_id}
                                     className="border-b-2 border-border/50 hover:bg-muted/50 font-body">
                                     <TableCell className="text-foreground font-bold">
-                                      {resource.resource_title}
+                                      <div className="flex items-center gap-2">
+                                        <span>{resource.resource_title}</span>
+                                        {resource.resource_type === "video" && (
+                                          <button
+                                            onClick={() => setActiveHeatmapResource(resource.resource_id)}
+                                            style={{ borderRadius: "12px" }}
+                                            className="px-2.5 py-1 text-[11px] bg-primary text-primary-foreground font-bold border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-1 font-body"
+                                          >
+                                            📊 View AI Analytics
+                                          </button>
+                                        )}
+                                      </div>
                                     </TableCell>
                                     <TableCell>
                                       <Badge
@@ -509,6 +522,26 @@ export function StudentProgressViewer() {
           </div>
         </CardContent>
       </Card>
+
+      {/* AI Attention Heatmap Modal overlay */}
+      {activeHeatmapResource !== null && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div 
+            style={{ borderRadius: "12px" }}
+            className="bg-[#14181D] border-4 border-[#BFA55A] p-6 max-w-4xl w-full shadow-hard-xl relative"
+          >
+            <button
+              onClick={() => setActiveHeatmapResource(null)}
+              className="absolute top-4 right-4 text-[#B0B0B0] hover:text-[#EAEAEA] font-bold p-2 cursor-pointer transition-colors border-2 border-[#BFA55A]/30 rounded-lg hover:bg-muted/10 bg-transparent flex items-center justify-center font-body text-xs"
+            >
+              ✕ Close
+            </button>
+            <div className="mt-8">
+              <AttentionHeatmap resourceId={activeHeatmapResource} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

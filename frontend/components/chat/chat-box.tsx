@@ -13,6 +13,7 @@ interface Message {
   profiles: {
     full_name: string;
     role: string;
+    avatar_url?: string | null;
   };
 }
 
@@ -60,7 +61,7 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
         ];
         const { data: profilesData, error: profilesError } = await supabase
           .from("profiles")
-          .select("user_id, full_name, role")
+          .select("user_id, full_name, role, avatar_url")
           .in("user_id", senderIds);
 
         if (profilesError) {
@@ -246,7 +247,7 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
           // Fetch the profile data for the sender
           const { data: profileData } = await supabase
             .from("profiles")
-            .select("user_id, full_name, role")
+            .select("user_id, full_name, role, avatar_url")
             .eq("user_id", payload.new.sender_id)
             .single();
 
@@ -375,8 +376,7 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
 
   return (
     <div 
-      style={{ borderRadius: "12px 225px 12px 255px / 255px 12px 225px 12px" }}
-      className="flex flex-col h-full bg-card border-[3px] border-border shadow-hard-md overflow-hidden"
+      className="flex flex-col h-full bg-card border-2 border-border rounded-xl shadow-hard-md overflow-hidden"
     >
       {/* Chat Header */}
       <div className="px-4 py-3 border-b-2 border-dashed border-border font-heading">
@@ -422,9 +422,13 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
                 <div className="flex-shrink-0">
                   <div 
                     style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                    className="w-10 h-10 border-2 border-border bg-accent text-accent-foreground flex items-center justify-center font-bold text-sm shadow-hard-xs"
+                    className="w-10 h-10 border-2 border-border bg-accent text-accent-foreground flex items-center justify-center font-bold text-sm shadow-hard-xs overflow-hidden"
                   >
-                    {getInitials(message.profiles.full_name)}
+                    <img 
+                      src={message.profiles.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(message.profiles.full_name)}&background=D4AF37&color=0B0D10&bold=true`} 
+                      alt={message.profiles.full_name} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
 
@@ -509,8 +513,7 @@ export default function ChatBox({ subjectId }: ChatBoxProps) {
           <button
             type="submit"
             disabled={!newMessage.trim() || sending}
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-            className="px-6 py-2 bg-accent text-accent-foreground border-2 border-border rounded-lg font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm cursor-pointer"
+            className="px-6 py-2 bg-accent text-accent-foreground border-2 border-border rounded-xl font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm cursor-pointer"
           >
             {sending ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-foreground" />

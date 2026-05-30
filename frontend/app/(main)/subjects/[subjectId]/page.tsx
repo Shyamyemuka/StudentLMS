@@ -105,8 +105,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     <PageContainer showBackButton backHref="/dashboard">
       {/* Subject Header Card */}
       <div 
-        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-        className="bg-card border-2 border-border p-6 md:p-8 mb-8 shadow-hard-md relative"
+        className="bg-card border-2 border-border rounded-xl p-6 md:p-8 mb-8 shadow-hard-md relative"
       >
         <div className="tape-decor" />
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 pt-4">
@@ -152,8 +151,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
           {/* Quick Stats */}
           <div className="flex gap-4 shrink-0 font-bold">
             <div 
-              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              className="text-center px-4 py-3 bg-background border-2 border-border shadow-hard-sm"
+              className="text-center px-4 py-3 bg-background border-2 border-border rounded-xl shadow-hard-sm"
             >
               <p className="text-2xl font-bold text-primary">
                 {videos?.length || 0}
@@ -161,8 +159,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
               <p className="text-xs text-muted-foreground font-bold">Videos</p>
             </div>
             <div 
-              style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-              className="text-center px-4 py-3 bg-background border-2 border-border shadow-hard-sm"
+              className="text-center px-4 py-3 bg-background border-2 border-border rounded-xl shadow-hard-sm"
             >
               <p className="text-2xl font-bold text-primary">
                 {pdfs?.length || 0}
@@ -170,8 +167,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
               <p className="text-xs text-muted-foreground font-bold">PDFs</p>
             </div>
             <div 
-              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
-              className="text-center px-4 py-3 bg-background border-2 border-border shadow-hard-sm"
+              className="text-center px-4 py-3 bg-background border-2 border-border rounded-xl shadow-hard-sm"
             >
               <p className="text-2xl font-bold text-primary">
                 {notes?.length || 0}

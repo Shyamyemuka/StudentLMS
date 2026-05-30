@@ -85,8 +85,7 @@ export default function CertificatePanel({
   return (
     <>
       <div 
-        style={{ borderRadius: "12px 225px 12px 255px / 255px 12px 225px 12px" }}
-        className="w-full bg-card border-2 border-border p-5 shadow-hard-sm wobbly-border"
+        className="w-full bg-card border-2 border-border rounded-xl p-5 shadow-hard-sm"
       >
         {isAdmin ? (
           <div className="flex flex-col gap-3 font-heading">
@@ -106,15 +105,13 @@ export default function CertificatePanel({
                     ? "bg-success/15 border-success text-success" 
                     : "bg-muted border-border text-muted-foreground"
                 }`}
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
               >
                 {enabled ? "Available" : "Not Available"}
               </div>
               <button
                 disabled={isLoading}
                 onClick={handleToggle}
-                style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-                className={`ml-auto font-bold text-xs px-4 py-2 border-2 shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50 ${
+                className={`ml-auto font-bold text-xs px-4 py-2 border-2 rounded-xl shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50 ${
                   enabled
                     ? "bg-[#C94A4A] text-white border-border hover:bg-[#B33E3E]"
                     : "bg-yellow-500 text-[#2d2d2d] border-border hover:bg-yellow-400"
@@ -142,8 +139,7 @@ export default function CertificatePanel({
             </p>
             <button
               onClick={() => setIsModalOpen(true)}
-              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              className="w-full mt-2 bg-yellow-500 hover:bg-yellow-400 text-[#2d2d2d] font-bold py-2.5 px-4 border-2 border-border shadow-hard-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer text-sm"
+              className="w-full mt-2 bg-yellow-500 hover:bg-yellow-400 text-[#2d2d2d] rounded-xl font-bold py-2.5 px-4 border-2 border-border shadow-hard-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer text-sm"
             >
               Get the certificate 🎓
             </button>
@@ -178,8 +174,7 @@ export default function CertificatePanel({
             
             {/* Note & Download Box */}
             <div 
-              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
-              className="w-full mt-4 p-4 bg-muted border-2 border-border flex flex-col sm:flex-row items-center justify-between gap-4 font-heading"
+              className="w-full mt-4 p-4 bg-muted border-2 border-border rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 font-heading"
             >
               <div className="flex items-center gap-2">
                 <span className="text-xl">💡</span>
@@ -191,15 +186,13 @@ export default function CertificatePanel({
               <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-                  className="bg-[#C94A4A] hover:bg-[#B33E3E] text-white font-bold py-2.5 px-5 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
+                  className="bg-[#C94A4A] hover:bg-[#B33E3E] text-white rounded-xl font-bold py-2.5 px-5 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
                 >
                   Close ❌
                 </button>
                 <button
                   onClick={() => certRef.current?.downloadPDF()}
-                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                  className="bg-yellow-500 hover:bg-yellow-400 text-[#2d2d2d] font-bold py-2.5 px-6 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
+                  className="bg-yellow-500 hover:bg-yellow-400 text-[#2d2d2d] rounded-xl font-bold py-2.5 px-6 border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer text-sm shrink-0"
                 >
                   <svg className="w-4 h-4 animate-sketch-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>

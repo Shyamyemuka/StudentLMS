@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import BookmarkModal from "./bookmark-modal";
+import FocusCompanion from "./focus-companion";
 
 interface Bookmark {
   id: number;
@@ -14,6 +15,7 @@ interface Bookmark {
 
 interface VideoPlayerProps {
   resourceId: number;
+  subjectId?: number;
   videoUrl: string;
   title: string;
   initialBookmarks: Bookmark[];
@@ -23,10 +25,12 @@ type VideoSource = "youtube" | "vimeo" | "drive" | "direct";
 
 export default function VideoPlayer({
   resourceId,
+  subjectId,
   videoUrl,
   title,
   initialBookmarks,
 }: VideoPlayerProps) {
+  const [resolvedSubjectId, setResolvedSubjectId] = useState<number>(subjectId || 0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -53,6 +57,15 @@ export default function VideoPlayer({
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const youtubePlayerRef = useRef<any>(null);
   const vimeoPlayerRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!subjectId && typeof window !== "undefined") {
+      const parsedId = Number(window.location.pathname.split("/")[2]);
+      if (!isNaN(parsedId)) {
+        setResolvedSubjectId(parsedId);
+      }
+    }
+  }, [subjectId]);
 
   // Auto-hide controls after 3 seconds of inactivity
   const resetControlsTimer = () => {
@@ -732,7 +745,8 @@ export default function VideoPlayer({
   // Render embedded video (YouTube, Vimeo, Drive) - Use their native controls
   if (videoSource !== "direct") {
     return (
-      <div className="rounded-xl overflow-hidden">
+      <>
+        <div className="rounded-xl overflow-hidden">
         {showEmbedNote && (
           <div className="bg-primary text-primary-foreground border-2 border-border shadow-hard-sm px-4 py-2.5 text-sm font-bold flex items-center justify-between">
             <span>
@@ -853,13 +867,28 @@ export default function VideoPlayer({
           )}
         </div>
       </div>
-    );
+      {/* AI Focus Companion */}
+      <FocusCompanion
+        resourceId={resourceId}
+        subjectId={resolvedSubjectId}
+        currentTime={currentTime}
+        isPlaying={isPlaying}
+        onPauseVideo={() => {
+          setIsPlaying(false);
+        }}
+        onPlayVideo={() => {
+          setIsPlaying(true);
+        }}
+      />
+    </>
+  );
   }
 
   // Render HTML5 video player (direct links)
   return (
-    <div
-      ref={containerRef}
+    <>
+      <div
+        ref={containerRef}
       onMouseMove={resetControlsTimer}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => {
@@ -1246,5 +1275,26 @@ export default function VideoPlayer({
         currentTime={currentTime}
       />
     </div>
-  );
+
+    {/* AI Focus Companion */}
+    <FocusCompanion
+      resourceId={resourceId}
+      subjectId={resolvedSubjectId}
+      currentTime={currentTime}
+      isPlaying={isPlaying}
+      onPauseVideo={() => {
+        if (videoRef.current) {
+          videoRef.current.pause();
+          setIsPlaying(false);
+        }
+      }}
+      onPlayVideo={() => {
+        if (videoRef.current) {
+          videoRef.current.play();
+          setIsPlaying(true);
+        }
+      }}
+    />
+  </>
+);
 }

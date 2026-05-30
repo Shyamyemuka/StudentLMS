@@ -168,13 +168,6 @@ export default function Header({ profile }: HeaderProps) {
             {/* Notification Bell */}
             {profile && <NotificationBell userId={profile.user_id} />}
 
-            {/* Admin Signature Upload */}
-            {profile?.role === "admin" && (
-              <div className="hidden lg:block shrink-0">
-                <AdminSignatureUpload />
-              </div>
-            )}
-
             {/* Profile Dropdown or CTAs */}
             {profile ? (
               <div className="relative">
@@ -184,9 +177,13 @@ export default function Header({ profile }: HeaderProps) {
                   {/* Avatar */}
                   <div 
                     style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                    className="w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-bold text-sm border-2 border-border shadow-hard-sm"
+                    className="w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-bold text-sm border-2 border-border shadow-hard-sm overflow-hidden"
                   >
-                    {profile?.full_name?.charAt(0)?.toUpperCase() || "U"}
+                    <img 
+                      src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || "User")}&background=D4AF37&color=0B0D10&bold=true`} 
+                      alt={profile?.full_name || "Profile"} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   {/* Name & Role */}
@@ -225,8 +222,8 @@ export default function Header({ profile }: HeaderProps) {
 
                     {/* Menu */}
                     <div 
-                      style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-                      className="absolute right-0 mt-2 w-56 bg-card border-2 border-border shadow-hard-md z-20 py-2 wobbly-border"
+                      style={{ borderRadius: "12px" }}
+                      className="absolute right-0 mt-2 w-56 bg-[#ffffff] dark:bg-[#14181D] border-2 border-border shadow-hard-md z-20 py-2 wobbly-border"
                     >
                       {/* Mobile Navigation */}
                       <div className="md:hidden border-b-2 border-dashed border-border pb-2 mb-2">

@@ -152,8 +152,8 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
 
                     {/* Dropdown Panel */}
                     <div 
-                        style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-card border-2 border-border rounded-xl shadow-hard-lg z-50 overflow-hidden"
+                        style={{ borderRadius: "12px" }}
+                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#ffffff] dark:bg-[#14181D] border-2 border-border rounded-xl shadow-hard-lg z-50 overflow-hidden"
                     >
                         {/* Header */}
                         <div className="px-4 py-3 border-b-2 border-border flex items-center justify-between">

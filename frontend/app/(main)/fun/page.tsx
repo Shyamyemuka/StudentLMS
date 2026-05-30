@@ -6,6 +6,7 @@ import { GameCard } from "@/components/fun/game-card";
 import { GamePlayer } from "@/components/fun/game-player";
 import { GAMES, Game } from "@/lib/games/games-config";
 import { ArrowLeft } from "lucide-react";
+import LeaderboardPanel from "@/components/fun/leaderboard-panel";
 
 export default function FunPage() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
@@ -42,7 +43,8 @@ export default function FunPage() {
           </p>
         </div>
 
-        <div className="grid gap-4">
+        {/* Game List Grid */}
+        <div className="grid gap-6 mb-10">
           {GAMES.map((game) => (
             <GameCard key={game.id} game={game} onPlay={handlePlayGame} />
           ))}
@@ -52,6 +54,11 @@ export default function FunPage() {
               <p>No games available yet. Check back soon!</p>
             </div>
           )}
+        </div>
+
+        {/* Leaderboards Panel Grid */}
+        <div className="mt-8">
+          <LeaderboardPanel />
         </div>
 
         <GamePlayer

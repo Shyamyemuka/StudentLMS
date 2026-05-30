@@ -237,8 +237,7 @@ export default function SubjectManagement() {
       {/* Subjects List */}
       {filteredSubjects.length === 0 ? (
         <Card 
-          style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-          className="bg-card border-2 border-border p-12 text-center shadow-hard-md"
+          className="bg-card border-2 border-border rounded-xl p-12 text-center shadow-hard-md"
         >
           <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-muted-foreground font-bold">
@@ -252,8 +251,7 @@ export default function SubjectManagement() {
           {filteredSubjects.map((subject) => (
             <Card
               key={subject.id}
-              style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
-              className="bg-card border-2 border-border p-6 shadow-hard-md hover:border-primary transition-all duration-200 hover:-translate-y-0.5">
+              className="bg-card border-2 border-border rounded-xl p-6 shadow-hard-md hover:border-primary transition-all duration-200 hover:-translate-y-0.5">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 {/* Subject Info */}
                 <div className="flex-1 min-w-0">
@@ -303,8 +301,7 @@ export default function SubjectManagement() {
                     disabled={deleting === subject.id}
                     variant="outline"
                     size="sm"
-                    style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-                    className="bg-destructive/10 hover:bg-destructive/20 text-destructive border-2 border-destructive/30 font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
+                    className="bg-destructive/10 hover:bg-destructive/20 text-destructive border-2 border-destructive/30 rounded-xl font-bold shadow-hard-sm cursor-pointer transition-all active:scale-95">
                     <Trash2 className="w-4 h-4 mr-2" />
                     {deleting === subject.id ? "Deleting..." : "Delete"}
                   </Button>

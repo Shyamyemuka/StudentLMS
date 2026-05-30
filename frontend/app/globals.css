@@ -164,13 +164,18 @@ a:hover {
   box-shadow: 8px 8px 0px 0px var(--color-shadow);
 }
 
-/* Irregular organic borders */
+/* Irregular organic borders -> standard elegant curvy edges */
 .wobbly-border {
-  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  border-radius: 0.75rem !important;
 }
 
 .wobbly-border-md {
-  border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  border-radius: 0.75rem !important;
+}
+
+/* Global override for inline wobbly styles across any portal options, buttons, notice boards, and dialogs */
+[style*="255px"], [style*="225px"], [style*="100px 10px"], [style*="10px 100px"] {
+  border-radius: 0.75rem !important;
 }
 
 /* Snappy jiggle jolt buttons */

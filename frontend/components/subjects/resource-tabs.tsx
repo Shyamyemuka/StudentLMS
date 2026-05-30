@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import { formatDate } from "@/lib/utils";
+import AttentionHeatmap from "../analytics/attention-heatmap";
 
 interface ResourceTabsProps {
   subjectId: number;
@@ -265,6 +266,7 @@ function ResourceCard({
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const supabase = createClient();
 
   const typeIcons: Record<string, string> = {
@@ -408,28 +410,47 @@ function ResourceCard({
     <>
       <div className="relative group/card">
         <Link href={href}>
-          <div className="bg-card border-2 border-border rounded-xl p-4 hover:border-primary transition-all duration-300 hover:shadow-hard-md group h-full shadow-hard-sm">
-            {/* Icon & Type */}
-            <div className="flex items-center justify-between mb-3 font-body font-bold">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 border-2 border-primary/20 flex items-center justify-center text-xl">
-                  {typeIcons[resource.type]}
+          <div className="bg-card border-2 border-border rounded-xl p-4 hover:border-primary transition-all duration-300 hover:shadow-hard-md group h-full shadow-hard-sm flex flex-col justify-between">
+            <div>
+              {/* Icon & Type */}
+              <div className="flex items-center justify-between mb-3 font-body font-bold">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 border-2 border-primary/20 flex items-center justify-center text-xl">
+                    {typeIcons[resource.type]}
+                  </div>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                    {resource.type}
+                  </span>
                 </div>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">
-                  {resource.type}
-                </span>
               </div>
+
+              {/* Title */}
+              <h4 className="text-foreground font-bold font-heading group-hover:text-primary transition-colors line-clamp-2 text-base">
+                {resource.title}
+              </h4>
             </div>
 
-            {/* Title */}
-            <h4 className="text-foreground font-bold font-heading group-hover:text-primary transition-colors line-clamp-2 text-base">
-              {resource.title}
-            </h4>
+            <div className="flex items-center justify-between mt-3">
+              {/* Date */}
+              <p className="text-muted-foreground/80 text-xs font-bold font-body">
+                {formatDate(resource.created_at)}
+              </p>
 
-            {/* Date */}
-            <p className="text-muted-foreground/80 text-xs mt-2 font-bold font-body">
-              {formatDate(resource.created_at)}
-            </p>
+              {/* View AI Heatmap Button (Visible to faculty/admins on videos) */}
+              {canDelete && resource.type === "video" && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowAnalytics(true);
+                  }}
+                  style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                  className="px-2.5 py-1 text-[11px] bg-primary text-primary-foreground font-bold border-2 border-border shadow-hard-sm hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-1 font-body z-10 animate-sketch-bounce"
+                >
+                  📊 AI Analytics
+                </button>
+              )}
+            </div>
           </div>
         </Link>
 
@@ -457,6 +478,25 @@ function ResourceCard({
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteDialog(false)}
       />
+      {/* AI Attention Heatmap Modal overlay */}
+      {showAnalytics && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div 
+            style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
+            className="bg-[#14181D] border-4 border-[#BFA55A] p-6 max-w-4xl w-full shadow-hard-xl relative text-left"
+          >
+            <button
+              onClick={() => setShowAnalytics(false)}
+              className="absolute top-4 right-4 text-[#B0B0B0] hover:text-[#EAEAEA] font-bold p-2 cursor-pointer transition-colors border-2 border-[#BFA55A]/30 rounded-lg hover:bg-muted/10 bg-transparent flex items-center justify-center font-body text-xs"
+            >
+              ✕ Close
+            </button>
+            <div className="mt-8">
+              <AttentionHeatmap resourceId={resource.id} />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

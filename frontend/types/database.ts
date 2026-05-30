@@ -10,6 +10,7 @@ export interface Profile {
   user_id: string;
   full_name: string;
   role: UserRole;
+  avatar_url?: string | null;
   created_at: string;
   updated_at: string;
 }

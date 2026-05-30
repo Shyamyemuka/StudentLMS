@@ -127,7 +127,8 @@ const Certificate = React.forwardRef<any, CertificateProps>(
           rel="stylesheet"
         />
 
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           .wobbly-border-outer {
               border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
               box-shadow: 8px 8px 0px 0px #2d2d2d;
@@ -217,7 +218,7 @@ const Certificate = React.forwardRef<any, CertificateProps>(
                 {studentName}
               </h2>
               <p className="cert-font-sans text-lg cert-text-dark mb-6 w-2/3 mx-auto leading-relaxed font-medium">
-                has successfully completed all requirements, assignments, and assessments for the course:
+                for successfully completing all requirements, assignments, and assessments for the course:
               </p>
               <h3 className="cert-font-serif text-3xl font-bold cert-text-dark wobbly-underline inline-block pb-2 px-6">
                 {courseName}
@@ -237,11 +238,11 @@ const Certificate = React.forwardRef<any, CertificateProps>(
               {/* Gold Seal */}
               <div className="relative flex justify-center items-center -mb-4 shrink-0">
                 <svg className="w-32 h-32 text-[#d97706] absolute" viewBox="0 0 100 100" fill="none">
-                  <path d="M50 5 L55 20 L70 15 L65 30 L80 35 L70 45 L85 55 L70 60 L75 75 L60 70 L55 85 L50 70 L45 85 L40 70 L25 75 L30 60 L15 55 L30 45 L20 35 L35 30 L30 15 L45 20 Z" fill="currentColor" opacity="0.2"/>
-                  <path d="M50 10 L54 22 L66 18 L62 30 L74 34 L65 43 L77 52 L64 57 L68 69 L56 64 L53 76 L50 63 L47 76 L44 64 L32 69 L36 57 L23 52 L35 43 L26 34 L38 30 L34 18 L46 22 Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round"/>
+                  <path d="M50 5 L55 20 L70 15 L65 30 L80 35 L70 45 L85 55 L70 60 L75 75 L60 70 L55 85 L50 70 L45 85 L40 70 L25 75 L30 60 L15 55 L30 45 L20 35 L35 30 L30 15 L45 20 Z" fill="currentColor" opacity="0.2" />
+                  <path d="M50 10 L54 22 L66 18 L62 30 L74 34 L65 43 L77 52 L64 57 L68 69 L56 64 L53 76 L50 63 L47 76 L44 64 L32 69 L36 57 L23 52 L35 43 L26 34 L38 30 L34 18 L46 22 Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
                 </svg>
                 <div className="cert-font-serif cert-text-dark text-center z-10 transform rotate-[-3deg] cert-bg-paper rounded-full w-16 h-16 flex items-center justify-center border-2 cert-border-dark border-dashed">
-                  <span className="font-bold text-xs leading-tight">VERI<br/>FIED</span>
+                  <span className="font-bold text-xs leading-tight">VERI<br />FIED</span>
                 </div>
               </div>
 

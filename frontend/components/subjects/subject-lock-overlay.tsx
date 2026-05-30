@@ -85,7 +85,7 @@ export default function SubjectLockOverlay({
 
           if (error) {
             console.error("Payment insert error:", error);
-            toast.error("Payment verified, but registration failed. Please contact studentlmsofficial@gmail.com.");
+            toast.error("Payment verified, but registration failed. Please contact Admin.");
           } else {
             toast.dismiss();
             toast.success("Course unlocked successfully! Happy learning!");
@@ -180,7 +180,7 @@ export default function SubjectLockOverlay({
         ) : (
           <span className="flex items-center justify-center gap-2">
             <Sparkles className="size-5" />
-            Unlock Course via Razorpay
+            Unlock Course
           </span>
         )}
       </Button>

@@ -136,8 +136,7 @@ export default function SubjectCard({
       <div className="relative group/card h-full">
         {isRejected ? (
           <div 
-            style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-            className="bg-card border-2 border-destructive p-6 h-full cursor-not-allowed opacity-75 shadow-hard-sm"
+            className="bg-card border-2 border-destructive rounded-xl p-6 h-full cursor-not-allowed opacity-75 shadow-hard-sm"
           >
             {/* Rejection Banner */}
             <div className="bg-destructive/10 border-2 border-dashed border-destructive rounded-lg p-3 mb-4">
@@ -177,8 +176,7 @@ export default function SubjectCard({
         ) : (
           <Link href={isGuest ? `/login?redirectTo=/subjects/${subject.id}` : `/subjects/${subject.id}`} className="block h-full">
             <div 
-              style={{ borderRadius: "15px 225px 15px 255px / 255px 15px 225px 15px" }}
-              className={`bg-card border-2 p-6 transition-all duration-200 shadow-hard-md hover:-translate-y-1 hover:shadow-hard-lg hover:rotate-1 group h-full relative ${
+              className={`bg-card border-2 rounded-xl p-6 transition-all duration-200 shadow-hard-md hover:-translate-y-1 hover:shadow-hard-lg hover:rotate-1 group h-full relative ${
                 isLocked 
                   ? "border-accent/40 hover:border-accent" 
                   : "border-border hover:border-primary"
@@ -186,7 +184,7 @@ export default function SubjectCard({
             >
               {/* Locked Badge Decor */}
               {isLocked && (
-                <div className="absolute top-[-10px] right-4 bg-accent text-accent-foreground border-2 border-border px-3 py-0.5 text-xs font-bold shadow-hard-sm wobbly-border uppercase tracking-wider flex items-center gap-1.5 animate-sketch-bounce">
+                <div className="absolute top-[-10px] right-4 bg-accent text-accent-foreground border-2 border-border px-3 py-0.5 text-xs font-bold shadow-hard-sm rounded-xl uppercase tracking-wider flex items-center gap-1.5 animate-sketch-bounce">
                   <Lock className="size-3" strokeWidth={3} />
                   Locked
                 </div>
@@ -262,8 +260,7 @@ export default function SubjectCard({
           <button
             onClick={handleDeleteClick}
             disabled={isDeleting}
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-            className="absolute top-2 right-2 bg-destructive text-destructive-foreground border-2 border-border p-2 opacity-0 md:group-hover/card:opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed z-10 cursor-pointer shadow-hard-sm"
+            className="absolute top-2 right-2 bg-destructive text-destructive-foreground border-2 border-border p-2 rounded-xl opacity-0 md:group-hover/card:opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed z-10 cursor-pointer shadow-hard-sm"
             title="Delete subject"
           >
             <Trash2 className="w-4 h-4" />
