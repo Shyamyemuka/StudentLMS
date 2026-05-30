@@ -53,29 +53,64 @@ export default function MathBlitz() {
     };
   }, []);
 
-  const generateQuestion = (): Question => {
-    const operators = ["+", "-", "*"];
-    const op = operators[Math.floor(Math.random() * operators.length)];
-    let num1 = 0, num2 = 0, answer = 0;
+  // Mount auto-start trigger (direct play)
+  useEffect(() => {
+    handleStart();
+  }, []);
 
-    if (op === "+") {
-      num1 = Math.floor(Math.random() * 89) + 10;
-      num2 = Math.floor(Math.random() * 89) + 10;
-      answer = num1 + num2;
-    } else if (op === "-") {
-      num1 = Math.floor(Math.random() * 89) + 10;
-      num2 = Math.floor(Math.random() * (num1 - 5)) + 5; // Avoid negative answers for fast speed
-      answer = num1 - num2;
-    } else {
-      num1 = Math.floor(Math.random() * 12) + 2;
-      num2 = Math.floor(Math.random() * 12) + 2;
-      answer = num1 * num2;
+  const generateQuestion = (): Question => {
+    const topics = ["derivative", "modulo", "binary", "determinant", "power", "log"];
+    const topic = topics[Math.floor(Math.random() * topics.length)];
+    let text = "";
+    let answer = 0;
+
+    switch (topic) {
+      case "derivative": {
+        const coef = Math.floor(Math.random() * 8) + 2; // 2 to 9
+        const pow = Math.floor(Math.random() * 3) + 2;  // 2 to 4
+        text = `d/dx(${coef}x^${pow}) at x=2`;
+        answer = coef * pow * Math.pow(2, pow - 1);
+        break;
+      }
+      case "modulo": {
+        const num1 = Math.floor(Math.random() * 80) + 20; // 20 to 99
+        const num2 = Math.floor(Math.random() * 7) + 3;   // 3 to 9
+        text = `${num1} mod ${num2}`;
+        answer = num1 % num2;
+        break;
+      }
+      case "binary": {
+        const val = Math.floor(Math.random() * 30) + 2; // 2 to 31
+        text = `${val.toString(2)} in bin`;
+        answer = val;
+        break;
+      }
+      case "determinant": {
+        const a = Math.floor(Math.random() * 5) + 1;
+        const b = Math.floor(Math.random() * 4) + 1;
+        const c = Math.floor(Math.random() * 4) + 1;
+        const d = Math.floor(Math.random() * 5) + 1;
+        text = `det([${a}, ${b}; ${c}, ${d}])`;
+        answer = (a * d) - (b * c);
+        break;
+      }
+      case "power": {
+        const p = Math.floor(Math.random() * 6) + 3; // 2^3 to 2^8
+        text = `2^${p}`;
+        answer = Math.pow(2, p);
+        break;
+      }
+      default: { // log
+        const p = Math.floor(Math.random() * 5) + 2; // 2 to 6
+        const base = Math.random() > 0.5 ? 2 : 10;
+        const val = Math.pow(base, p);
+        text = `log${base}(${val})`;
+        answer = p;
+        break;
+      }
     }
 
-    return {
-      text: `${num1} ${op} ${num2}`,
-      answer,
-    };
+    return { text, answer };
   };
 
   const handleStart = () => {
@@ -169,12 +204,12 @@ export default function MathBlitz() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border rounded-xl text-center min-h-[400px]">
+    <div className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border rounded-xl text-center min-h-[400px] text-[#2d2d2d] dark:text-[#EAEAEA]">
       {gameState === "idle" && (
         <div className="space-y-6">
           <div className="text-6xl animate-bounce">⚡</div>
-          <h2 className="text-2xl font-bold font-heading text-foreground">Math Blitz Solver</h2>
-          <p className="text-sm font-bold font-body text-muted-foreground max-w-md mx-auto">
+          <h2 className="text-2xl font-bold font-heading text-[#2d2d2d] dark:text-[#EAEAEA]">Math Blitz Solver</h2>
+          <p className="text-sm font-bold font-body text-[#706b60] dark:text-[#B0B0B0] max-w-md mx-auto">
             Solve basic equations as quickly as possible. Every streak of 5 correct answers increases your score multiplier! Can you conquer the whiteboard?
           </p>
           <Button
@@ -190,16 +225,16 @@ export default function MathBlitz() {
         <div className="w-full max-w-md space-y-6 relative">
           {/* Score & Timer Dashboard */}
           <div className="flex justify-between items-center bg-background border-2 border-border rounded-xl p-3 font-bold font-heading shadow-hard-sm">
-            <div className="text-lg text-primary">Score: {score}</div>
-            <div className="text-xs text-muted-foreground bg-primary/10 border border-primary/20 px-2 py-1 rounded">
+            <div className="text-lg text-[#2d2d2d] dark:text-[#EAEAEA] font-extrabold">Score: {score}</div>
+            <div className="text-xs text-[#706b60] dark:text-[#B0B0B0] bg-muted border border-border px-2 py-1 rounded font-bold">
               Combo: {multiplier}x ({streak} streak)
             </div>
-            <div className="text-lg text-accent">Time: {timeLeft}s</div>
+            <div className="text-lg text-red-600 dark:text-red-400 font-extrabold">Time: {timeLeft}s</div>
           </div>
 
           {/* Big Equation Box */}
           <div className="bg-background border-4 border-dashed border-border py-10 px-4 rounded-xl shadow-hard-md relative overflow-hidden">
-            <div className="text-5xl font-extrabold font-heading text-foreground select-none">
+            <div className="text-5xl font-extrabold font-heading text-[#2d2d2d] dark:text-[#EAEAEA] select-none">
               {question.text} = ?
             </div>
 
@@ -208,7 +243,7 @@ export default function MathBlitz() {
               {scorePopups.map((popup) => (
                 <div
                   key={popup.id}
-                  className="animate-bounce text-xl font-bold font-heading text-primary bg-background border-2 border-primary rounded-xl px-3 py-1.5 shadow-hard-md"
+                  className="animate-bounce text-xl font-bold font-heading text-[#2d2d2d] dark:text-[#EAEAEA] bg-background border-2 border-border rounded-xl px-3 py-1.5 shadow-hard-md"
                 >
                   {popup.text}
                 </div>
@@ -224,7 +259,7 @@ export default function MathBlitz() {
               onChange={(e) => setUserAnswer(e.target.value)}
               placeholder="Type answer..."
               autoFocus
-              className="bg-background border-2 border-border rounded-xl text-center text-xl font-bold py-6 text-foreground placeholder:text-muted-foreground/50"
+              className="bg-background border-2 border-border rounded-xl text-center text-xl font-bold py-6 text-[#2d2d2d] dark:text-[#EAEAEA] placeholder:text-[#706b60]/50"
             />
             <Button
               type="submit"
@@ -250,8 +285,8 @@ export default function MathBlitz() {
       {gameState === "gameover" && (
         <div className="space-y-6">
           <div className="text-6xl">🏆</div>
-          <h2 className="text-3xl font-bold font-heading text-foreground">Time's Up!</h2>
-          <p className="text-lg text-muted-foreground font-bold font-body">
+          <h2 className="text-3xl font-bold font-heading text-[#2d2d2d] dark:text-[#EAEAEA]">Time's Up!</h2>
+          <p className="text-lg text-[#706b60] dark:text-[#B0B0B0] font-bold font-body">
             You scored a blitzing <span className="text-primary text-xl font-extrabold">{score}</span> points!
           </p>
 

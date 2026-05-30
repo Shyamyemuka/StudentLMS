@@ -181,32 +181,6 @@ export default function SubjectApprovals() {
         }
       }
 
-      // Delete resource submissions
-      const { data: submissions } = await supabase
-        .from("resource_submissions")
-        .select("id, storage_path, type")
-        .eq("subject_id", subjectId);
-
-      if (submissions && submissions.length > 0) {
-        for (const submission of submissions) {
-          if (
-            (submission.type === "pdf" || submission.type === "notes") &&
-            submission.storage_path
-          ) {
-            const [bucket, ...pathParts] = submission.storage_path.split("/");
-            const filePath = pathParts.join("/");
-
-            const { error: deleteError } = await supabase.storage
-              .from(bucket)
-              .remove([filePath]);
-
-            if (deleteError) {
-              console.error("Error deleting submission file:", deleteError);
-              // Continue even if file deletion fails
-            }
-          }
-        }
-      }
 
       // Send notification to the creator BEFORE deleting (only for students)
       const subject = subjects.find((s) => s.id === subjectId);

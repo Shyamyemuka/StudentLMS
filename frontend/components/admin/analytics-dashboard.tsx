@@ -26,6 +26,7 @@ import {
   Calendar,
   Activity,
   ArrowLeft,
+  Video,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,6 @@ interface MonthlyData {
   users: number;
   subjects: number;
   resources: number;
-  submissions: number;
 }
 
 interface StatusData {
@@ -54,11 +54,10 @@ interface RoleData {
 export default function AnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
-  const [submissionStatusData, setSubmissionStatusData] = useState<
-    StatusData[]
-  >([]);
+  const [resourceTypeData, setResourceTypeData] = useState<StatusData[]>([]);
   const [userRoleData, setUserRoleData] = useState<RoleData[]>([]);
   const [subjectStatusData, setSubjectStatusData] = useState<StatusData[]>([]);
+  const [totalResourcesCount, setTotalResourcesCount] = useState(0);
 
   const supabase = createClient();
 
@@ -74,44 +73,41 @@ export default function AnalyticsDashboard() {
         { data: profiles },
         { data: subjects },
         { data: resources },
-        { data: submissions },
       ] = await Promise.all([
         supabase.from("profiles").select("created_at, role"),
         supabase.from("subjects").select("created_at, status"),
-        supabase.from("resources").select("created_at"),
-        supabase.from("resource_submissions").select("created_at, status"),
+        supabase.from("resources").select("created_at, type"),
       ]);
+
+      setTotalResourcesCount(resources?.length || 0);
 
       // Process monthly growth data (last 6 months)
       const monthlyStats = processMonthlyData(
         profiles || [],
         subjects || [],
         resources || [],
-        submissions || [],
       );
       setMonthlyData(monthlyStats);
 
-      // Process submission status data
-      const submissionStats = [
+      // Process resource type distribution
+      const resourceTypeStats = [
         {
-          name: "Pending",
-          value: submissions?.filter((s) => s.status === "pending").length || 0,
-          color: "#D4AF37",
+          name: "Videos",
+          value: resources?.filter((r) => r.type === "video").length || 0,
+          color: "#4CAF8F", // Green
         },
         {
-          name: "Approved",
-          value:
-            submissions?.filter((s) => s.status === "approved").length || 0,
-          color: "#4CAF8F",
+          name: "PDFs",
+          value: resources?.filter((r) => r.type === "pdf").length || 0,
+          color: "#6B9FDB", // Blue
         },
         {
-          name: "Rejected",
-          value:
-            submissions?.filter((s) => s.status === "rejected").length || 0,
-          color: "#C94A4A",
+          name: "Notes",
+          value: resources?.filter((r) => r.type === "notes").length || 0,
+          color: "#D4AF37", // Gold
         },
       ];
-      setSubmissionStatusData(submissionStats);
+      setResourceTypeData(resourceTypeStats);
 
       // Process user role data
       const roleStats = [
@@ -164,7 +160,6 @@ export default function AnalyticsDashboard() {
     profiles: any[],
     subjects: any[],
     resources: any[],
-    submissions: any[],
   ): MonthlyData[] => {
     const months = [];
     const now = new Date();
@@ -194,17 +189,11 @@ export default function AnalyticsDashboard() {
         return createdAt >= monthStart && createdAt <= monthEnd;
       }).length;
 
-      const submissionsCount = submissions.filter((s) => {
-        const createdAt = new Date(s.created_at);
-        return createdAt >= monthStart && createdAt <= monthEnd;
-      }).length;
-
       months.push({
         month: monthName,
         users: usersCount,
         subjects: subjectsCount,
         resources: resourcesCount,
-        submissions: submissionsCount,
       });
     }
 
@@ -283,13 +272,6 @@ export default function AnalyticsDashboard() {
               strokeWidth={3}
               name="New Resources"
             />
-            <Line
-              type="monotone"
-              dataKey="submissions"
-              stroke="#C94A4A"
-              strokeWidth={3}
-              name="Submissions"
-            />
           </LineChart>
         </ResponsiveContainer>
       </Card>
@@ -324,18 +306,18 @@ export default function AnalyticsDashboard() {
           </ResponsiveContainer>
         </Card>
 
-        {/* Submission Status */}
+        {/* Resource Distribution */}
         <Card className="bg-card border-2 border-border shadow-hard-sm p-6 wobbly-border">
           <div className="flex items-center gap-3 mb-6">
             <FileText className="w-6 h-6 text-primary" />
             <h2 className="text-xl font-bold text-foreground font-heading">
-              Submission Status
+              Resource Distribution
             </h2>
           </div>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                data={submissionStatusData}
+                data={resourceTypeData}
                 cx="50%"
                 cy="50%"
                 outerRadius={80}
@@ -344,7 +326,7 @@ export default function AnalyticsDashboard() {
                 stroke="var(--border)"
                 strokeWidth={2}
                 label={({ value }) => (value > 0 ? value : "")}>
-                {submissionStatusData.map((entry, index) => (
+                {resourceTypeData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -362,10 +344,10 @@ export default function AnalyticsDashboard() {
                 formatter={(value, entry: any) =>
                   `${entry.payload.name}: ${entry.payload.value} (${(
                     (entry.payload.value /
-                      submissionStatusData.reduce(
+                      (resourceTypeData.reduce(
                         (acc, curr) => acc + curr.value,
                         0,
-                      )) *
+                      ) || 1)) *
                     100
                   ).toFixed(0)}%)`
                 }
@@ -412,10 +394,10 @@ export default function AnalyticsDashboard() {
                 formatter={(value, entry: any) =>
                   `${entry.payload.name}: ${entry.payload.value} (${(
                     (entry.payload.value /
-                      subjectStatusData.reduce(
+                      (subjectStatusData.reduce(
                         (acc, curr) => acc + curr.value,
                         0,
-                      )) *
+                      ) || 1)) *
                     100
                   ).toFixed(0)}%)`
                 }
@@ -454,13 +436,10 @@ export default function AnalyticsDashboard() {
             <div className="flex items-center justify-between p-4 bg-background border-2 border-border shadow-hard-sm rounded-lg wobbly-border transition-colors duration-200">
               <div className="flex items-center gap-3">
                 <FileText className="w-5 h-5 text-primary" />
-                <span className="text-muted-foreground font-bold font-body">Total Submissions</span>
+                <span className="text-muted-foreground font-bold font-body">Total Resources</span>
               </div>
               <span className="text-2xl font-bold text-foreground font-body">
-                {submissionStatusData.reduce(
-                  (acc, curr) => acc + curr.value,
-                  0,
-                )}
+                {totalResourcesCount}
               </span>
             </div>
           </div>

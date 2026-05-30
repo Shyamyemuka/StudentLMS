@@ -44,16 +44,36 @@ export default function FunPage() {
         </div>
 
         {/* Game List Grid */}
-        <div className="grid gap-6 mb-10">
-          {GAMES.map((game) => (
-            <GameCard key={game.id} game={game} onPlay={handlePlayGame} />
-          ))}
-
-          {GAMES.length === 0 && (
-            <div className="text-center py-12 text-[#B0B0B0]">
-              <p>No games available yet. Check back soon!</p>
+        <div className="space-y-8 mb-10">
+          {/* Competitive Leaderboard Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-foreground font-heading flex items-center gap-2">
+              🏆 Competitive Leaderboard Challenges
+            </h2>
+            <p className="text-sm text-muted-foreground font-bold font-body">
+              These games score your performance. Save your score and compete on the global student leaderboards!
+            </p>
+            <div className="grid gap-6">
+              {GAMES.filter(g => g.isLeaderboardEligible).map((game) => (
+                <GameCard key={game.id} game={game} onPlay={handlePlayGame} />
+              ))}
             </div>
-          )}
+          </div>
+
+          {/* Creative Sandbox Section */}
+          <div className="space-y-4 pt-4 border-t-2 border-dashed border-border">
+            <h2 className="text-xl font-bold text-foreground font-heading flex items-center gap-2">
+              💡 Creative Sandbox & AI Toys
+            </h2>
+            <p className="text-sm text-muted-foreground font-bold font-body">
+              Explore interactives like hand trackers and AI mood readers. Play freely without scoring!
+            </p>
+            <div className="grid gap-6">
+              {GAMES.filter(g => !g.isLeaderboardEligible).map((game) => (
+                <GameCard key={game.id} game={game} onPlay={handlePlayGame} />
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Leaderboards Panel Grid */}

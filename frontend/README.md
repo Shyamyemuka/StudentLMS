@@ -36,17 +36,11 @@ Student LMS is a comprehensive Learning Management System designed for universit
 - Integrated document viewer for PDFs and Office documents
 - Cloud storage with Supabase Storage
 
-#### ✅ **Submission System**
-
-- Student resource submissions with approval workflow
-- Faculty and admin review system
-- Track submission status (pending, approved, rejected)
-- Personal submission history for students
 
 #### 👥 **User Roles & Permissions**
 
-- **Students**: Access courses, submit resources, track progress
-- **Faculty**: Create courses, review submissions, manage content
+- **Students**: Access courses, track progress
+- **Faculty**: Create courses, manage content
 - **Admin**: Full system access, user management, analytics dashboard
 
 #### 📢 **Notice Board**
@@ -94,7 +88,6 @@ frontend/
 │   ├── (main)/           # Protected main app routes
 │   │   ├── dashboard/    # Main dashboard
 │   │   ├── my-courses/   # User's courses
-│   │   ├── my-submissions/ # User's submissions
 │   │   ├── subjects/     # Course/subject details
 │   │   ├── create-course/# Course creation
 │   │   └── fun/          # Fun Zone games
@@ -102,7 +95,6 @@ frontend/
 │   │   ├── analytics/    # System analytics
 │   │   ├── course-approvals/
 │   │   ├── faculty-approvals/
-│   │   ├── submission-approvals/
 │   │   └── users/        # User management
 │   └── api/              # API routes
 ├── components/
@@ -200,7 +192,6 @@ Student LMS supports multiple authentication methods:
 - **User Management**: View, edit, and manage all users
 - **Course Approvals**: Review and approve new courses
 - **Faculty Approvals**: Approve pending faculty registrations
-- **Submission Reviews**: Review and approve student submissions
 
 ---
 

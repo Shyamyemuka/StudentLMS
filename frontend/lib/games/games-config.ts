@@ -15,6 +15,7 @@ export interface Game {
   type: 'python' | 'javascript';
   pythonFile?: string;
   component?: React.ComponentType;
+  isLeaderboardEligible?: boolean;
 }
 
 export const GAMES: Game[] = [
@@ -24,7 +25,8 @@ export const GAMES: Game[] = [
     description: 'Fast-paced mental math sprint! Answer as many math problems as you can in 60 seconds with multipliers for streaks.',
     image: '/images/games/math-blitz.png',
     type: 'javascript',
-    component: MathBlitz
+    component: MathBlitz,
+    isLeaderboardEligible: true
   },
   {
     id: 'code-racer',
@@ -32,7 +34,8 @@ export const GAMES: Game[] = [
     description: 'Type out blocks of code as fast and accurately as possible under the timer. Race for the top typing WPM!',
     image: '/images/games/code-racer.png',
     type: 'javascript',
-    component: CodeRacer
+    component: CodeRacer,
+    isLeaderboardEligible: true
   },
   {
     id: 'hand-gesture-sphere',

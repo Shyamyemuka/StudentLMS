@@ -152,101 +152,103 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
 
                     {/* Dropdown Panel */}
                     <div 
-                        style={{ borderRadius: "12px" }}
-                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#ffffff] dark:bg-[#14181D] border-2 border-border rounded-xl shadow-hard-lg z-50 overflow-hidden"
+                      style={{ borderRadius: "12px" }}
+                      className="absolute right-0 mt-2 w-80 sm:w-96 bg-card border-2 border-border shadow-hard-lg z-50 overflow-hidden wobbly-border-md text-foreground"
                     >
-                        {/* Header */}
-                        <div className="px-4 py-3 border-b-2 border-border flex items-center justify-between">
-                            <h3 className="text-foreground font-bold font-heading">Notifications</h3>
-                            <div className="flex items-center gap-2">
-                                {unreadCount > 0 && (
-                                    <button
-                                        onClick={handleMarkAllAsRead}
-                                        className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-bold cursor-pointer"
-                                    >
-                                        <CheckCheck className="w-3.5 h-3.5" />
-                                        Mark all read
-                                    </button>
-                                )}
+                      {/* Header */}
+                      <div className="px-4 py-3 border-b-2 border-border flex items-center justify-between bg-card">
+                        <h3 className="text-foreground font-bold font-heading text-lg">Notifications</h3>
+                        <div className="flex items-center gap-2">
+                          {unreadCount > 0 && (
+                            <button
+                              onClick={handleMarkAllAsRead}
+                              className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-bold cursor-pointer"
+                            >
+                              <CheckCheck className="w-3.5 h-3.5" />
+                              Mark all read
+                            </button>
+                          )}
+                          <button
+                            onClick={() => setIsOpen(false)}
+                            className="p-1 hover:bg-muted border-2 border-transparent hover:border-border rounded transition-all md:hidden cursor-pointer"
+                          >
+                            <X className="w-4 h-4 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Notification List */}
+                      <div className="max-h-[400px] overflow-y-auto bg-card">
+                        {loading ? (
+                          <div className="px-4 py-8 text-center text-muted-foreground font-bold animate-pulse">
+                            Loading...
+                          </div>
+                        ) : notifications.length === 0 ? (
+                          <div className="px-4 py-8 text-center">
+                            <Bell className="w-8 h-8 text-muted/60 mx-auto mb-2" />
+                            <p className="text-muted-foreground font-bold text-sm">No notifications yet</p>
+                          </div>
+                        ) : (
+                          <ul>
+                            {notifications.map((notification) => (
+                              <li key={notification.id}>
                                 <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="p-1 hover:bg-muted border-2 border-transparent hover:border-border rounded transition-all md:hidden cursor-pointer"
+                                  onClick={() => handleNotificationClick(notification)}
+                                  className={`w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors border-b-2 border-border/40 last:border-b-0 cursor-pointer ${
+                                    !notification.is_read ? "bg-muted/30" : "bg-card"
+                                  }`}
                                 >
-                                    <X className="w-4 h-4 text-muted-foreground" />
+                                  <div className="flex gap-3">
+                                    {/* Icon */}
+                                    <div
+                                      className={`mt-0.5 ${getNotificationColor(
+                                        notification.type
+                                      )}`}
+                                    >
+                                      {getNotificationIcon(notification.type)}
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-start justify-between gap-2">
+                                        <p
+                                          className={`text-sm font-bold truncate ${
+                                            !notification.is_read
+                                              ? "text-foreground font-extrabold"
+                                              : "text-muted-foreground font-medium"
+                                          }`}
+                                        >
+                                          {notification.title}
+                                        </p>
+                                        {!notification.is_read && (
+                                          <span className="w-2.5 h-2.5 bg-primary border-2 border-border rounded-full flex-shrink-0 mt-1.5 shadow-hard-sm animate-pulse" />
+                                        )}
+                                      </div>
+                                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 font-bold">
+                                        {notification.message}
+                                      </p>
+                                      <p className="text-xs text-muted-foreground/60 mt-1 font-bold">
+                                        {formatDistanceToNow(new Date(notification.created_at), {
+                                          addSuffix: true,
+                                        })}
+                                      </p>
+                                    </div>
+                                  </div>
                                 </button>
-                            </div>
-                        </div>
-
-                        {/* Notification List */}
-                        <div className="max-h-[400px] overflow-y-auto">
-                            {loading ? (
-                                <div className="px-4 py-8 text-center text-muted-foreground font-bold">
-                                    Loading...
-                                </div>
-                            ) : notifications.length === 0 ? (
-                                <div className="px-4 py-8 text-center">
-                                    <Bell className="w-8 h-8 text-muted/60 mx-auto mb-2" />
-                                    <p className="text-muted-foreground font-bold text-sm">No notifications yet</p>
-                                </div>
-                            ) : (
-                                <ul>
-                                    {notifications.map((notification) => (
-                                        <li key={notification.id}>
-                                            <button
-                                                onClick={() => handleNotificationClick(notification)}
-                                                className={`w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors border-b-2 border-border/40 last:border-b-0 cursor-pointer ${!notification.is_read ? "bg-muted/30" : ""
-                                                    }`}
-                                            >
-                                                <div className="flex gap-3">
-                                                    {/* Icon */}
-                                                    <div
-                                                        className={`mt-0.5 ${getNotificationColor(
-                                                            notification.type
-                                                        )}`}
-                                                    >
-                                                        {getNotificationIcon(notification.type)}
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-start justify-between gap-2">
-                                                            <p
-                                                                className={`text-sm font-bold truncate ${!notification.is_read
-                                                                        ? "text-foreground"
-                                                                        : "text-muted-foreground"
-                                                                    }`}
-                                                            >
-                                                                {notification.title}
-                                                            </p>
-                                                            {!notification.is_read && (
-                                                                <span className="w-2.5 h-2.5 bg-primary border-2 border-border rounded-full flex-shrink-0 mt-1.5 shadow-hard-sm" />
-                                                            )}
-                                                        </div>
-                                                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 font-bold">
-                                                            {notification.message}
-                                                        </p>
-                                                        <p className="text-xs text-muted-foreground/60 mt-1 font-bold">
-                                                            {formatDistanceToNow(new Date(notification.created_at), {
-                                                                addSuffix: true,
-                                                            })}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-
-                        {/* Footer */}
-                        {notifications.length > 0 && (
-                            <div className="px-4 py-2 border-t-2 border-border bg-muted/40">
-                                <p className="text-xs text-muted-foreground/60 text-center font-bold">
-                                    Showing last {notifications.length} notifications
-                                </p>
-                            </div>
+                              </li>
+                            ))}
+                          </ul>
                         )}
+                      </div>
+
+                      {/* Footer */}
+                      {notifications.length > 0 && (
+                        <div className="px-4 py-2 border-t-2 border-border bg-muted/40">
+                          <p className="text-xs text-muted-foreground text-center font-bold">
+                            Showing last {notifications.length} notifications
+                          </p>
+                        </div>
+                      )}
                     </div>
                 </>
             )}

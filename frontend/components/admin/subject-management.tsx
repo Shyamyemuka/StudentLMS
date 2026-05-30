@@ -116,7 +116,7 @@ export default function SubjectManagement() {
   const handleDelete = async (subjectId: number, subjectTitle: string) => {
     if (
       !confirm(
-        `Are you sure you want to delete "${subjectTitle}"?\n\nThis will also delete:\n- All resources associated with this subject\n- All submissions for this subject\n- All enrollments for this subject\n\nThis action cannot be undone.`,
+        `Are you sure you want to delete "${subjectTitle}"?\n\nThis will also delete:\n- All resources associated with this subject\n- All enrollments for this subject\n\nThis action cannot be undone.`,
       )
     ) {
       return;
@@ -152,36 +152,7 @@ export default function SubjectManagement() {
         }
       }
 
-      // Check if there are submissions
-      const { data: submissions } = await supabase
-        .from("resource_submissions")
-        .select("id, storage_path, type")
-        .eq("subject_id", subjectId);
 
-      // Delete submission files from storage
-      if (submissions && submissions.length > 0) {
-        for (const submission of submissions) {
-          if (
-            (submission.type === "pdf" || submission.type === "notes") &&
-            submission.storage_path
-          ) {
-            const [bucket, ...pathParts] = submission.storage_path.split("/");
-            const filePath = pathParts.join("/");
-
-            const { error: deleteError } = await supabase.storage
-              .from(bucket)
-              .remove([filePath]);
-
-            if (deleteError) {
-              console.error(
-                `Error deleting submission file ${submission.storage_path}:`,
-                deleteError,
-              );
-              // Continue anyway
-            }
-          }
-        }
-      }
 
       // Delete the subject (cascade will handle related records)
       const { error: deleteError } = await supabase

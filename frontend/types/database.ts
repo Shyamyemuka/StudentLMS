@@ -4,7 +4,6 @@ export type SubjectStatus = "pending" | "approved" | "rejected";
 
 export type ResourceType = "video" | "pdf" | "notes";
 
-export type SubmissionStatus = "pending" | "approved" | "rejected";
 
 export interface Profile {
   user_id: string;
@@ -64,24 +63,6 @@ export interface Resource {
   subject?: Subject;
 }
 
-export interface ResourceSubmission {
-  id: number;
-  subject_id: number;
-  type: "pdf" | "notes";
-  title: string;
-  storage_path: string;
-  submitted_by: string;
-  status: SubmissionStatus;
-  reviewed_by: string | null;
-  reviewed_at: string | null;
-  review_note: string | null;
-  created_at: string;
-  updated_at: string;
-  // Joined data
-  submitter?: Profile;
-  reviewer?: Profile;
-  subject?: Subject;
-}
 
 export interface Message {
   id: number;
@@ -290,3 +271,39 @@ export interface UpdateResourceProgress {
   time_spent_seconds?: number;
   last_accessed?: string;
 }
+
+export interface AssignmentQuestion {
+  id: number;
+  question_text: string;
+  ideal_answer: string;
+  max_score: number;
+}
+
+export interface Assignment {
+  id: number;
+  subject_id: number;
+  title: string;
+  questions: AssignmentQuestion[];
+  max_score: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AssignmentSubmission {
+  id: number;
+  assignment_id: number;
+  student_id: string;
+  answers: Record<number, string>;
+  score: number | null;
+  feedback: string | null;
+  ai_analysis: any | null;
+  status: "submitted" | "graded";
+  marks_published: boolean;
+  submitted_at: string;
+  graded_at: string | null;
+  graded_by: string | null;
+  // Joined data
+  student?: Profile;
+  assignment?: Assignment;
+}

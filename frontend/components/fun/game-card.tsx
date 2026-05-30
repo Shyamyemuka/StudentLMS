@@ -40,11 +40,20 @@ export function GameCard({ game, onPlay }: GameCardProps) {
           {/* Game Info */}
           <div className="flex-1 flex flex-col justify-between gap-2">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-lg font-semibold">{game.name}</h3>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-[#D4AF37]/20 text-[#D4AF37]">
-                  {game.type === "python" ? "🐍 Python" : "⚡ JavaScript"}
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <h3 className="text-lg font-bold font-heading text-foreground">{game.name}</h3>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-bold font-body">
+                  {game.type === "python" ? "🐍 Python" : "⚡ JS"}
                 </span>
+                {game.isLeaderboardEligible ? (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/30 font-bold font-body">
+                    🏆 LEADERBOARD ELIGIBLE
+                  </span>
+                ) : (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground font-bold font-body">
+                    💡 Creative Sandbox
+                  </span>
+                )}
               </div>
               <p className="text-sm text-muted-foreground">
                 {game.description}

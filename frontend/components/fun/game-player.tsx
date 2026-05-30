@@ -529,6 +529,15 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
     }
   };
 
+  useEffect(() => {
+    if (isOpen && game) {
+      const t = setTimeout(() => {
+        startGame();
+      }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen, game]);
+
   const toggleFullscreen = async () => {
     if (!gameContainerRef.current) return;
 
@@ -586,12 +595,12 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
         {/* Header */}
         <div className="sticky top-0 bg-card border-b-2 border-border p-4 flex items-center justify-between z-10">
           <div>
-            <h2 className="text-xl font-bold text-foreground font-heading">{game.name}</h2>
-            <p className="text-sm text-muted-foreground font-bold">{game.description}</p>
+            <h2 className="text-xl font-bold text-[#2d2d2d] dark:text-[#EAEAEA] font-heading">{game.name}</h2>
+            <p className="text-sm text-[#706b60] dark:text-[#B0B0B0] font-bold">{game.description}</p>
           </div>
           <button
             onClick={handleClose}
-            className="text-muted-foreground hover:text-foreground font-bold p-1 cursor-pointer transition-colors">
+            className="text-[#706b60] hover:text-[#2d2d2d] dark:text-[#B0B0B0] dark:hover:text-[#EAEAEA] font-bold p-1 cursor-pointer transition-colors">
             <X className="w-5 h-5" strokeWidth={2.5} />
           </button>
         </div>
@@ -657,8 +666,13 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
               ? "fixed inset-0 z-50 bg-black flex items-center justify-center"
               : ""
               }`}>
-            {/* Render custom component if game has one */}
-            {showCustomComponent && game?.component ? (
+            {!isRunning ? (
+              <div className="flex flex-col items-center justify-center h-[350px] bg-background border-4 border-dashed border-border rounded-xl">
+                <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+                <p className="font-bold text-[#2d2d2d] dark:text-[#EAEAEA] text-lg">Launching Game Session...</p>
+                <p className="text-xs text-[#706b60] dark:text-[#B0B0B0] mt-1 font-bold">Please wait a moment while the resources load</p>
+              </div>
+            ) : showCustomComponent && game?.component ? (
               <Suspense fallback={
                 <div className="flex items-center justify-center h-[480px]">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -740,9 +754,9 @@ export function GamePlayer({ game, isOpen, onClose }: GamePlayerProps) {
           )}
 
           {/* Output Console */}
-          {output.length > 0 && (
+          {isRunning && output.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold mb-2">Console:</h3>
+              <h3 className="text-sm font-semibold mb-2 text-[#2d2d2d] dark:text-[#EAEAEA]">Console:</h3>
               <div className="bg-muted p-3 rounded-lg font-mono text-xs max-h-32 overflow-y-auto space-y-1">
                 {output.map((line, i) => (
                   <div key={i} className="text-green-600">

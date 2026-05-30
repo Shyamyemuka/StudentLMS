@@ -6,11 +6,11 @@ import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 
 const CODE_SNIPPETS = [
-  "const calculateEAR = (landmarks) => { return (leftEAR + rightEAR) / 2; };",
-  "function processFrame() { if (!faceMesh || !video) return; requestAnimationFrame(processFrame); }",
-  "create table public.game_scores ( id uuid primary key, user_id uuid, score integer );",
-  "import { useState, useEffect } from 'react'; export default function Dashboard() { return <div />; }",
-  "const channel = supabase.channel('notices').on('postgres_changes', () => { refetch(); }).subscribe();",
+  "const binarySearch = (arr, val) => { let l = 0, r = arr.length - 1; while (l <= r) { const m = Math.floor((l+r)/2); if (arr[m] === val) return m; if (arr[m] < val) l = m + 1; else r = m - 1; } return -1; };",
+  "const fib = (n, memo = {}) => { if (n in memo) return memo[n]; if (n <= 2) return 1; return memo[n] = fib(n - 1, memo) + fib(n - 2, memo); };",
+  "const partition = (arr, low, high) => { const pivot = arr[high]; let i = low - 1; for (let j = low; j < high; j++) { if (arr[j] < pivot) { i++; [arr[i], arr[j]] = [arr[j], arr[i]]; } } [arr[i+1], arr[high]] = [arr[high], arr[i+1]]; return i + 1; };",
+  "class ListNode { constructor(value) { this.value = value; this.next = null; } }",
+  "SELECT p.full_name, COALESCE(SUM(gs.score), 0) AS total_score FROM public.profiles p INNER JOIN public.game_scores gs ON p.user_id = gs.user_id GROUP BY p.user_id, p.full_name ORDER BY total_score DESC;",
 ];
 
 export default function CodeRacer() {
@@ -30,8 +30,9 @@ export default function CodeRacer() {
   const gameStateRef = useRef(gameState);
 
   useEffect(() => {
-    scoreRef.current = Math.round(wpm * (accuracy / 100));
-  }, [wpm, accuracy]);
+    const ratio = typedInput.length / Math.max(1, snippet.length);
+    scoreRef.current = Math.round(wpm * (accuracy / 100) * ratio);
+  }, [wpm, accuracy, typedInput, snippet]);
 
   useEffect(() => {
     gameStateRef.current = gameState;
@@ -52,6 +53,11 @@ export default function CodeRacer() {
         }).catch((err) => console.error("Auto-save score failed:", err));
       }
     };
+  }, []);
+
+  // Mount auto-start trigger (direct play)
+  useEffect(() => {
+    handleStart();
   }, []);
 
   const handleStart = () => {
@@ -119,7 +125,8 @@ export default function CodeRacer() {
     setGameState("gameover");
     if (timerRef.current) clearInterval(timerRef.current);
 
-    const score = Math.round(finalWpm * (finalAcc / 100));
+    const completionRatio = typedInput.length / Math.max(1, snippet.length);
+    const score = Math.round(finalWpm * (finalAcc / 100) * completionRatio);
 
     // Save score to database
     try {
@@ -160,12 +167,12 @@ export default function CodeRacer() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border rounded-xl text-center min-h-[400px]">
+    <div className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border rounded-xl text-center min-h-[400px] text-[#2d2d2d] dark:text-[#EAEAEA]">
       {gameState === "idle" && (
         <div className="space-y-6">
           <div className="text-6xl animate-bounce">🏎️</div>
-          <h2 className="text-2xl font-bold font-heading text-foreground">Code Racer Typing</h2>
-          <p className="text-sm font-bold font-body text-muted-foreground max-w-md mx-auto">
+          <h2 className="text-2xl font-bold font-heading text-[#2d2d2d] dark:text-[#EAEAEA]">Code Racer Typing</h2>
+          <p className="text-sm font-bold font-body text-[#706b60] dark:text-[#B0B0B0] max-w-md mx-auto">
             Test your programming typing speed! Type the highlighted snippet of code as accurately and quickly as possible. Score points based on WPM and typing accuracy!
           </p>
           <Button
@@ -181,11 +188,11 @@ export default function CodeRacer() {
         <div className="w-full max-w-2xl space-y-6">
           {/* Stats Bar */}
           <div className="flex justify-between items-center bg-background border-2 border-border rounded-xl p-3 font-bold font-heading shadow-hard-sm">
-            <div className="text-lg text-primary">WPM: {wpm}</div>
-            <div className="text-xs text-muted-foreground bg-primary/10 border border-primary/20 px-2 py-1 rounded">
+            <div className="text-lg text-[#2d2d2d] dark:text-[#EAEAEA] font-extrabold">WPM: {wpm}</div>
+            <div className="text-xs text-[#706b60] dark:text-[#B0B0B0] bg-muted border border-border px-2 py-1 rounded font-bold">
               Accuracy: {accuracy}%
             </div>
-            <div className="text-lg text-accent">Time Left: {timeLeft}s</div>
+            <div className="text-lg text-red-600 dark:text-red-400 font-extrabold">Time Left: {timeLeft}s</div>
           </div>
 
           {/* Typing Area Code Display */}
@@ -193,7 +200,7 @@ export default function CodeRacer() {
             {renderSnippetChars()}
           </div>
 
-          {/* Hidden Input field mapped to full visual focus */}
+          {/* Hidden Input field mapped to visual focus */}
           <div className="relative">
             <input
               ref={inputRef}
@@ -201,7 +208,7 @@ export default function CodeRacer() {
               value={typedInput}
               onChange={(e) => setTypedInput(e.target.value)}
               placeholder="Type code exactly as shown above..."
-              className="w-full bg-background border-2 border-border rounded-xl px-4 py-4 font-mono text-sm text-foreground focus:outline-none focus:border-primary shadow-hard-sm"
+              className="w-full bg-background border-2 border-border rounded-xl px-4 py-4 font-mono text-sm text-[#2d2d2d] dark:text-[#EAEAEA] focus:outline-none focus:border-primary shadow-hard-sm placeholder:text-[#706b60]/50"
               autoFocus
             />
           </div>
@@ -231,7 +238,7 @@ export default function CodeRacer() {
               Accuracy rating: <span className="text-[#3b82f6]">{accuracy}%</span>
             </p>
             <p className="text-base text-foreground mt-2">
-              Calculated competitive score: <span className="text-accent font-extrabold text-xl">{Math.round(wpm * (accuracy / 100))}</span>
+              Calculated competitive score: <span className="text-accent font-extrabold text-xl">{Math.round(wpm * (accuracy / 100) * (typedInput.length / Math.max(1, snippet.length)))}</span>
             </p>
           </div>
 

@@ -81,35 +81,7 @@ export default function SubjectCard({
         }
       }
 
-      // Check if there are submissions
-      const { data: submissions } = await supabase
-        .from("resource_submissions")
-        .select("id, storage_path, type")
-        .eq("subject_id", subject.id);
 
-      // Delete submission files from storage
-      if (submissions && submissions.length > 0) {
-        for (const submission of submissions) {
-          if (
-            (submission.type === "pdf" || submission.type === "notes") &&
-            submission.storage_path
-          ) {
-            const [bucket, ...pathParts] = submission.storage_path.split("/");
-            const filePath = pathParts.join("/");
-
-            const { error: deleteError } = await supabase.storage
-              .from(bucket)
-              .remove([filePath]);
-
-            if (deleteError) {
-              console.error(
-                `Error deleting submission file ${submission.storage_path}:`,
-                deleteError,
-              );
-            }
-          }
-        }
-      }
 
       // Delete the subject
       const { error: deleteError } = await supabase
@@ -285,7 +257,6 @@ export default function SubjectCard({
           </p>
           <ul className="list-disc list-inside space-y-2 text-sm">
             <li>All resources associated with this subject</li>
-            <li>All submissions for this subject</li>
             <li>All enrollments for this subject</li>
           </ul>
           <p className="text-destructive text-sm font-bold">

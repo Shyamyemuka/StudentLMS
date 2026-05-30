@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 import PageContainer from "@/components/layout/page-container";
 import SubjectContent from "@/components/subjects/subject-content";
 import SubjectLockOverlay from "@/components/subjects/subject-lock-overlay";
@@ -110,9 +111,19 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
         <div className="tape-decor" />
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 pt-4">
           <div>
-            {/* Subject Code Badge */}
-            <div className="inline-block px-3 py-1 bg-secondary/15 text-secondary border border-secondary/30 rounded-md text-sm font-bold mb-3">
-              {subject.subject_code}
+            {/* Subject Code Badge & Assignments Link */}
+            <div className="flex items-center gap-3 mb-3 flex-wrap">
+              <div className="inline-block px-3 py-1 bg-secondary/15 text-secondary border border-secondary/30 rounded-md text-sm font-bold">
+                {subject.subject_code}
+              </div>
+              {isUnlocked && (
+                <Link
+                  href={`/subjects/${subject.id}/assignments`}
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground border-2 border-border px-4 py-1.5 rounded-xl text-xs font-bold hover:scale-105 active:scale-95 transition-all shadow-hard-sm cursor-pointer"
+                >
+                  📝 Course Worksheets
+                </Link>
+              )}
             </div>
 
             {/* Title */}

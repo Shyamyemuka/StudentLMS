@@ -223,20 +223,20 @@ export default function Header({ profile }: HeaderProps) {
                     {/* Menu */}
                     <div 
                       style={{ borderRadius: "12px" }}
-                      className="absolute right-0 mt-2 w-56 bg-[#ffffff] dark:bg-[#14181D] border-2 border-border shadow-hard-md z-20 py-2 wobbly-border"
+                      className="absolute right-0 mt-2 w-56 bg-card border-2 border-border shadow-hard-md z-20 py-2 wobbly-border text-foreground"
                     >
                       {/* Mobile Navigation */}
                       <div className="md:hidden border-b-2 border-dashed border-border pb-2 mb-2">
                         <Link
                           href="/dashboard"
                           onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
+                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold transition-colors">
                           Dashboard
                         </Link>
                         <Link
                           href="/fun"
                           onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold">
+                          className="block px-4 py-2 text-foreground hover:bg-muted text-sm font-bold transition-colors">
                           Fun Zone
                         </Link>
                         {/* Faculty/Admin Management Links */}
@@ -246,7 +246,7 @@ export default function Header({ profile }: HeaderProps) {
                             <Link
                               href="/admin/student-progress"
                               onClick={() => setIsMenuOpen(false)}
-                              className="block px-4 py-2 text-[#4CAF8F] hover:bg-muted text-sm font-bold">
+                              className="block px-4 py-2 text-emerald-600 dark:text-emerald-500 hover:bg-muted text-sm font-bold transition-colors">
                               Student Progress
                             </Link>
                           </>
@@ -255,7 +255,7 @@ export default function Header({ profile }: HeaderProps) {
                           <Link
                             href="/admin"
                             onClick={() => setIsMenuOpen(false)}
-                            className="block px-4 py-2 text-destructive hover:bg-muted text-sm font-bold">
+                            className="block px-4 py-2 text-destructive hover:bg-muted text-sm font-bold transition-colors">
                             Admin Panel
                           </Link>
                         )}
