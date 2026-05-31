@@ -41,7 +41,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     supabase.from("profiles").select("*").eq("user_id", user.id).single(),
     supabase
       .from("subjects")
-      .select("id, title, subject_code, regulation, description, price, access_duration_months, certificate_enabled")
+      .select("id, title, subject_code, regulation, description, fun_context, price, access_duration_months, certificate_enabled")
       .eq("id", subjectIdNum)
       .single(),
     supabase
@@ -215,6 +215,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
             initialCertificateEnabled={subject.certificate_enabled}
             studentName={profile?.full_name || "Student"}
             courseName={subject.title}
+            funContext={subject.fun_context}
           />
         </div>
       </div>

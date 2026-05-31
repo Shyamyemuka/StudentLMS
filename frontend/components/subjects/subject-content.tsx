@@ -17,6 +17,7 @@ interface SubjectContentProps {
   initialCertificateEnabled: boolean;
   studentName: string;
   courseName: string;
+  funContext?: string | null;
 }
 
 export default function SubjectContent({
@@ -28,6 +29,7 @@ export default function SubjectContent({
   initialCertificateEnabled,
   studentName,
   courseName,
+  funContext,
 }: SubjectContentProps) {
   const [videos, setVideos] = useState(initialVideos);
   const [pdfs, setPdfs] = useState(initialPdfs);
@@ -90,6 +92,7 @@ export default function SubjectContent({
           notes={notes}
           userRole={userRole}
           onResourceDeleted={fetchResources}
+          funContext={funContext}
         />
       </div>
 

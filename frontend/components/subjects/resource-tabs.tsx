@@ -5,7 +5,7 @@ import { Resource, Assignment, AssignmentSubmission } from "@/types/database";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
-import { Trash2, Plus, FileText, CheckCircle, Clock, Award } from "lucide-react";
+import { Trash2, Plus, FileText, CheckCircle, Clock, Award, Sparkles } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import { formatDate } from "@/lib/utils";
 import AttentionHeatmap from "../analytics/attention-heatmap";
@@ -17,9 +17,10 @@ interface ResourceTabsProps {
   notes: Resource[];
   userRole: string;
   onResourceDeleted?: () => void;
+  funContext?: string | null;
 }
 
-type TabType = "videos" | "pdfs" | "notes" | "assignments";
+type TabType = "videos" | "pdfs" | "notes" | "assignments" | "ai-explainer";
 
 export default function ResourceTabs({
   subjectId,
@@ -28,12 +29,28 @@ export default function ResourceTabs({
   notes,
   userRole,
   onResourceDeleted,
+  funContext,
 }: ResourceTabsProps) {
   const [activeTab, setActiveTab] = useState<TabType>("videos");
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [submissionsMap, setSubmissionsMap] = useState<Record<number, AssignmentSubmission>>({});
   const [submissionCountsMap, setSubmissionCountsMap] = useState<Record<number, number>>({});
   const [loadingAssignments, setLoadingAssignments] = useState(true);
+  const [analogyType, setAnalogyType] = useState<"movie" | "series" | "superhero-fight">("movie");
+  const [targetName, setTargetName] = useState("");
+  const [includeResources, setIncludeResources] = useState(false);
+  const [explainerResult, setExplainerResult] = useState("");
+  const [generating, setGenerating] = useState(false);
+
+  const [currentFunContext, setCurrentFunContext] = useState(funContext || "");
+  const [showEditContextDialog, setShowEditContextDialog] = useState(false);
+  const [editContextVal, setEditContextVal] = useState(funContext || "");
+  const [updatingContext, setUpdatingContext] = useState(false);
+
+  useEffect(() => {
+    setCurrentFunContext(funContext || "");
+    setEditContextVal(funContext || "");
+  }, [funContext]);
 
   const fetchAssignmentsAndSubmissions = async () => {
     setLoadingAssignments(true);
@@ -96,6 +113,100 @@ export default function ResourceTabs({
     fetchAssignmentsAndSubmissions();
   }, [subjectId, userRole]);
 
+  const fetchSavedExplainer = async () => {
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("subject_explainers")
+        .select("*")
+        .eq("subject_id", subjectId)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (data) {
+        setAnalogyType(data.analogy_type as "movie" | "series" | "superhero-fight");
+        setTargetName(data.target_name);
+        setIncludeResources(data.include_resources);
+        setExplainerResult(data.explanation);
+      }
+    } catch (err) {
+      console.error("Error fetching saved explainer:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "ai-explainer") {
+      fetchSavedExplainer();
+    }
+  }, [activeTab, subjectId]);
+
+  const handleUpdateContext = async () => {
+    setUpdatingContext(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from("subjects")
+        .update({ fun_context: editContextVal.trim() || null })
+        .eq("id", subjectId);
+
+      if (error) {
+        throw error;
+      }
+
+      setCurrentFunContext(editContextVal.trim());
+      toast.success("AI Explainer Context updated successfully");
+      setShowEditContextDialog(false);
+    } catch (err: any) {
+      console.error("Error updating context:", err);
+      toast.error(err.message || "Failed to update context");
+    } finally {
+      setUpdatingContext(false);
+    }
+  };
+
+  const handleGenerateExplainer = async () => {
+    if (!targetName.trim()) {
+      toast.error("Please enter a title/target name for your analogy");
+      return;
+    }
+
+    setGenerating(true);
+    setExplainerResult("");
+
+    try {
+      const res = await fetch("/api/ai/explainer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subjectId,
+          analogyType,
+          targetName: targetName.trim(),
+          includeResources,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate explanation");
+      }
+
+      setExplainerResult(data.explanation || "");
+      toast.success("Explanation generated successfully");
+    } catch (err: any) {
+      console.error("Explainer error:", err);
+      toast.error(err.message || "Failed to generate explanation");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const tabs = [
     {
       id: "videos" as TabType,
@@ -110,6 +221,11 @@ export default function ResourceTabs({
       label: "Assignments",
       count: assignments.length,
       icon: "📋",
+    },
+    {
+      id: "ai-explainer" as TabType,
+      label: "AI Explainer",
+      icon: <Sparkles className="w-4 h-4 text-foreground/80" />,
     },
   ];
 
@@ -410,7 +526,238 @@ export default function ResourceTabs({
             )}
           </div>
         )}
+
+        {/* AI Explainer Tab */}
+        {activeTab === "ai-explainer" && (
+          <div className="space-y-6">
+            <div className="bg-card border-2 border-border rounded-xl p-6 shadow-hard-md text-left font-body relative">
+              <div className="tape-decor" />
+              <h3 className="text-xl font-bold font-heading text-foreground mb-2 pt-2">
+                Fun AI Explainer Mode
+              </h3>
+              <p className="text-muted-foreground text-sm font-medium mb-6">
+                Understand this subject through creative, pop-culture analogies. Select an analogy style, type in a target movie, series, or superhero match-up, and let the AI explain the scientific/engineering concepts of the syllabus in a highly engaging, wobbly classroom style.
+              </p>
+
+              {/* Faculty Context Management Block */}
+              {(userRole === "faculty" || userRole === "admin") && (
+                <div className="bg-muted/40 border-2 border-dashed border-border rounded-xl p-5 shadow-hard-sm text-left relative mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="text-sm font-bold text-foreground mb-1 uppercase tracking-wider font-heading">
+                        Faculty AI Explainer Context
+                      </h4>
+                      <p className="text-xs text-muted-foreground font-medium leading-relaxed max-w-xl">
+                        {currentFunContext
+                          ? "A custom syllabus context is configured for this course. The AI will prioritize this summary to deliver highly aligned pop-culture explanations."
+                          : "No custom context is configured. The AI will fall back to the standard course description. Provide a summary of core topics to improve accuracy."}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditContextVal(currentFunContext);
+                        setShowEditContextDialog(true);
+                      }}
+                      style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+                      className="px-4 py-2 bg-secondary/15 hover:bg-secondary/25 text-secondary border-2 border-secondary/35 text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-hard-sm cursor-pointer shrink-0"
+                    >
+                      {currentFunContext ? "Update Context" : "Add Context"}
+                    </button>
+                  </div>
+                  {currentFunContext && (
+                    <div className="mt-4 p-3 bg-card border-2 border-border rounded-lg text-xs text-foreground font-medium leading-relaxed font-body whitespace-pre-wrap">
+                      {currentFunContext}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Analogy Style Selectors */}
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-foreground mb-3">
+                  Select Analogy Style
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    {
+                      id: "movie" as const,
+                      title: "Movie Analogy",
+                      desc: "Explain syllabus concepts in terms of a feature film plot, world, or character arcs.",
+                    },
+                    {
+                      id: "series" as const,
+                      title: "Series Analogy",
+                      desc: "Map course topics to the episodes, seasons, or lore of a popular web/television series.",
+                    },
+                    {
+                      id: "superhero-fight" as const,
+                      title: "Superhero Fight",
+                      desc: "Break down principles using the dynamics, powers, and tactics of a battle between two heroes.",
+                    },
+                  ].map((style) => (
+                    <button
+                      key={style.id}
+                      type="button"
+                      onClick={() => setAnalogyType(style.id)}
+                      className={`p-4 text-left border-2 rounded-xl transition-all shadow-hard-sm cursor-pointer hover:scale-[1.02] active:scale-95 flex flex-col justify-between h-full ${
+                        analogyType === style.id
+                          ? "bg-primary/10 border-primary text-foreground"
+                          : "bg-background border-border text-foreground hover:border-primary/50"
+                      }`}
+                    >
+                      <div>
+                        <span className="block font-bold text-sm mb-1">{style.title}</span>
+                        <span className="block text-xs text-muted-foreground font-medium leading-relaxed">
+                          {style.desc}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Input for target name */}
+              <div className="mb-6">
+                <label htmlFor="targetName" className="block text-sm font-bold text-foreground mb-2">
+                  Pop-Culture Analogy Target
+                </label>
+                <input
+                  id="targetName"
+                  type="text"
+                  value={targetName}
+                  onChange={(e) => setTargetName(e.target.value)}
+                  className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body font-medium"
+                  placeholder={
+                    analogyType === "movie"
+                      ? "e.g., Bahubali, Harry Potter, Inception"
+                      : analogyType === "series"
+                      ? "e.g., Stranger Things, Game of Thrones, Dark"
+                      : "e.g., Iron Man vs Batman, Thor vs Superman"
+                  }
+                  required
+                />
+              </div>
+
+              {/* Cost-saving checkbox */}
+              <div className="mb-6 flex items-start gap-3 bg-muted/40 border-2 border-dashed border-border/80 rounded-xl p-4">
+                <input
+                  id="includeResources"
+                  type="checkbox"
+                  checked={includeResources}
+                  onChange={(e) => setIncludeResources(e.target.checked)}
+                  className="w-5 h-5 mt-0.5 rounded border-2 border-border accent-primary cursor-pointer"
+                />
+                <div className="flex-1">
+                  <label htmlFor="includeResources" className="block text-sm font-bold text-foreground cursor-pointer">
+                    Include PDFs and Videos metadata for deeper context
+                  </label>
+                  <p className="text-xs text-muted-foreground/80 font-medium mt-1 leading-relaxed">
+                    By default, the explainer uses the context supplied by the faculty to build high-quality matches. Tick this option if you want the AI to also map the titles and descriptions of all uploaded resources, which enables deeper analysis of specific topics but increases API costs.
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                type="button"
+                onClick={handleGenerateExplainer}
+                disabled={generating}
+                style={{ borderRadius: "10px 100px 10px 100px / 100px 10px 100px 10px" }}
+                className="w-full bg-primary text-primary-foreground border-2 border-border py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-hard-sm cursor-pointer font-heading text-lg flex items-center justify-center gap-2"
+              >
+                {generating ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 mr-1" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Generating Analogy...
+                  </>
+                ) : (
+                  "Generate Fun Explanation"
+                )}
+              </button>
+            </div>
+
+            {/* Blackboard styled Canvas */}
+            {(generating || explainerResult) && (
+              <div
+                style={{ borderRadius: "12px 12px 12px 12px" }}
+                className="bg-[#12161A] border-4 border-[#BFA55A] p-6 md:p-8 shadow-hard-lg relative text-left"
+              >
+                <div className="flex items-center justify-between border-b border-[#BFA55A]/30 pb-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                    <span className="text-[#B0B0B0] font-heading text-sm font-bold ml-2 tracking-wider">
+                      CHALKBOARD WORKSPACE
+                    </span>
+                  </div>
+                  {explainerResult && (
+                    <span className="text-[#BFA55A] font-body text-xs font-bold bg-[#BFA55A]/10 border border-[#BFA55A]/20 px-2 py-0.5 rounded">
+                      Success
+                    </span>
+                  )}
+                </div>
+
+                {generating && (
+                  <div className="flex flex-col items-center justify-center py-12 text-center space-y-4">
+                    <div className="w-8 h-8 border-4 border-dashed border-[#BFA55A] rounded-full animate-spin" />
+                    <p className="text-[#B0B0B0] font-body font-bold text-sm tracking-wide">
+                      Writing on chalkboard... please wait.
+                    </p>
+                  </div>
+                )}
+
+                {explainerResult && (
+                  <div className="prose prose-invert max-w-none text-[#EAEAEA] font-body text-base leading-relaxed selection:bg-[#BFA55A] selection:text-[#12161A]">
+                    {parseMarkdownToReact(explainerResult)}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Edit AI Explainer Context Dialog */}
+      <Dialog
+        isOpen={showEditContextDialog}
+        onClose={() => !updatingContext && setShowEditContextDialog(false)}
+        title={currentFunContext ? "Update AI Explainer Context" : "Add AI Explainer Context"}
+        confirmText={updatingContext ? "Saving..." : "Save"}
+        cancelText="Cancel"
+        onConfirm={handleUpdateContext}
+        onCancel={() => setShowEditContextDialog(false)}
+      >
+        <div className="space-y-4 text-left">
+          <p className="text-xs text-muted-foreground font-medium leading-relaxed font-body">
+            Provide a summary of the core scientific/engineering concepts, primary learning objectives, or key mathematical formulations taught in this subject. Keep it descriptive (do not include any emojis in the text).
+          </p>
+          <textarea
+            value={editContextVal}
+            onChange={(e) => setEditContextVal(e.target.value)}
+            rows={6}
+            disabled={updatingContext}
+            className="w-full bg-background border-2 border-border rounded-xl px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none resize-none font-body font-medium"
+            placeholder="e.g. This course introduces graph theory, focusing on pathfinding algorithms (Dijkstra, A*), minimum spanning trees (Kruskal, Prim), and basic topological concepts..."
+          />
+        </div>
+      </Dialog>
     </div>
   );
 }
@@ -685,4 +1032,115 @@ function ResourceCard({
       )}
     </>
   );
+}
+
+// Custom Lightweight Markdown Parser for Chalkboard Workspace to ensure full compatibility without ESM module bugs
+function parseMarkdownToReact(text: string): React.ReactNode[] {
+  if (!text) return [];
+
+  // Split by paragraphs
+  const paragraphs = text.split(/\n\s*\n/);
+
+  return paragraphs.map((para, paraIdx) => {
+    const trimmed = para.trim();
+    if (!trimmed) return null;
+
+    // Check for Horizontal Rule
+    if (trimmed === "***" || trimmed === "---" || trimmed === "___") {
+      return <hr key={paraIdx} className="border-t-2 border-dashed border-[#BFA55A]/30 my-6" />;
+    }
+
+    // Check for Headings
+    if (trimmed.startsWith("### ")) {
+      return (
+        <h3 key={paraIdx} className="text-base font-bold font-heading text-[#BFA55A] mt-5 mb-2 text-left">
+          {renderInlineMarkdown(trimmed.substring(4))}
+        </h3>
+      );
+    }
+    if (trimmed.startsWith("## ")) {
+      return (
+        <h2 key={paraIdx} className="text-lg font-bold font-heading text-[#BFA55A] mt-6 mb-3 text-left">
+          {renderInlineMarkdown(trimmed.substring(3))}
+        </h2>
+      );
+    }
+    if (trimmed.startsWith("# ")) {
+      return (
+        <h1 key={paraIdx} className="text-xl font-bold font-heading text-[#BFA55A] mt-8 mb-4 text-left">
+          {renderInlineMarkdown(trimmed.substring(2))}
+        </h1>
+      );
+    }
+
+    // Check for List Items
+    const lines = trimmed.split("\n");
+    const isBulletList = lines.every(line => line.trim().startsWith("* ") || line.trim().startsWith("- ") || line.trim().startsWith("*") || line.trim().startsWith("-"));
+
+    if (isBulletList && lines.length > 1) {
+      return (
+        <ul key={paraIdx} className="list-disc pl-6 mb-4 space-y-2 text-left">
+          {lines.map((line, lineIdx) => {
+            const cleanLine = line.trim().replace(/^[\*\-]\s*/, "");
+            return <li key={lineIdx} className="font-medium text-[#EAEAEA]">{renderInlineMarkdown(cleanLine)}</li>;
+          })}
+        </ul>
+      );
+    }
+
+    // Check for a single bullet item in the paragraph
+    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+      const cleanLine = trimmed.replace(/^[\*\-]\s*/, "");
+      return (
+        <ul key={paraIdx} className="list-disc pl-6 mb-4 space-y-2 text-left">
+          <li className="font-medium text-[#EAEAEA]">{renderInlineMarkdown(cleanLine)}</li>
+        </ul>
+      );
+    }
+
+    // Check for Numbered List
+    const isNumberedList = lines.every(line => /^\d+\.\s/.test(line.trim()));
+    if (isNumberedList && lines.length > 1) {
+      return (
+        <ol key={paraIdx} className="list-decimal pl-6 mb-4 space-y-2 text-left">
+          {lines.map((line, lineIdx) => {
+            const cleanLine = line.trim().replace(/^\d+\.\s*/, "");
+            return <li key={lineIdx} className="font-medium text-[#EAEAEA]">{renderInlineMarkdown(cleanLine)}</li>;
+          })}
+        </ol>
+      );
+    }
+
+    if (/^\d+\.\s/.test(trimmed)) {
+      const cleanLine = trimmed.replace(/^\d+\.\s*/, "");
+      return (
+        <ol key={paraIdx} className="list-decimal pl-6 mb-4 space-y-2 text-left">
+          <li className="font-medium text-[#EAEAEA]">{renderInlineMarkdown(cleanLine)}</li>
+        </ol>
+      );
+    }
+
+    // Handle normal multi-line paragraph block or individual lines
+    return (
+      <p key={paraIdx} className="mb-4 leading-relaxed font-medium text-[#EAEAEA] text-left">
+        {renderInlineMarkdown(trimmed)}
+      </p>
+    );
+  });
+}
+
+function renderInlineMarkdown(text: string): React.ReactNode[] {
+  // Simple inline parser for bold (**) and italic (*)
+  const regex = /(\*\*.*?\*\*|\*.*?\*)/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={idx} className="font-extrabold text-[#BFA55A]">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return <em key={idx} className="italic text-foreground/90">{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
 }

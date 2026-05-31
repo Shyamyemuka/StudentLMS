@@ -13,7 +13,7 @@ interface LeaderboardEntry {
 }
 
 export default function LeaderboardPanel() {
-  const [selectedGame, setSelectedGame] = useState<"math-blitz" | "code-racer">("math-blitz");
+  const [selectedGame, setSelectedGame] = useState<"math-blitz" | "code-racer" | "subway">("math-blitz");
   const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +61,7 @@ export default function LeaderboardPanel() {
           </div>
 
           {/* Scored Game Selector Toggle */}
-          <div className="flex gap-2 bg-muted/30 p-1.5 border-2 border-border rounded-xl">
+          <div className="flex flex-wrap gap-2 bg-muted/30 p-1.5 border-2 border-border rounded-xl">
             <button
               onClick={() => setSelectedGame("math-blitz")}
               className={`px-3 py-1.5 text-xs font-bold font-body transition-all cursor-pointer rounded-lg ${
@@ -81,6 +81,16 @@ export default function LeaderboardPanel() {
               }`}
             >
               🏎️ Code Racer
+            </button>
+            <button
+              onClick={() => setSelectedGame("subway")}
+              className={`px-3 py-1.5 text-xs font-bold font-body transition-all cursor-pointer rounded-lg ${
+                selectedGame === "subway"
+                  ? "bg-primary text-primary-foreground border border-border shadow-hard-sm"
+                  : "text-muted-foreground hover:text-foreground bg-transparent border border-transparent"
+              }`}
+            >
+              🏃 Subway Surfer
             </button>
           </div>
         </div>

@@ -20,6 +20,7 @@ export interface Subject {
   title: string;
   regulation: string;
   description: string | null;
+  fun_context?: string | null;
   status: SubjectStatus;
   created_by: string;
   approved_by: string | null;

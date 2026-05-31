@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
@@ -12,29 +13,27 @@ interface GameCardProps {
 }
 
 export function GameCard({ game, onPlay }: GameCardProps) {
+  const [hasError, setHasError] = useState(false);
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <CardContent className="p-0">
         <div className="flex flex-col md:flex-row gap-4 p-4">
           {/* Game Image */}
           <div className="relative w-full md:w-48 h-48 md:h-32 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-            {game.image ? (
+            {game.image && !hasError ? (
               <Image
                 src={game.image}
                 alt={game.name}
                 fill
                 className="object-cover"
-                onError={(e) => {
-                  // Fallback if image doesn't exist
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                }}
+                onError={() => setHasError(true)}
               />
-            ) : null}
-            {/* Fallback gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-[#4CAF8F]/20 flex items-center justify-center">
-              <Play className="w-12 h-12 text-[#D4AF37]/50" />
-            </div>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-[#4CAF8F]/20 flex items-center justify-center">
+                <Play className="w-12 h-12 text-[#D4AF37]/50" />
+              </div>
+            )}
           </div>
 
           {/* Game Info */}
