@@ -138,10 +138,6 @@ export default function CreateAssignmentPage() {
         toast.error(`Please enter the question text for Question ${i + 1}`);
         return;
       }
-      if (!q.ideal_answer.trim()) {
-        toast.error(`Please provide an ideal answer for Question ${i + 1} to enable AI evaluation`);
-        return;
-      }
       if (isNaN(q.max_score) || q.max_score <= 0) {
         toast.error(`Please enter a valid maximum score greater than 0 for Question ${i + 1}`);
         return;
@@ -165,21 +161,27 @@ export default function CreateAssignmentPage() {
         max_score: Number(q.max_score),
       }));
 
-      // Calculate total max score
-      const totalMaxScore = structuredQuestions.reduce(
-        (sum, q) => sum + q.max_score,
-        0
-      );
-
-      const { error } = await supabase.from("assignments").insert({
-        subject_id: subjectIdNum,
-        title: title.trim(),
-        questions: structuredQuestions,
-        max_score: totalMaxScore,
-        created_by: user.id,
+      const response = await fetch("/api/assignments/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subjectId: subjectIdNum,
+          title: title.trim(),
+          questions: questions.map((q, idx) => ({
+            id: idx + 1,
+            question_text: q.question_text.trim(),
+            ideal_answer: q.ideal_answer.trim(),
+            max_score: Number(q.max_score),
+          })),
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Failed to publish worksheet");
+      }
 
       toast.success("Worksheet published successfully!");
       router.push(`/subjects/${subjectId}`);
@@ -275,7 +277,7 @@ export default function CreateAssignmentPage() {
                 <div className="space-y-4 font-body">
                   {/* Question Text */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground">Question Prompt</label>
+                    <label className="text-xs font-bold text-foreground">Question</label>
                     <textarea
                       placeholder="Write your question details or prompts..."
                       value={q.question_text}
@@ -289,20 +291,21 @@ export default function CreateAssignmentPage() {
 
                   {/* Ideal Reference Answer */}
                   <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-foreground">Ideal Answer Criteria</label>
+                    <div className="flex items-center justify-between flex-wrap gap-1">
+                      <label className="text-xs font-bold text-foreground">
+                        Ideal Answer Criteria <span className="text-[10px] text-muted-foreground font-normal">(Optional: AI will auto-generate if left blank)</span>
+                      </label>
                       <span className="text-[10px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded font-bold">
                         💡 Key terms used by AI evaluator
                       </span>
                     </div>
                     <textarea
-                      placeholder="Write the ideal correct response or key points students must state to receive marks..."
+                      placeholder="Write the ideal correct response... or leave completely blank for auto AI generation."
                       value={q.ideal_answer}
                       onChange={(e) => handleQuestionChange(idx, "ideal_answer", e.target.value)}
                       rows={3}
                       className="w-full bg-background border-2 border-border text-foreground placeholder:text-muted-foreground/60 rounded-xl p-3 focus:border-primary focus:outline-none font-bold font-body resize-none"
                       disabled={submitting}
-                      required
                     />
                   </div>
 

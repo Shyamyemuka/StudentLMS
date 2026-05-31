@@ -93,6 +93,7 @@ export default function AssignmentDetailPage() {
   const [studentSubmission, setStudentSubmission] = useState<Submission | null>(null);
   const [answersInput, setAnswersInput] = useState<Record<number, string>>({});
   const [activeQuestionTab, setActiveQuestionTab] = useState<number>(1);
+  const [useLocalMode, setUseLocalMode] = useState(false);
   
   // Faculty state
   const [allSubmissions, setAllSubmissions] = useState<Submission[]>([]);
@@ -102,6 +103,7 @@ export default function AssignmentDetailPage() {
   // Faculty Grading override state
   const [scoreOverride, setScoreOverride] = useState("");
   const [feedbackOverride, setFeedbackOverride] = useState("");
+  const [evaluatingAI, setEvaluatingAI] = useState(false);
 
   const supabase = createClient();
 
@@ -203,7 +205,7 @@ export default function AssignmentDetailPage() {
 
     setEvaluating(true);
     try {
-      console.log("Submitting student answers for AI evaluation...");
+      console.log("Submitting student answers for storage...");
       const response = await fetch("/api/assignments/evaluate", {
         method: "POST",
         headers: {
@@ -212,17 +214,19 @@ export default function AssignmentDetailPage() {
         body: JSON.stringify({
           assignmentId: assignmentIdNum,
           answers: answersInput,
+          mode: useLocalMode ? "local" : "gemini",
+          triggerAI: false, // Skip AI evaluation on student submit
         }),
       });
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.error || "AI evaluation failed");
+        throw new Error(errData.error || "Worksheet submission failed");
       }
 
       const resData = await response.json();
       if (resData.success) {
-        toast.success("AI Grading completed. Worksheet submitted successfully.");
+        toast.success("Worksheet submitted successfully.");
         setStudentSubmission(resData.submission);
       }
     } catch (err: any) {
@@ -275,6 +279,49 @@ export default function AssignmentDetailPage() {
     setSelectedSubmission(sub);
     setScoreOverride(sub.score?.toString() || "");
     setFeedbackOverride(sub.feedback || "");
+  };
+
+  const handleFacultyAIEvaluate = async () => {
+    if (!selectedSubmission || !assignment) return;
+
+    setEvaluatingAI(true);
+    try {
+      console.log("Triggering AI evaluation for student submission...");
+      const response = await fetch("/api/assignments/evaluate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          assignmentId: assignmentIdNum,
+          answers: selectedSubmission.answers,
+          mode: useLocalMode ? "local" : "gemini",
+          triggerAI: true,
+          studentId: selectedSubmission.student_id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "AI evaluation failed");
+      }
+
+      const resData = await response.json();
+      if (resData.success) {
+        toast.success("AI evaluation generated successfully.");
+        setScoreOverride(resData.submission.score?.toString() || "");
+        setFeedbackOverride(resData.submission.feedback || "");
+        setAllSubmissions(
+          allSubmissions.map((s) => (s.id === selectedSubmission.id ? resData.submission : s))
+        );
+        setSelectedSubmission(resData.submission);
+      }
+    } catch (err: any) {
+      console.error("AI Evaluation error:", err);
+      toast.error(err?.message || "Failed to trigger AI evaluation");
+    } finally {
+      setEvaluatingAI(false);
+    }
   };
 
   const handleFacultySubmitGrade = async (e: React.FormEvent) => {
@@ -392,7 +439,7 @@ export default function AssignmentDetailPage() {
                         {/* Question description */}
                         <div className="bg-muted/40 p-4 border border-border/80 rounded-xl relative">
                           <span className="absolute -top-3 left-4 px-2 py-0.5 bg-primary text-primary-foreground border border-border text-[9px] rounded-full font-bold">
-                            Question Prompt
+                            Question
                           </span>
                           <p className="text-foreground/90 font-medium text-sm pt-1 whitespace-pre-wrap leading-relaxed">
                             {q.question_text}
@@ -416,6 +463,20 @@ export default function AssignmentDetailPage() {
                       </div>
                     );
                   })}
+
+                  {/* Credit Saving local override toggle */}
+                  <div className="flex items-center gap-2 px-4 py-3 bg-muted/40 border-2 border-dashed border-border rounded-xl font-body text-xs font-bold text-muted-foreground mt-4 mb-4 animate-fadeIn">
+                    <input
+                      type="checkbox"
+                      id="localModeToggle"
+                      checked={useLocalMode}
+                      onChange={(e) => setUseLocalMode(e.target.checked)}
+                      className="w-4.5 h-4.5 text-primary bg-background border-2 border-border rounded focus:ring-0 cursor-pointer accent-primary"
+                    />
+                    <label htmlFor="localModeToggle" className="cursor-pointer select-none">
+                      🔒 Use Credit-Saving Local Evaluator Mode (Bypass live Gemini API)
+                    </label>
+                  </div>
 
                   <form onSubmit={handleStudentSubmit} className="pt-2 border-t border-border/40 flex justify-between gap-4">
                     {/* Left/Right navigator shortcuts */}
@@ -527,15 +588,15 @@ export default function AssignmentDetailPage() {
 
                         return (
                           <div key={q.id} className="space-y-4 font-body animate-fadeIn">
-                            {/* Question prompt */}
-                            <div className="bg-muted/40 p-4 border border-border/80 rounded-xl relative">
-                              <span className="absolute -top-3 left-4 px-2 py-0.5 bg-primary text-primary-foreground border border-border text-[9px] rounded-full font-bold">
-                                Question {idx + 1} Prompt
-                              </span>
-                              <p className="text-foreground/90 font-medium text-sm pt-1 whitespace-pre-wrap leading-relaxed">
-                                {q.question_text}
-                              </p>
-                            </div>
+                             {/* Question prompt */}
+                             <div className="bg-muted/40 p-4 border border-border/80 rounded-xl relative">
+                               <span className="absolute -top-3 left-4 px-2 py-0.5 bg-primary text-primary-foreground border border-border text-[9px] rounded-full font-bold">
+                                 Question {idx + 1}
+                               </span>
+                               <p className="text-foreground/90 font-medium text-sm pt-1 whitespace-pre-wrap leading-relaxed">
+                                 {q.question_text}
+                               </p>
+                             </div>
 
                             {/* Student Answer */}
                             <div className="bg-background border-2 border-border p-4 rounded-xl">
@@ -859,6 +920,21 @@ export default function AssignmentDetailPage() {
                         );
                       })}
                     </div>
+                  </div>
+
+                  {/* Evaluate using AI Button for Faculty */}
+                  <div className="pt-3 border-t border-border/40 font-body">
+                    <button
+                      type="button"
+                      disabled={evaluatingAI || grading}
+                      onClick={handleFacultyAIEvaluate}
+                      className="w-full bg-primary hover:bg-primary/95 text-primary-foreground border-2 border-border rounded-xl font-bold shadow-hard-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs p-2.5 mb-3"
+                    >
+                      {evaluatingAI ? "AI Evaluating Answers..." : "💡 Evaluate using AI"}
+                    </button>
+                    <p className="text-[10px] text-muted-foreground font-medium text-center">
+                      Auto-generate suggested score and feedback using Gemini evaluation.
+                    </p>
                   </div>
 
                   {/* Override Review form */}

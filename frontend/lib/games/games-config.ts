@@ -6,6 +6,7 @@ const HandDrawing = dynamic(() => import('@/components/fun/hand-drawing'), { ssr
 const MoodAnalyzer = dynamic(() => import('@/components/fun/mood-analyzer'), { ssr: false });
 const MathBlitz = dynamic(() => import('@/components/fun/math-blitz'), { ssr: false });
 const CodeRacer = dynamic(() => import('@/components/fun/code-racer'), { ssr: false });
+const Subway = dynamic(() => import('@/components/fun/subway'), { ssr: false });
 
 export interface Game {
   id: string;
@@ -19,6 +20,15 @@ export interface Game {
 }
 
 export const GAMES: Game[] = [
+  {
+    id: 'subway',
+    name: 'Cyber Subway Surfer 🏃',
+    description: 'Avoid oncoming trains, jump over roadblocks, and slide under barriers in this high-speed cyberpunk runner speed run! Record your score on the leaderboard!',
+    image: '/images/games/subway.png',
+    type: 'javascript',
+    component: Subway,
+    isLeaderboardEligible: true
+  },
   {
     id: 'math-blitz',
     name: 'Math Blitz ⚡',
